@@ -12,9 +12,12 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     if @answer.save
-      redirect_to @answer
+      redirect_to question_path(@question),
+             notice: "Your answer published successfully"
     else
-      render :new
+      render template: 'questions/show',
+             question: @question,
+             notice: "Smth went wrong. Try again"
     end
   end
 

@@ -11,11 +11,12 @@ feature 'Write Answer', %q{
 
   scenario "User can write the answer on the question's page" do
     visit question_path(question)
+    current_page = page
 
-    click_on 'Answer the question'
     fill_in 'Body', with: answer.body
     click_on 'Publish'
 
+    expect(page).to eq current_page
     expect(page).to have_content answer.body
   end
 

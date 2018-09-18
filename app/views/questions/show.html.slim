@@ -1,0 +1,9 @@
+h1= @question.title
+h2= @question.body
+
+ul
+  - @question.answers.each do |ans|
+    li
+      = ans.body
+
+= render 'shared/answers_form'
