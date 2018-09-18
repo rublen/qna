@@ -12,8 +12,8 @@ feature 'User sign in', %q{
     sign_in(user)
 
     click_on 'Log out'
-    expect(current_path).to eq root_path
 
+    expect(current_path).to eq root_path
     expect(page).to have_content 'Log in'
   end
 
