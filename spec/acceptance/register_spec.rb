@@ -6,9 +6,9 @@ feature 'User sign in', %q{
   I want to be able to register
 } do
 
-  scenario 'Registered user tries to sign up' do
-    user = create(:user)
+  given(:user) { create(:user) }
 
+  scenario 'Registered user tries to sign up' do
     visit new_user_registration_path
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password

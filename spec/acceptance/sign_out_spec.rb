@@ -10,7 +10,6 @@ feature 'User sign in', %q{
 
   scenario 'Signed-in user logs out' do
     sign_in(user)
-
     click_on 'Log out'
 
     expect(current_path).to eq root_path
