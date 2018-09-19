@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User sign in', %q{
+feature 'User signs in', %q{
   In order to be able to ask question
   As a user
   I want to be able to sign in

@@ -7,7 +7,7 @@ feature 'Write Answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question) }
 
   scenario "Authenticated user can write the answer on the question's page" do

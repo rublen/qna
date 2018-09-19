@@ -1,12 +1,13 @@
 require 'rails_helper'
 
-feature 'Questions list', %q{
+feature 'Question and its answers', %q{
   In order to see what people answered to this question
   As an ordinary user
   I want to be able to look over the list of answers
 } do
 
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:question) { create(:question, author: user) }
   given!(:answers) { create_list(:answer, 2, question: question) }
 
   scenario 'Every user can see the list of answers for this question' do

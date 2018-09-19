@@ -15,10 +15,12 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    return unless current_user_author?
   end
 
   def create
-    @question = Question.new(question_params)
+    @question = current_user.questions.new(question_params)
+
     if @question.save
       redirect_to @question, notice: 'Your question was successfully created'
     else
@@ -27,6 +29,8 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    return unless current_user_author?
+
     if @question.update(question_params)
       redirect_to @question
     else
@@ -35,8 +39,9 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
+    return unless current_user_author?
     @question.destroy
-    redirect_to questions_path
+    redirect_to questions_path, notice: 'Question was deleted successfully.'
   end
 
   private
@@ -46,5 +51,9 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
+  end
+
+  def current_user_author?
+    @question.author == current_user
   end
 end

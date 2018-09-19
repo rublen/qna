@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+
+  let!(:author) { create(:user) }
+
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
+    let(:questions) { create_list(:question, 2, author: author) }
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -15,7 +18,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    let(:question) { create(:question) }
+    let(:question) { create(:question, author: author) }
     before { get :show, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -42,7 +45,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     sign_in_user
-    let(:question) { create(:question) }
+    let(:question) { create(:question, author: @user) }
     before { get :edit, params: { id: question } }
 
     it 'assigns the requested question to @question' do
@@ -58,7 +61,7 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     context 'with valide attributes' do
       it 'saves a new question in the DB' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+        expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
       it 'redirects to show view' do
@@ -81,7 +84,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     sign_in_user
-    let(:question) { create(:question) }
+    let(:question) { create(:question, author: @user) }
 
     context 'with valide attributes' do
       it 'assigns the requested question to @question' do
@@ -119,7 +122,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    let!(:question) { create(:question) }
+    let!(:question) { create(:question, author: @user) }
 
     it 'deletes question' do
       expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)

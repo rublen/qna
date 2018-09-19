@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
+  let(:questions_author) { create(:user) }
+  let(:answers_author) { create(:user) }
+  let!(:question) { create(:question, author: questions_author) }
 
   describe 'GET #show' do
     sign_in_user
-    let(:answer) { create(:answer, question: question) }
+    let(:answer) { create(:answer, question: question, author: answers_author) }
     before { get :show, params: { id: answer } }
 
     it 'assigns the requested answer to @answer' do
@@ -33,11 +35,20 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     sign_in_user
     context 'with valid attributes' do
-      it 'saves a new answer in the DB' do
-        expect { post :create, params: {
-          answer: attributes_for(:answer),
-          question_id: question }
+      it 'saves a new answer in the DB in assosiation with question' do
+        expect {
+          post :create, params: {
+            answer: attributes_for(:answer),
+            question_id: question }
         }.to change(question.answers, :count).by(1)
+      end
+
+      it 'saves a new answer in the DB in assosiation with user' do
+        expect {
+          post :create, params: {
+            answer: attributes_for(:answer),
+            question_id: question }
+        }.to change(@user.answers, :count).by(1)
       end
 
       it 'redirects to questions/show view' do

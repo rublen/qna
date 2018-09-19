@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User sign in', %q{
+feature 'User registers', %q{
   In order to be able to ask and answer questions
   As a user
   I want to be able to register

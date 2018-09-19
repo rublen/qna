@@ -1,4 +1,8 @@
 h1= @question.title
+
+- if @question.author == current_user
+  button= button_to 'Delete question', @question, method: :delete
+
 h2= @question.body
 
 ul
