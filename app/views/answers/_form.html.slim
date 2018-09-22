@@ -1,0 +1,6 @@
+= render 'shared/errors', resource: @answer
+
+= form_with model: [@question, @answer], local: true do |f|
+  p= f.label :body, 'Your answer'
+  = f.text_area :body
+  p= f.submit 'Publish'

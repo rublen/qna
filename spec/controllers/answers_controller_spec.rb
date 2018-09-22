@@ -1,48 +1,35 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
-
-  describe 'GET #show' do
-    let(:answer) { create(:answer, question: question) }
-    before { get :show, params: { id: answer } }
-
-    it 'assigns the requested answer to @answer' do
-      expect(assigns(:answer)).to eq answer
-    end
-
-    it 'renders show view' do
-      expect(response).to render_template 'show'
-    end
-  end
-
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question }  }
-
-    it 'assigns a new answer to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template(:new)
-    end
-  end
+  let(:author) { create(:user) }
+  let!(:question) { create(:question, author: author) }
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
-      it 'saves a new answer in the DB' do
-        expect { post :create, params: {
-          answer: attributes_for(:answer),
-          question_id: question }
+      it 'saves a new answer in the DB in assosiation with question' do
+        expect {
+          post :create, params: {
+            answer: attributes_for(:answer),
+            question_id: question }
         }.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'saves a new answer in the DB in assosiation with user' do
+        expect {
+          post :create, params: {
+            answer: attributes_for(:answer),
+            question_id: question }
+        }.to change(@user.answers, :count).by(1)
+      end
+
+      it 'redirects to questions/show view' do
         post :create, params: {
           answer: attributes_for(:answer),
           question_id: question
         }
-        expect(response).to redirect_to answer_path(assigns(:answer))
+        expect(response).to redirect_to question_path(assigns(:question))
       end
     end
 
@@ -54,12 +41,42 @@ RSpec.describe AnswersController, type: :controller do
         }.to_not change(Answer, :count)
       end
 
-      it 'renders new view' do
+      it 'renders questions/show view' do
         post :create, params: {
           answer: attributes_for(:invalid_answer),
           question_id: question
         }
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    sign_in_user
+
+    context 'author deletes the answer' do
+      let!(:answer) { create(:answer, author: @user) }
+
+      it 'deletes answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to questions/show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(answer.question)
+      end
+    end
+
+    context 'not author can not delete the answer' do
+      let!(:answer) { create(:answer, author: author) }
+
+      it 'tries to delete answer' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to questions/show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(answer.question)
       end
     end
   end

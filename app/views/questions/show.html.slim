@@ -1,0 +1,16 @@
+h1= @question.title
+
+- if user_signed_in? && current_user.author_of?(@question)
+  = button_to 'Delete question', @question, method: :delete
+
+h2= @question.body
+
+ul
+  - @question.answers.reload.each do |answer|
+    li
+      - if answer.persisted?
+        = answer.body
+        - if current_user&.author_of?(answer)
+          = button_to 'Delete answer', answer, method: :delete
+
+= render 'answers/form'
