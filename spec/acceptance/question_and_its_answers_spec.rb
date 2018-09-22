@@ -10,6 +10,13 @@ feature 'Question and its answers', %q{
   given(:question) { create(:question, author: user) }
   given!(:answers) { create_list(:answer, 2, question: question) }
 
+  scenario 'Every user can see title and body of question' do
+    visit question_path(question)
+
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+  end
+
   scenario 'Every user can see the list of answers for this question' do
     visit question_path(question)
 

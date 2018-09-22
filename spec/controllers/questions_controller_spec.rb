@@ -28,6 +28,10 @@ RSpec.describe QuestionsController, type: :controller do
     it 'renders show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns a new answer to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
   end
 
   describe 'GET #new' do
@@ -106,12 +110,16 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'with invalide attributes' do
-      before { patch :update, params: { id: question, question: attributes_for(:invalid_question) } }
+      before do
+        @title = question.title
+        @body = question.body
+        patch :update, params: { id: question, question: attributes_for(:invalid_question) }
+      end
 
       it 'does not change question attributes' do
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to eq @title
+        expect(question.body).to eq @body
       end
 
       it 'renders edit view' do
@@ -122,15 +130,31 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    let!(:question) { create(:question, author: @user) }
 
-    it 'deletes question' do
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    context 'author deletes question' do
+      let!(:question) { create(:question, author: @user) }
+
+      it 'deletes question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+    context 'not author can not delete the question' do
+      let!(:question) { create(:question, author: author) }
+
+      it 'tries to delete answer' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirects to questions/index view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end

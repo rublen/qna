@@ -1,7 +1,0 @@
-h2= @answer.question.title
-h3= @answer.question.body
-
-h4= @answer.body
-
-- if @answer.author == current_user
-  button= button_to 'Delete answer', @answer, method: :delete

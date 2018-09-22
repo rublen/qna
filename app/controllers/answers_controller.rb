@@ -1,14 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[show destroy]
-  before_action :set_question, only: %i[new create]
-
-  def new
-    @answer = @question.answers.new
-  end
-
-  def show
-  end
+  before_action :set_answer, only: %i[destroy]
+  before_action :set_question, only: %i[create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -17,16 +10,19 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to question_path(@question), notice: "Your answer published successfully."
     else
-      render template: 'questions/show',
-             question: @question,
-             notice: "Smth went wrong. Try again"
+      render 'questions/show'
     end
   end
 
   def destroy
-    return unless current_user_author?
-    @answer.destroy
-    redirect_to question_path(@answer.question), notice: 'Answer was deleted successfully.'
+    if current_user.author_of? @answer
+      @answer.destroy
+      flash[:notice] = 'Answer was deleted successfully.'
+    else
+      flash[:alert] = 'This action is permitted only for author.'
+    end
+
+    redirect_to question_path(@answer.question)
   end
 
   private
@@ -41,9 +37,5 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body)
-  end
-
-  def current_user_author?
-    current_user == @answer.author
   end
 end

@@ -15,7 +15,10 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    return unless current_user_author?
+    unless current_user.author_of? @question
+      flash[:alert] = 'This action is permitted only for author.'
+      redirect_to @question
+    end
   end
 
   def create
@@ -29,8 +32,6 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    return unless current_user_author?
-
     if @question.update(question_params)
       redirect_to @question
     else
@@ -39,9 +40,14 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    return unless current_user_author?
-    @question.destroy
-    redirect_to questions_path, notice: 'Question was deleted successfully.'
+    if current_user.author_of? @question
+      @question.destroy
+      flash[:notice] = 'Question was deleted successfully.'
+    else
+      flash[:alert] = 'This action is permitted only for author.'
+    end
+
+    redirect_to questions_path
   end
 
   private
@@ -51,9 +57,5 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body)
-  end
-
-  def current_user_author?
-    @question.author == current_user
   end
 end

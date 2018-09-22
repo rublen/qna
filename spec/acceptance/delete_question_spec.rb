@@ -6,22 +6,28 @@ feature 'Delete question', %q{
   I want to be able to delete the question
 } do
 
-  given(:users) { create_list(:user, 2) }
-  given(:question) { create(:question, author: users[0]) }
+  given(:author) { create(:user) }
+  given(:other_user) { create(:user) }
+  given!(:question) { create(:question, author: author) }
 
 
   scenario 'Author deletes question' do
-    sign_in(users[0])
+    sign_in(author)
 
-    visit question_path(question)
+    visit questions_path
+    expect(page).to have_content question.title
+
+    click_on question.title
+
+    expect(current_path).to eq question_path(question)
     click_on 'Delete question'
 
-    expect(page).to have_content 'Question was deleted successfully.'
     expect(current_path).to eq questions_path
+    expect(page).to_not have_content question.title
   end
 
   scenario "Not author can't delete question" do
-    sign_in(users[1])
+    sign_in(other_user)
     visit question_path(question)
 
     expect(page).to_not have_content 'Delete Question'

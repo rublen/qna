@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Write Answer', %q{
+feature 'Create Answer', %q{
   In order to answer the current question
   As an authenticated user
   I want to be able to write my answer on the current question's page
@@ -13,10 +13,20 @@ feature 'Write Answer', %q{
   scenario "Authenticated user can write the answer on the question's page" do
     sign_in(user)
     visit question_path(question)
-    fill_in 'Body', with: answer.body
+    fill_in 'Your answer', with: answer.body
     click_on 'Publish'
 
     expect(page).to have_content answer.body
+    expect(current_path).to eq question_path(question)
+  end
+
+  scenario "Authenticated user can't save the empty answer" do
+    sign_in(user)
+    visit question_path(question)
+
+    click_on 'Publish'
+
+    expect(page).to have_content "Body can't be blank"
     expect(current_path).to eq question_path(question)
   end
 
@@ -24,7 +34,7 @@ feature 'Write Answer', %q{
     answer_body = 'AnswerBody'
 
     visit question_path(question)
-    fill_in 'Body', with: answer_body
+    fill_in 'Your answer', with: answer_body
     click_on 'Publish'
 
     expect(question_path(question)).to_not have_content answer_body

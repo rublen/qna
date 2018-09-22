@@ -1,13 +1,15 @@
 h1= @question.title
 
-- if @question.author == current_user
-  button= button_to 'Delete question', @question, method: :delete
+- if user_signed_in? && current_user.author_of?(@question)
+  = button_to 'Delete question', @question, method: :delete
 
 h2= @question.body
 
 ul
-  - @question.answers.each do |ans|
+  - @question.answers.reload.each do |ans|
     li
       = ans.body
+      - if user_signed_in? && current_user.author_of?(ans)
+        = button_to 'Delete answer', ans, method: :delete
 
-= render 'shared/answers_form'
+= render 'answers/form'
