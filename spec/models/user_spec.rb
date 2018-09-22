@@ -6,19 +6,16 @@ RSpec.describe User, type: :model do
 
   let(:user) { create(:user) }
 
-  describe 'checks authorship' do
+  describe 'authorship' do
     let(:question) { create(:question, author: user) }
-    let(:answer) { create(:answer, author: user) }
     let(:user1) { create(:user) }
 
-    it "checks question's authorship" do
-      expect(user.author_of? question).to eq true
-      expect(user1.author_of? question).to eq false
+    it "checks authorship" do
+      expect(user).to be_author_of(question)
     end
 
-    it "checks answer's authorship" do
-      expect(user.author_of? answer).to eq true
-      expect(user1.author_of? answer).to eq false
+    it "checks not-authorship" do
+      expect(user1).to_not be_author_of(question)
     end
   end
 end

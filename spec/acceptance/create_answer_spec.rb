@@ -27,7 +27,6 @@ feature 'Create Answer', %q{
     click_on 'Publish'
 
     expect(page).to have_content "Body can't be blank"
-    expect(current_path).to eq question_path(question)
   end
 
   scenario "Non-authenticated user can't write the answer" do
