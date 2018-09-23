@@ -8,9 +8,7 @@ class AnswersController < ApplicationController
     @answer.author = current_user
 
     if @answer.save
-      redirect_to question_path(@question), notice: "Your answer published successfully."
-    else
-      render 'questions/show'
+      flash[:notice] = "Your answer published successfully."
     end
   end
 
