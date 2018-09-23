@@ -1,7 +1,0 @@
-ul
-  - @question.answers.each do |answer|
-    li
-      - if answer.persisted?
-        = answer.body
-        - if current_user&.author_of?(answer)
-          = button_to 'Delete answer', answer, method: :delete
