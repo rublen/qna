@@ -6,13 +6,6 @@ h1= @question.title
 h2= @question.body
 
 .answers
-  ul
-  - @question.answers.each do |answer|
-    li
-      - if answer.persisted?
-        = answer.body
-        - if current_user&.author_of?(answer)
-          = button_to 'Delete answer', answer, method: :delete
-        = render 'answer'
+  = render @question.answers
 
 = render 'answers/form'
