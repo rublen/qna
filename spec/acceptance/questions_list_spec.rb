@@ -12,7 +12,15 @@ feature 'Questions list', %q{
   scenario 'Every user can see the list of question' do
     visit questions_path
 
-    questions.each { |quest| expect(page).to have_content quest.title }
+    questions.each { |question| expect(page).to have_content question.title }
+  end
+
+  scenario "User can click on question's title to visit question's page" do
+    questions.each do |question|
+      visit questions_path
+      click_on question.title
+      expect(current_path).to eq question_path(question)
+    end
   end
 
 end

@@ -13,8 +13,7 @@ feature 'Question and its answers', %q{
   scenario 'Every user can see title and body of question' do
     visit question_path(question)
 
-    expect(page).to have_content question.title
-    expect(page).to have_content question.body
+    expect(page).to have_content question.title, question.body
   end
 
   scenario 'Every user can see the list of answers for this question' do

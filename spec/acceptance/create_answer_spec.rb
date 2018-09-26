@@ -8,36 +8,41 @@ feature 'Create Answer', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question, author: user) }
-  given!(:answer) { create(:answer, question: question) }
 
-  scenario "Authenticated user can write the answer on the question's page" do
+  scenario "Authenticated user can write the answer on the question's page", js: true do
     sign_in(user)
     visit question_path(question)
-    fill_in 'Your answer', with: answer.body
+
+    fill_in 'Your answer', with: "answer_body"
     click_on 'Publish'
 
-    expect(page).to have_content answer.body
     expect(current_path).to eq question_path(question)
+    within '.answers' do
+      expect(page).to have_content "answer_body"
+    end
   end
 
-  scenario "Authenticated user can't save the empty answer" do
+  scenario "Authenticated user can't save the empty answer", js: true do
     sign_in(user)
     visit question_path(question)
 
     click_on 'Publish'
 
-    expect(page).to have_content "Body can't be blank"
+    expect(page).to have_content "Body can't be blank" # пока что не проходит, ошибки не выводятся
   end
 
   scenario "Non-authenticated user can't write the answer" do
-    answer_body = 'AnswerBody'
-
     visit question_path(question)
-    fill_in 'Your answer', with: answer_body
+    fill_in 'Your answer', with: 'answer_body'
     click_on 'Publish'
 
-    expect(question_path(question)).to_not have_content answer_body
+    expect(current_path).to eq user_session_path
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
+
+    visit question_path(question)
+    within '.answers' do
+      expect(page).to_not have_content "answer_body"
+    end
   end
 
 end
