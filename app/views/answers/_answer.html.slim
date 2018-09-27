@@ -1,4 +1,10 @@
 - if answer.persisted?
   = answer.body
+
   - if current_user&.author_of?(answer)
+    = link_to 'Edit', '', class: "edit-answer-link", data: { answer_id: answer.id }
+
+    div id="edit-answer-#{answer.id}" class='hide'
+      = render 'answers/form'
+
     = button_to 'Delete answer', answer, method: :delete

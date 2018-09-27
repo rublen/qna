@@ -1,0 +1,22 @@
+
+  document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>"
+  document.querySelector('.answers').innerHTML += "<li> <%= j render @answer %> </li>"
+
+  var editAnswerLinks = document.querySelectorAll('.edit-answer-link')
+
+  if (editAnswerLinks.length) {
+    for(var i = 0; i < editAnswerLinks.length; i++) {
+      editAnswerLinks[i].addEventListener('click', function {
+        event.preventDefault()
+        console.log('qqq')
+        editAnswerLinks[i].classList.add('hide')
+        var answer_id = editAnswerLinks[i].dataset.answerId
+        editFormHandler(answer_id)
+      }
+    }
+  }
+
+  function editFormHandler(id) {
+    document.getElementById('#edit-answer-' + id).classList.remove('hide')
+  }
+
