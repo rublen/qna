@@ -1,2 +1,3 @@
+document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>"
 document.querySelector('.answers').innerHTML += "<li> <%= j render @answer %> </li>"
 document.getElementById('answer_body').value = ''

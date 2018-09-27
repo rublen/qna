@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Question and its answers', %q{
   In order to see what people answered to this question
