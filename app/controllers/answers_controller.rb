@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy]
-  before_action :set_question, only: %i[update create]
+  before_action :set_question, only: %i[create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -14,6 +14,7 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def destroy

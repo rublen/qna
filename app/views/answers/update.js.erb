@@ -1,22 +1,10 @@
+var answerErrors = document.getElementById('edit-answer-form-' + "<%= @answer.id %>").querySelector('.answer-errors')
+var answerBody = document.getElementById('answer-body-' + "<%= @answer.id %>")
+var answerEditLink = document.querySelector('[data-answer-id="<%= @answer.id %>"]')
 
-  document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>"
-  document.querySelector('.answers').innerHTML += "<li> <%= j render @answer %> </li>"
+answerErrors.innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
 
-  var editAnswerLinks = document.querySelectorAll('.edit-answer-link')
-
-  if (editAnswerLinks.length) {
-    for(var i = 0; i < editAnswerLinks.length; i++) {
-      editAnswerLinks[i].addEventListener('click', function {
-        event.preventDefault()
-        console.log('qqq')
-        editAnswerLinks[i].classList.add('hide')
-        var answer_id = editAnswerLinks[i].dataset.answerId
-        editFormHandler(answer_id)
-      }
-    }
-  }
-
-  function editFormHandler(id) {
-    document.getElementById('#edit-answer-' + id).classList.remove('hide')
-  }
-
+if (answerErrors.innerHTML === '') {
+  answerBody.innerHTML = "<%= @answer.body %>";
+  editHideClassHandler("<%= @answer.id %>"); // defined in assets/javascripts/answers.js
+};

@@ -13,27 +13,35 @@ feature 'Delete answer', %q{
   given!(:answer) { create(:answer, question: question, author: author) }
 
   scenario 'Author deletes answer' do
-    sign_in(author)
-
+    sign_in author
     visit question_path(question)
-    expect(page).to have_content answer.body
-    click_on 'Delete answer'
 
-    expect(page).to_not have_content answer.body
-    expect(current_path).to eq question_path(question)
+    within '.answers' do
+      expect(page).to have_content answer.body
+      click_on 'Delete'
+
+      expect(current_path).to eq question_path(question)
+      expect(page).to_not have_content(answer.body)
+    end
+
+    expect(page).to have_content('Answer was deleted successfully.')
   end
 
   scenario "Not author can't delete question" do
     sign_in(other_user)
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete Answer'
+    within '.answers' do
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
   scenario "Non-authenticated user can't delete question" do
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete Answer'
+    within '.answers' do
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
 end
