@@ -26,9 +26,9 @@ feature 'Answer editing', %q{
     end
 
     scenario 'Author tries to edit his answer with valid attributes', js: true do
-      expect(page).to have_content(answer.body)
-
       within '.answers' do
+        expect(page).to have_content(answer.body)
+
         click_on 'Edit'
         fill_in 'Your answer', with: 'edited body'
         click_on 'Publish'
@@ -41,9 +41,9 @@ feature 'Answer editing', %q{
     end
 
     scenario 'Author tries to edit his answer with invalid attributes', js: true do
-      expect(page).to have_content(answer.body)
-
       within '.answers' do
+        expect(page).to have_content(answer.body)
+
         click_on 'Edit'
         fill_in 'Your answer', with: ''
         click_on 'Publish'

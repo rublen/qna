@@ -1,10 +1,10 @@
 document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>"
 document.querySelector('.answers').innerHTML += "<%= j render @answer %>"
-document.getElementById('answer_body').value = ''
+document.querySelector('.new-answer-form').querySelector('#answer_body').value = ''
 
 editNewAnswerLink = document.querySelector('[data-answer-id="<%= @answer.id %>"]');
 
 editNewAnswerLink.addEventListener('click', function(event) {
   event.preventDefault();
-  editHideClassHandler(this.dataset.answerId); // defined in assets/javascripts/answers.js
+  editHideClassHandler('answer', this.dataset.answerId); // defined in assets/javascripts/answers.js
 })

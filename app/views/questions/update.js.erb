@@ -1,0 +1,10 @@
+var questionErrors = document.getElementById('edit-question-form-' + "<%= @question.id %>").querySelector('.question-errors')
+var questionTitle = document.getElementById('question-title-' + "<%= @question.id %>")
+var questionEditLink = document.querySelector('[data-question-id="<%= @question.id %>"]')
+
+questionErrors.innerHTML = "<%= j render 'shared/errors', resource: @question %>";
+
+if (questionErrors.innerHTML === '') {
+  questionTitle.innerHTML = "<%= @question.title %>";
+  editHideClassHandler("<%= @question.id %>"); // defined in assets/javascripts/questions.js
+};

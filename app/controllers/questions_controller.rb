@@ -16,10 +16,10 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    unless current_user.author_of? @question
-      flash[:alert] = 'This action is permitted only for author.'
-      redirect_to @question
-    end
+    # unless current_user.author_of? @question
+    #   flash[:alert] = 'This action is permitted only for author.'
+    #   redirect_to @question
+    # end
   end
 
   def create
@@ -33,10 +33,10 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.author_of? @question
+      @question.update(question_params)
     else
-      render :edit
+      flash[:alert] = 'This action is permitted only for author.'
     end
   end
 

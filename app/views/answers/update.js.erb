@@ -6,5 +6,5 @@ answerErrors.innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
 
 if (answerErrors.innerHTML === '') {
   answerBody.innerHTML = "<%= @answer.body %>";
-  editHideClassHandler("<%= @answer.id %>"); // defined in assets/javascripts/answers.js
+  editHideClassHandler('answer', "<%= @answer.id %>"); // defined in assets/javascripts/answers.js
 };
