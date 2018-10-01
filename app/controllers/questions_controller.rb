@@ -12,31 +12,23 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
-    # @answers = @question.answers
   end
 
   def edit
-    # unless current_user.author_of? @question
-    #   flash[:alert] = 'This action is permitted only for author.'
-    #   redirect_to @question
-    # end
   end
 
   def create
     @question = current_user.questions.new(question_params)
 
     if @question.save
-      redirect_to @question, notice: 'Your question was successfully created'
-    else
-      render :new
+      redirect_to questions_path, notice: 'Your question was successfully created'
     end
   end
 
   def update
     if current_user.author_of? @question
-      @question.update(question_params)
-    else
-      flash[:alert] = 'This action is permitted only for author.'
+      # flash.now не работает
+      flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
     end
   end
 

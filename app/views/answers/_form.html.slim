@@ -1,5 +1,7 @@
 = form_with model: (answer.persisted? ? answer : [@question, answer]) do |f|
+
   p= f.label :body, 'Your answer'
   .answer-errors
   = f.text_area :body
+
   p= f.submit 'Publish'

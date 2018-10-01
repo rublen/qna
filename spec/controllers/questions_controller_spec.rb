@@ -47,19 +47,19 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    let(:question) { create(:question, author: @user) }
-    before { get :edit, params: { id: question } }
+  # describe 'GET #edit' do
+  #   sign_in_user
+  #   let(:question) { create(:question, author: @user) }
+  #   before { get :edit, params: { id: question } }
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
+  #   it 'assigns the requested question to @question' do
+  #     expect(assigns(:question)).to eq question
+  #   end
 
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
+  #   it 'renders edit view' do
+  #     expect(response).to render_template :edit
+  #   end
+  # end
 
   describe 'POST #create' do
     sign_in_user
@@ -68,20 +68,20 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'redirects to questions_path' do
         post :create, params: { question: attributes_for(:question) }
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to redirect_to questions_path
       end
     end
 
     context 'with invalide attributes' do
       it 'does not save the question in the DB' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:invalid_question) }, format: :js }.to_not change(Question, :count)
       end
 
       it 'renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
-        expect(response).to render_template :new
+        post :create, params: { question: attributes_for(:invalid_question), format: :js }
+        expect(response).to render_template :create
       end
     end
   end
@@ -92,20 +92,20 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with valide attributes' do
       it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'} }
+        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
         question.reload
         expect(question.title).to eq 'new tit'
         expect(question.body).to eq 'new b'
       end
 
-      it 'redirects to the updated question' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'} }
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'renders update template' do
+        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
+        expect(response).to render_template :update
       end
     end
 
@@ -113,7 +113,7 @@ RSpec.describe QuestionsController, type: :controller do
       before do
         @title = question.title
         @body = question.body
-        patch :update, params: { id: question, question: attributes_for(:invalid_question) }
+        patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js }
       end
 
       it 'does not change question attributes' do
@@ -122,8 +122,8 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.body).to eq @body
       end
 
-      it 'renders edit view' do
-        expect(response).to render_template :edit
+      it 'renders update template' do
+        expect(response).to render_template :update
       end
     end
   end
