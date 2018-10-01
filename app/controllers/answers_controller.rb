@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: %i[update destroy]
+  before_action :set_answer, only: %i[update best destroy]
   before_action :set_question, only: %i[create]
 
   def create
@@ -12,6 +12,14 @@ class AnswersController < ApplicationController
   def update
     flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
     @question = @answer.question
+  end
+
+  def best
+    # @question = @answer.question
+    # if current_user.author_of?(@question)
+    #   @question.answers.find { |answer| answer.bestness = true }.bestness = false
+    #   @answer.bestness = true
+    # end
   end
 
   def destroy
@@ -33,6 +41,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, :bestness)
   end
 end
