@@ -6,23 +6,20 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
-    @answer.save
+    flash.now[:notice] = 'Answer was created successfully.' if @answer.save
   end
 
   def update
-    @answer.update(answer_params)
+    flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
     @question = @answer.question
   end
 
   def destroy
     if current_user.author_of? @answer
-      @answer.destroy
-      flash[:notice] = 'Answer was deleted successfully.'
+      flash.now[:notice] = 'Answer was deleted successfully.' if @answer.destroy
     else
-      flash[:alert] = 'This action is permitted only for author.'
+      flash.now[:alert] = 'This action is permitted only for author.'
     end
-
-    redirect_to question_path(@answer.question)
   end
 
   private

@@ -27,7 +27,6 @@ class QuestionsController < ApplicationController
 
   def update
     if current_user.author_of? @question
-      # flash.now не работает
       flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
     end
   end

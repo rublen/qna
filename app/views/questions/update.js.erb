@@ -1,3 +1,5 @@
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+
 var questionErrors = document.getElementById('edit-question-form-' + "<%= @question.id %>").querySelector('.question-errors')
 var questionTitle = document.getElementById('question-title-' + "<%= @question.id %>")
 var questionEditLink = document.querySelector('[data-id="<%= @question.id %>"]', '[data-model="question"]')

@@ -12,7 +12,7 @@ feature 'Delete answer', %q{
   given(:question) { create(:question, author: other_user) }
   given!(:answer) { create(:answer, question: question, author: author) }
 
-  scenario 'Author deletes answer' do
+  scenario 'Author deletes answer', js: true do
     sign_in author
     visit question_path(question)
 
@@ -43,5 +43,4 @@ feature 'Delete answer', %q{
       expect(page).to_not have_content 'Delete'
     end
   end
-
 end

@@ -1,3 +1,4 @@
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
 document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>"
 document.querySelector('.answers').innerHTML += "<%= j render @answer %>"
 document.querySelector('.new-answer-form').querySelector('#answer_body').value = ''

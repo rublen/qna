@@ -1,3 +1,5 @@
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+
 var answerErrors = document.getElementById('edit-answer-form-' + "<%= @answer.id %>").querySelector('.answer-errors')
 var answerBody = document.getElementById('answer-body-' + "<%= @answer.id %>")
 var answerEditLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]')
