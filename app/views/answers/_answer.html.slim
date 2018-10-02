@@ -1,12 +1,8 @@
 - if answer.persisted?
   p id="answer-body-#{answer.id}"
     = answer.body
-    / - if current_user&.author_of?(answer.question)
-    span style="color:gray"
-       / = link_to "Mark as the best", best_answer_path(answer), class: "best-answer", id: "answer_#{answer.id}", remote: true
-       = radio_button_tag(:answer, "#{answer.id}", method: :best)
-
-       / = render 'answers/best', answer: answer, formats: [:js]
+    - if current_user&.author_of?(answer.question)
+       = link_to "Mark as the best", best_answer_path(answer), class: "best-answer", id: "answer_#{answer.id}", remote: true
 
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '', class: "edit-link", data: { id: answer.id, model: 'answer' }

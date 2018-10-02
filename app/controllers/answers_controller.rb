@@ -15,11 +15,9 @@ class AnswersController < ApplicationController
   end
 
   def best
-    # @question = @answer.question
-    # if current_user.author_of?(@question)
-    #   @question.answers.find { |answer| answer.bestness = true }.bestness = false
-    #   @answer.bestness = true
-    # end
+    unless current_user.author_of?(@answer.question)
+      flash.now[:alert] = 'This action is permitted only for author.'
+    end
   end
 
   def destroy

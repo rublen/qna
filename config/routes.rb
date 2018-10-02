@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, shallow: true, except: %i[index new show] do
-      patch 'best', on: :member
+      get 'best', on: :member
     end
   end
 

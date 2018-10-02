@@ -10,14 +10,15 @@ feature 'The best answer for question', %q{
   given(:other_user) { create(:user) }
 
   given(:question) { create(:question, author: author) }
-  given!(:answers) { create_list(:answer, 2) }
+  given!(:answers) { create_list(:answer, 2, question: question) }
 
   scenario "Author can choose the best answer", js: true do
     sign_in(author)
     visit question_path(question)
-
+    save_and_open_page
     within '.answers' do
-      'each answer has radio-button'
+      click_on 'Mark as the best'
+      expect(current_path).to eq question_path(question)
     end
   end
 
@@ -34,4 +35,8 @@ feature 'The best answer for question', %q{
   scenario "Not author can't choose the best answer", js: true do
     sign_in(other_user)
     visit question_path(question)
+    within '.answers' do
+      expect(page).to_not have_content 'Mark as the best'
+    end
   end
+end

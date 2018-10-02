@@ -1,7 +1,5 @@
 document.addEventListener('turbolinks:load', function() {
   var editLinks = document.querySelectorAll('.edit-link');
-  var notice = document.querySelector('.notice');
-  var alert = document.querySelector('.alert')
 
   if (editLinks.length) {
     for(var i = 0; i < editLinks.length; i++) {
@@ -19,6 +17,6 @@ function editHideClassHandler(model, id) {
 };
 
 function cleanFlash() {
-  notice.innerHTML = ''
-  alert.innerHTML = ''
+  document.querySelector('.notice').innerHTML = ''
+  document.querySelector('.alert').innerHTML = ''
 }
