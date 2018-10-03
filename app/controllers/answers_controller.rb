@@ -6,16 +6,25 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
-    flash.now[:notice] = 'Answer was created successfully.' if @answer.save
+    if @answer.save!
+      flash.now[:notice] = 'Answer was created successfully.'
+    end
   end
 
   def update
-    flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
+    if @answer.update(answer_params)
+      flash.now[:notice] = 'Answer was updated successfully.'
+    end
     @question = @answer.question
   end
 
   def best
-    unless current_user.author_of?(@answer.question)
+    @question = @answer.question
+
+    if current_user.author_of?(@question)
+      @answer.mark_the_best
+      @answers = Question.best_is_first_answers_list(@question)
+    else
       flash.now[:alert] = 'This action is permitted only for author.'
     end
   end
@@ -39,6 +48,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :bestness)
+    params.require(:answer).permit(:body, :best)
   end
 end

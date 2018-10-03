@@ -12,6 +12,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
+    @answers = Question.best_is_first_answers_list(@question)
   end
 
   def edit
