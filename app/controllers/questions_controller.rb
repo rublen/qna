@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   before_action :set_question, only: %i[show edit update destroy]
+  before_action :set_answers, only: %i[show]
 
   def index
     @questions = Question.all
@@ -12,10 +13,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
-    @answers = Question.best_is_first_answers_list(@question)
-  end
-
-  def edit
   end
 
   def create
@@ -46,6 +43,10 @@ class QuestionsController < ApplicationController
   private
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def set_answers
+    @answers = Question.best_is_first_answers_list(@question)
   end
 
   def question_params

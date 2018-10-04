@@ -92,26 +92,91 @@ RSpec.describe AnswersController, type: :controller do
     context 'author deletes the answer' do
       let!(:answer) { create(:answer, author: @user) }
 
+      it 'assigns requested answer to @answer' do
+        delete :destroy, params: { id: answer, format: :js }
+        expect(assigns(:answer)).to eq answer
+      end
+
       it 'deletes answer' do
         expect { delete :destroy, params: { id: answer, format: :js } }.to change(Answer, :count).by(-1)
       end
 
-       it 'renders answers/delete view' do
+       it 'renders answers/destroy view' do
         delete :destroy, params: { id: answer, format: :js }
         expect(response).to render_template 'destroy'
       end
     end
 
     context 'not author can not delete the answer' do
-      let!(:answer) { create(:answer, author: user) }
+      let!(:answer) { create(:answer, author: create(:user)) }
+      it 'assigns requested answer to @answer' do
+        delete :destroy, params: { id: answer, format: :js }
+        expect(assigns(:answer)).to eq answer
+      end
 
       it 'tries to delete answer' do
-        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
+        expect { delete :destroy, params: { id: answer, format: :js } }.to_not change(Answer, :count)
+      end
+
+      it 'renders answers/destroy view' do
+        delete :destroy, params: { id: answer, format: :js }
+        expect(response).to render_template 'destroy'
+      end
+    end
+  end
+
+  describe "GET #best" do
+    let(:user) { create(:user) }
+    let(:question) { create(:question, author: user) }
+    let!(:answer_1) { create(:answer, question: question) }
+    let!(:answer_2) { create(:answer, question: question) }
+
+    context "assigning" do
+      before do
+        sign_in user
+        get :best, params: { id: answer_1, format: :js }
+      end
+
+      it 'assigns requested answer to @answer' do
+        expect(assigns(:answer)).to eq answer_1
+      end
+
+      it 'assigns the responsive question to @question' do
+        expect(assigns(:question)).to eq answer_1.question
+      end
+    end
+
+    context 'author chooses the best answer for his question' do
+      before do
+        sign_in user
+        answer_2.update(best: true)
+        get :best, params: { id: answer_1, format: :js }
+      end
+
+      it "answer's attribute 'best' changes for 'true'" do
+        expect(answer_1.reload.best).to eq true
+      end
+
+      it "all of other answers of current question have { best: false }" do
+        expect(answer_2.reload.best).to eq false
+      end
+
+       it 'renders answers/best view' do
+        expect(response).to render_template 'best'
+      end
+    end
+
+    context 'not author can not mark the answer as best' do
+      sign_in_user
+      # before { sign_in create(:user) }
+
+      it 'tries to mark answer' do
+        expect { get :best, params: { id: answer_1, format: :js } }.to_not change(answer_1, :best)
       end
 
       it 'renders answers/delete view' do
-        delete :destroy, params: { id: answer, format: :js }
-        expect(response).to render_template 'destroy'
+        get :best, params: { id: answer_1, format: :js }
+        expect(response).to render_template 'best'
       end
     end
   end

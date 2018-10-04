@@ -1,14 +1,14 @@
 document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+document.querySelector('.answers').innerHTML = "<%= j render @answers %>"
+// var answers = document.querySelector('.answers').innerHTML
+// var id = "<%= @answer.id %>"
 
-var answers = document.querySelector('.answers').innerHTML
-var id = "<%= @answer.id %>"
+// answers = answers.split('<p id="answer-body-')
 
-answers = answers.split('<p id="answer-body-')
+// for (var i = 0; i < answers.length; i++) {
+//   if (answers[i].substring(0, id.length) === id) {
+//     delete answers[i]
+//   }
+// }
 
-for (var i = 0; i < answers.length; i++) {
-  if (answers[i].substring(0, id.length) === id) {
-    delete answers[i]
-  }
-}
-
-document.querySelector('.answers').innerHTML = answers.join('<p id="answer-body-')
+// document.querySelector('.answers').innerHTML = answers.join('<p id="answer-body-')
