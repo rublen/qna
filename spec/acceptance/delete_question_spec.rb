@@ -20,7 +20,8 @@ feature 'Delete question', %q{
       click_on 'Delete'
 
       expect(current_path).to eq questions_path
-      expect(page).to_not have_content question.title
+      page.refresh # на всякий случай
+      expect(page).to_not have_content question.title # ?!! в этом месте падает, не могу понять почему, нету там этого текста, проверяла с save_and_open_page
       expect(page).to have_content 'Question was deleted successfully.'
     end
   end
