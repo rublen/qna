@@ -7,7 +7,7 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :body }
 
   it "sets default value 'false' for 'best' attribute" do
-    expect(create(:answer).best).to eq false
+    expect(create(:answer)).to_not be_best
   end
 
   describe "best answer" do
@@ -18,19 +18,19 @@ RSpec.describe Answer, type: :model do
     context "validates question's number of best answers" do
       it 'returns error after attempt to have two questions with { best: true }' do
         answer_1.update(best: true)
-        expect(answer_1.errors.full_messages).to include("Question can't have more than one best answer")
+        expect(answer_1.errors.full_messages).to include("Best answer: question can't have more than one")
       end
     end
 
     context "'mark_the_best' method" do
       it 'changes the answer with { best: true } for { best: false }' do
         answer_1.mark_the_best
-        expect(answer_2.reload.best).to eq false
+        expect(answer_2.reload).to_not be_best
       end
 
       it 'updates the required answer with { best: true }' do
         answer_1.mark_the_best
-        expect(answer_1.reload.best).to eq true
+        expect(answer_1.reload).to be_best
       end
     end
   end

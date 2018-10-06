@@ -73,42 +73,67 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
-    let(:question) { create(:question, author: @user) }
+    let(:author) { create(:user) }
+    let(:question) { create(:question, author: author) }
 
-    context 'with valide attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
-        expect(assigns(:question)).to eq question
+    context 'The author updates his question' do
+      before { sign_in(author) }
+
+      describe 'With valide attributes' do
+        it 'assigns the requested question to @question' do
+          patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+          expect(assigns(:question)).to eq question
+        end
+
+        it "changes question's attributes" do
+          patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
+          question.reload
+          expect(question.title).to eq 'new tit'
+          expect(question.body).to eq 'new b'
+        end
+
+        it 'renders update template' do
+          patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+          expect(response).to render_template :update
+        end
       end
 
-      it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
-        question.reload
-        expect(question.title).to eq 'new tit'
-        expect(question.body).to eq 'new b'
-      end
+      describe 'With invalide attributes' do
+        before do
+          @title = question.title
+          @body = question.body
+          patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js }
+        end
 
-      it 'renders update template' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
-        expect(response).to render_template :update
+        it 'does not change question attributes' do
+          question.reload
+          expect(question.title).to eq @title
+          expect(question.body).to eq @body
+        end
+
+        it 'renders update template' do
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalide attributes' do
-      before do
-        @title = question.title
-        @body = question.body
-        patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js }
+    context 'Not author tries to update the question' do
+      before { sign_in(create(:user)) }
+
+      it "doesn't change question's attributes" do
+        expect { patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js } }.to_not change(question, :title)
+        expect { patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js } }.to_not change(question, :body)
       end
 
-      it 'does not change question attributes' do
-        question.reload
-        expect(question.title).to eq @title
-        expect(question.body).to eq @body
+      it "recieves the flash-message about no permission for this action" do
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+
+        expect(flash[:alert]).to eq 'This action is permitted only for author.'
       end
 
-      it 'renders update template' do
+      it 'renders questions/update view' do
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+
         expect(response).to render_template :update
       end
     end

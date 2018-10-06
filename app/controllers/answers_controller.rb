@@ -1,5 +1,4 @@
 class AnswersController < ApplicationController
-  protect_from_forgery except: :best
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy best]
   before_action :set_question, only: %i[create]
@@ -14,16 +13,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
-      flash.now[:notice] = 'Answer was updated successfully.'
+    if current_user.author_of? @answer
+      @question = @answer.question
+      flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
+    else
+      flash.now[:alert] = 'This action is permitted only for author.'
     end
-    @question = @answer.question
   end
 
   def destroy
     if current_user.author_of? @answer
       flash.now[:notice] = 'Answer was deleted successfully.' if @answer.destroy
-
     else
       flash.now[:alert] = 'This action is permitted only for author.'
     end
@@ -50,7 +50,7 @@ class AnswersController < ApplicationController
   end
 
   def set_answers
-    @answers = Question.best_is_first_answers_list(@answer.question)
+    @answers = @answer.question.answers.best_first
   end
 
   def answer_params

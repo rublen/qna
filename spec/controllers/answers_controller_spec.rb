@@ -57,39 +57,77 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
-    let!(:answer) { create :answer, question: question, author: @user }
+    let(:author) { create(:user) }
+    let!(:answer) { create :answer, question: question, author: author }
 
-    it 'assigns requested answer to @answer' do
-      patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
+    context 'The author updates his answer' do
+      before { sign_in(author) }
 
-      expect(assigns(:answer)).to eq answer
+      describe 'Assigning' do
+        before { patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js } }
+
+        it 'assigns requested answer to @answer' do
+          expect(assigns(:answer)).to eq answer
+        end
+
+        it 'assigns the requested question to @question' do
+          expect(assigns(:question)).to eq question
+        end
+      end
+
+      describe 'With valid attributes' do
+        it "changes answer's attributes" do
+          patch :update, params: { id: answer, answer: { body: 'new body' }, format: :js }
+          answer.reload
+
+          expect(answer.body).to eq 'new body'
+        end
+
+        it 'renders answers/update view' do
+          patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
+
+          expect(response).to render_template :update
+        end
+      end
+
+      describe 'With invalid attributes' do
+        it "doesn't change answer's attributes" do
+          expect { patch :update, params: { id: answer, answer: { body: '' }, format: :js } }.to_not change(answer, :body)
+        end
+
+        it 'renders answers/update view' do
+          patch :update, params: { id: answer, answer: { body: '' }, format: :js }
+
+          expect(response).to render_template :update
+        end
+      end
     end
 
-    it 'assigns the requested question to @question' do
-      patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
+    context 'Not author tries to update the answer' do
+      before { sign_in(create(:user)) }
 
-      expect(assigns(:question)).to eq question
-    end
+      it "doesn't change answer's attributes" do
+        expect { patch :update, params: { id: answer, answer: { body: 'new body' }, format: :js } }.to_not change(answer, :body)
+      end
 
-    it "changes answer's attributes" do
-      patch :update, params: { id: answer, answer: { body: 'new body' }, format: :js }
-      answer.reload
+      it "recieves the flash-message about no permission for this action" do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
 
-      expect(answer.body).to eq 'new body'
-    end
+        expect(flash[:alert]).to eq 'This action is permitted only for author.'
+      end
 
-    it 'render update template' do
-      patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
+      it 'renders answers/update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
 
-      expect(response).to render_template :update
+        expect(response).to render_template :update
+      end
     end
   end
 
   describe 'DELETE #destroy' do
     sign_in_user
 
-    context 'author deletes the answer' do
+    context 'The author deletes the answer' do
       let!(:answer) { create(:answer, author: @user) }
 
       it 'assigns requested answer to @answer' do
@@ -107,8 +145,9 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not author can not delete the answer' do
+    context 'Not author can not delete the answer' do
       let!(:answer) { create(:answer, author: create(:user)) }
+
       it 'assigns requested answer to @answer' do
         delete :destroy, params: { id: answer, format: :js }
         expect(assigns(:answer)).to eq answer
@@ -125,16 +164,16 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe "GET #best" do
+  describe "PATCH #best" do
     let(:user) { create(:user) }
     let(:question) { create(:question, author: user) }
     let!(:answer_1) { create(:answer, question: question) }
     let!(:answer_2) { create(:answer, question: question) }
 
-    context "assigning" do
+    context "Assigning" do
       before do
         sign_in user
-        get :best, params: { id: answer_1, format: :js }
+        patch :best, params: { id: answer_1, format: :js }
       end
 
       it 'assigns requested answer to @answer' do
@@ -146,11 +185,11 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'author chooses the best answer for his question' do
+    context 'The author chooses the best answer for his question' do
       before do
         sign_in user
         answer_2.update(best: true)
-        get :best, params: { id: answer_1, format: :js }
+        patch :best, params: { id: answer_1, format: :js }
       end
 
       it "answer's attribute 'best' changes for 'true'" do
@@ -166,16 +205,15 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not author can not mark the answer as best' do
+    context 'Not author can not mark the answer as best' do
       sign_in_user
-      # before { sign_in create(:user) }
 
       it 'tries to mark answer' do
-        expect { get :best, params: { id: answer_1, format: :js } }.to_not change(answer_1, :best)
+        expect { patch :best, params: { id: answer_1, format: :js } }.to_not change(answer_1, :best)
       end
 
       it 'renders answers/delete view' do
-        get :best, params: { id: answer_1, format: :js }
+        patch :best, params: { id: answer_1, format: :js }
         expect(response).to render_template 'best'
       end
     end
