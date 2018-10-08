@@ -47,20 +47,6 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    let(:question) { create(:question, author: @user) }
-    before { get :edit, params: { id: question } }
-
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     sign_in_user
     context 'with valide attributes' do
@@ -68,62 +54,87 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(@user.questions, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'redirects to questions_path' do
         post :create, params: { question: attributes_for(:question) }
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to redirect_to questions_path
       end
     end
 
     context 'with invalide attributes' do
       it 'does not save the question in the DB' do
-        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:invalid_question) }, format: :js }.to_not change(Question, :count)
       end
 
-      it 'renders new view' do
-        post :create, params: { question: attributes_for(:invalid_question) }
-        expect(response).to render_template :new
+      it 'renders questions/create view' do
+        post :create, params: { question: attributes_for(:invalid_question), format: :js }
+        expect(response).to render_template :create
       end
     end
   end
 
   describe 'PATCH #update' do
-    sign_in_user
-    let(:question) { create(:question, author: @user) }
+    let(:author) { create(:user) }
+    let(:question) { create(:question, author: author) }
 
-    context 'with valide attributes' do
-      it 'assigns the requested question to @question' do
-        patch :update, params: { id: question, question: attributes_for(:question) }
-        expect(assigns(:question)).to eq question
+    context 'The author updates his question' do
+      before { sign_in(author) }
+
+      describe 'With valide attributes' do
+        it 'assigns the requested question to @question' do
+          patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+          expect(assigns(:question)).to eq question
+        end
+
+        it "changes question's attributes" do
+          patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'}, format: :js }
+          question.reload
+          expect(question.title).to eq 'new tit'
+          expect(question.body).to eq 'new b'
+        end
+
+        it 'renders update template' do
+          patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+          expect(response).to render_template :update
+        end
       end
 
-      it 'changes question attributes' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'} }
-        question.reload
-        expect(question.title).to eq 'new tit'
-        expect(question.body).to eq 'new b'
-      end
+      describe 'With invalide attributes' do
+        before do
+          @title = question.title
+          @body = question.body
+          patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js }
+        end
 
-      it 'redirects to the updated question' do
-        patch :update, params: { id: question, question: { title: 'new tit', body: 'new b'} }
-        expect(response).to redirect_to question_path(assigns(:question))
+        it 'does not change question attributes' do
+          question.reload
+          expect(question.title).to eq @title
+          expect(question.body).to eq @body
+        end
+
+        it 'renders update template' do
+          expect(response).to render_template :update
+        end
       end
     end
 
-    context 'with invalide attributes' do
-      before do
-        @title = question.title
-        @body = question.body
-        patch :update, params: { id: question, question: attributes_for(:invalid_question) }
+    context 'Not author tries to update the question' do
+      before { sign_in(create(:user)) }
+
+      it "doesn't change question's attributes" do
+        expect { patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js } }.to_not change(question, :title)
+        expect { patch :update, params: { id: question, question: attributes_for(:invalid_question), format: :js } }.to_not change(question, :body)
       end
 
-      it 'does not change question attributes' do
-        question.reload
-        expect(question.title).to eq @title
-        expect(question.body).to eq @body
+      it "recieves the flash-message about no permission for this action" do
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+
+        expect(flash[:alert]).to eq 'This action is permitted only for author.'
       end
 
-      it 'renders edit view' do
-        expect(response).to render_template :edit
+      it 'renders questions/update view' do
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
+
+        expect(response).to render_template :update
       end
     end
   end

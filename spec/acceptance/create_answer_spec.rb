@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Create Answer', %q{
   In order to answer the current question
@@ -28,7 +28,7 @@ feature 'Create Answer', %q{
 
     click_on 'Publish'
 
-    expect(page).to have_content "Body can't be blank" # пока что не проходит, ошибки не выводятся
+    expect(page).to have_content "Body can't be blank"
   end
 
   scenario "Non-authenticated user can't write the answer" do

@@ -1,11 +1,9 @@
 h1= @question.title
 
-- if user_signed_in? && current_user.author_of?(@question)
-  = button_to 'Delete question', @question, method: :delete
-
 h2= @question.body
 
 .answers
-  = render @question.answers
+  = render @answers
 
-= render 'answers/form'
+.new-answer-form
+  = render 'answers/form', answer: @answer

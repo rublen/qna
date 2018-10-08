@@ -1,2 +1,11 @@
-document.querySelector('.answers').innerHTML += "<li> <%= j render @answer %> </li>"
-document.getElementById('answer_body').value = ''
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>";
+document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
+document.querySelector('.answers').innerHTML += "<%= j render @answer %>";
+document.querySelector('.new-answer-form').querySelector('#answer_body').value = '';
+
+editNewAnswerLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
+
+editNewAnswerLink.addEventListener('click', function(event) {
+  event.preventDefault();
+  editHideClassHandler('answer', this.dataset.id); // defined in assets/javascripts/answers.js
+});

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'acceptance_helper'
 
 feature 'Delete question', %q{
   In order to manage my questions
@@ -13,29 +13,33 @@ feature 'Delete question', %q{
 
   scenario 'Author deletes question' do
     sign_in(author)
-
     visit questions_path
-    expect(page).to have_content question.title
 
-    click_on question.title
+    within '.questions' do
+      expect(page).to have_content question.title
+      click_on 'Delete'
 
-    expect(current_path).to eq question_path(question)
-    click_on 'Delete question'
-
-    expect(current_path).to eq questions_path
-    expect(page).to_not have_content question.title
+      expect(current_path).to eq questions_path
+      page.refresh # на всякий случай
+      expect(page).to_not have_content question.title # ?!! в этом месте падает, не могу понять почему, нету там этого текста, проверяла с save_and_open_page
+      expect(page).to have_content 'Question was deleted successfully.'
+    end
   end
 
   scenario "Not author can't delete question" do
     sign_in(other_user)
-    visit question_path(question)
+    visit questions_path
 
-    expect(page).to_not have_content 'Delete Question'
+    within '.questions' do
+      expect(page).to_not have_content 'Delete'
+    end
   end
 
   scenario "Non-authenticated user can't delete question" do
-    visit question_path(question)
+    visit questions_path
 
-    expect(page).to_not have_content 'Delete Question'
+    within '.questions' do
+      expect(page).to_not have_content 'Delete'
+    end
   end
 end

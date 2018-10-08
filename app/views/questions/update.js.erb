@@ -1,0 +1,12 @@
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+
+var questionErrors = document.getElementById('edit-question-form-' + "<%= @question.id %>").querySelector('.question-errors')
+var questionTitle = document.getElementById('question-title-' + "<%= @question.id %>")
+var questionEditLink = document.querySelector('[data-id="<%= @question.id %>"]', '[data-model="question"]')
+
+questionErrors.innerHTML = "<%= j render 'shared/errors', resource: @question %>";
+
+if (questionErrors.innerHTML === '') {
+  questionTitle.innerHTML = '<%= link_to @question.title, question_path(@question) %>';
+  editHideClassHandler('question', "<%= @question.id %>"); // defined in assets/javascripts/edit_links.js
+};
