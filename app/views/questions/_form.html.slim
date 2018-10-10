@@ -7,4 +7,10 @@
   p= f.label :body
   = f.text_area :body
 
+  p Attachments:
+  p
+    = f.fields_for :attachments do |a|
+      p= a.label :file
+      p= a.file_field :file
+
   p= f.submit 'Publish'

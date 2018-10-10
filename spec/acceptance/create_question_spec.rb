@@ -8,13 +8,14 @@ feature 'Create question', %q{
 
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user creates question' do
+  scenario 'Authenticated user creates question', js: true do
     sign_in(user)
-
     visit questions_path
+
     click_on 'Ask question'
     fill_in 'Title', with: 'Test question'
     fill_in 'Body', with: '12345678'
+
     click_on 'Publish'
 
     expect(page).to have_content 'Your question was successfully created'
