@@ -4,4 +4,7 @@
   .answer-errors
   = f.text_area :body
 
+  p Attachments:
+  = render 'attachments/form', form: f
+
   p= f.submit 'Publish'
