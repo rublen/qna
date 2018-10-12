@@ -28,3 +28,7 @@ body {
 .hide {
   display: none;
 }
+.attachments {
+  padding-left: 7px;
+  padding-bottom: 10px;
+}

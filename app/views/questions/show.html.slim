@@ -1,12 +1,14 @@
 h1= @question.title
 
-h2= @question.body
+h3= @question.body
 
 .attachments
   = render @attachments
 
 .answers
+  h2 Answers:
   = render @answers
 
+hr
 .new-answer-form
   = render 'answers/form', answer: @answer

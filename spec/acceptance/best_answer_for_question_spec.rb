@@ -23,10 +23,10 @@ feature 'The best answer for question', %q{
 
     scenario "To choose the best answer author has links wich don't redirect to another page", js: true do
       within ".answers" do
-        expect(page).to have_link('Mark as the best')
-        expect(page.all('.best-answer').size).to eq question.answers.count # внутри '.best-answer' ссылка 'Mark as the best'
+        expect(page).to have_link('[Mark as the best]')
+        expect(page.all('.best-answer').size).to eq question.answers.count # внутри '.best-answer' ссылка '[Mark as the best]'
 
-        within('p:first-child') { click_on 'Mark as the best' }
+        within('p:last-child') { click_on '[Mark as the best]' }
         expect(current_path).to eq question_path(question)
       end
     end
@@ -35,7 +35,7 @@ feature 'The best answer for question', %q{
     scenario "The best answer becomes first in the list", js: true do
       within ".answers" do
         within('p:first-child') { expect(page).to have_content("#{answer_1}") }
-        within('p:last-child') { click_on 'Mark as the best' }
+        within('p:last-child') { click_on '[Mark as the best]' }
         within('p:first-child') { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -43,7 +43,7 @@ feature 'The best answer for question', %q{
 
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
-        within("p:last-child") { click_on 'Mark as the best' }
+        within("p:last-child") { click_on '[Mark as the best]' }
         within("p:first-child") { expect(page).to have_content("#{answer_2}") }
         page.refresh
         within("p:first-child") { expect(page).to have_content("#{answer_2}") }
@@ -53,10 +53,10 @@ feature 'The best answer for question', %q{
 
     scenario "Author can change his mind and choose another best answer", js: true do
       within ".answers" do
-        within("p:last-child") { click_on 'Mark as the best' }
+        within("p:last-child") { click_on '[Mark as the best]' }
         within("p:first-child") { expect(page).to have_content("#{answer_2}") }
 
-        within("p:last-child") { click_on 'Mark as the best' }
+        within("p:last-child") { click_on '[Mark as the best]' }
         within("p:first-child") { expect(page).to have_content("#{answer_1}") }
       end
     end
@@ -66,6 +66,6 @@ feature 'The best answer for question', %q{
   scenario "Not author can't choose the best answer", js: true do
     sign_in(other_user)
     visit question_path(question)
-    within('.answers') { expect(page).to_not have_content 'Mark as the best' }
+    within('.answers') { expect(page).to_not have_content '[Mark as the best]' }
   end
 end

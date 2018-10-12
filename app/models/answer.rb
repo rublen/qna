@@ -3,7 +3,7 @@ class Answer < ApplicationRecord
   belongs_to :question
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   validates :body, presence: true
   validates :best, inclusion: { in: [true, false] },

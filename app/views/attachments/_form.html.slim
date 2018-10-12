@@ -1,3 +1,2 @@
-= form.fields_for :attachments do |a|
-  = a.label :file
-  = a.file_field :file
+/ = form.fields_for :attachments do |a|
+/   = render 'attachment_fields', f: a

@@ -18,12 +18,11 @@ feature 'Delete question', %q{
     within '.questions' do
       expect(page).to have_content question.title
       click_on 'Delete'
+    end
 
       expect(current_path).to eq questions_path
-      page.refresh # на всякий случай
-      expect(page).to_not have_content question.title # ?!! в этом месте падает, не могу понять почему, нету там этого текста, проверяла с save_and_open_page
+      expect(page).to_not have_content question.title
       expect(page).to have_content 'Question was deleted successfully.'
-    end
   end
 
   scenario "Not author can't delete question" do
