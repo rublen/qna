@@ -1,9 +1,10 @@
-h1= @question.title
+div id="question-#{@question.id}"
+  h1= @question.title
 
-h3= @question.body
+  h3= @question.body
 
-.attachments
-  = render @attachments
+  .attachments
+    = render @attachments
 
 .answers
   h2 Answers:

@@ -12,7 +12,7 @@ document.addEventListener('turbolinks:load', function() {
 });
 
 function editHideClassHandler(model, id) {
-  document.querySelector('[data-id="' + id + '"], [data-model="' + model + '"]').classList.toggle('hide');
+  document.querySelector('[data-id="' + id + '"]', '[data-model="' + model + '"]').classList.toggle('hide');
   document.querySelector('#edit-' + model + '-form-' + id).classList.toggle('hide')
 };
 

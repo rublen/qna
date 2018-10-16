@@ -8,7 +8,7 @@ feature 'Create question', %q{
 
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user creates question', js: true do
+  scenario 'Authenticated user creates question' do
     sign_in(user)
     visit questions_path
 
@@ -21,7 +21,7 @@ feature 'Create question', %q{
     expect(page).to have_content 'Your question was successfully created'
   end
 
-  scenario 'Authenticated user can not create invalid question', js: true do
+  scenario 'Authenticated user can not create invalid question' do
     sign_in(user)
 
     visit questions_path

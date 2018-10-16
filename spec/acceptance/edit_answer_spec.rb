@@ -25,7 +25,7 @@ feature 'Answer editing', %q{
       visit question_path(question)
     end
 
-    scenario 'Author tries to edit his answer with valid attributes', js: true do
+    scenario 'with valid attributes', js: true do
       within '.answers' do
         expect(page).to have_content(answer.body)
 
@@ -40,7 +40,7 @@ feature 'Answer editing', %q{
       end
     end
 
-    scenario 'Author tries to edit his answer with invalid attributes', js: true do
+    scenario 'with invalid attributes', js: true do
       within '.answers' do
         expect(page).to have_content(answer.body)
 
@@ -51,8 +51,8 @@ feature 'Answer editing', %q{
         expect(current_path).to eq question_path(question)
         expect(page).to have_selector 'textarea'
         expect(page).to have_content(answer.body)
-        expect(page).to have_content("Body can't be blank")
       end
+      expect(page).to have_content("Body can't be blank")
     end
   end
 

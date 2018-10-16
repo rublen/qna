@@ -1,0 +1,18 @@
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>";
+
+var parentId = "<%= @attachment.attachable_id %>"
+var parent = "<%= @attachment.attachable_type.downcase %>"
+
+var parentNode = document.getElementById(parent + '-' + parentId);
+var parentAttachments = parentNode.querySelector('.attachments');
+
+var attachments = parentAttachments.innerHTML.split('<a target="_blank" ');
+
+for (var i = 0; i < attachments.length; i++) {
+  if (attachments[i].includes("<%= @attachment.file.filename %>")) {
+    delete attachments[i];
+    break
+  }
+};
+
+parentAttachments.innerHTML = attachments.join('<a target="_blank" ');

@@ -1,13 +1,15 @@
 - if question.persisted?
-  li
-    p id="question-title-#{question.id}"
-      = link_to question.title, question_path(question)
+  div id="question-#{question.id}"
+    li
+      p id="question-title-#{question.id}"
+        = link_to question.title, question_path(question)
 
-    - if current_user&.author_of?(question)
-      = link_to 'Edit', '', class: "edit-link", data: { model: 'question', id: question.id }
+      - if current_user&.author_of?(question)
+        = link_to 'Edit', '', class: "edit-link", data: { model: 'question', id: question.id }
 
-      div id="edit-question-form-#{question.id}" class='hide'
-        = render 'form', question: question
+        div id="edit-question-form-#{question.id}" class='hide'
+          = form_with model: question do |f|
+            = render 'form_content', question: question, f: f
 
-      = "  "
-      = link_to 'Delete', question, method: :delete
+        = "  "
+        = link_to 'Delete', question, method: :delete
