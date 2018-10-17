@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
-  before_action :set_question, only: %i[show edit update destroy]
+  before_action :set_question, only: %i[show update destroy]
 
   def index
     @questions = Question.all
@@ -8,11 +8,14 @@ class QuestionsController < ApplicationController
 
   def new
     @question = Question.new
+    @attachment = @question.attachments.new
   end
 
   def show
     @answer = @question.answers.new
+    @answer.attachments.new
     @answers = @question.answers.best_first
+    @attachments = @question.attachments
   end
 
   def create
@@ -20,6 +23,8 @@ class QuestionsController < ApplicationController
 
     if @question.save
       redirect_to questions_path, notice: 'Your question was successfully created'
+    else
+      render 'new'
     end
   end
 
@@ -48,6 +53,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
 end

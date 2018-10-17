@@ -1,7 +1,15 @@
 = form_with model: (answer.persisted? ? answer : [@question, answer]) do |f|
 
-  p= f.label :body, 'Your answer'
+  h4= f.label :body, 'Your answer'
   .answer-errors
   = f.text_area :body
+
+  .attachments
+    p Attachments:
+    - f.fields_for :attachments do |a|
+      - render 'attachments/attachment_fields', f: a
+
+    .links
+      = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
 
   p= f.submit 'Publish'

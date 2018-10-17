@@ -1,14 +1,28 @@
 - if answer.persisted?
-  p id="answer-body-#{answer.id}"
-    = answer.body
-    - if current_user&.author_of?(answer.question)
-      = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true, class: "best-answer"
+  div id="answer-#{answer.id}"
+    hr
+    p id="answer-body-#{answer.id}"
+      = answer.body
 
-  - if current_user&.author_of?(answer)
-    = link_to 'Edit', '', class: "edit-link", data: { id: answer.id, model: 'answer' }
+      - if answer == answer.question.answers.best_first[0]
+        span class="best-answer"
+          = ' [The best answer]'
+      - elsif current_user&.author_of?(answer.question)
+        = '  '
+        = link_to "[Mark as the best]", best_answer_path(answer), method: :patch, remote: true, class: "best-answer"
 
-    div id="edit-answer-form-#{answer.id}" class='hide'
-      = render 'answers/form', answer: answer
+    - unless answer.attachments.empty?
+      .attachments
+        = "Attachments:"
+        br
+        = render answer.attachments
 
-    = "  "
-    = link_to 'Delete', answer, method: :delete, remote: true
+    .links
+      - if current_user&.author_of?(answer)
+        = link_to 'Edit', '', class: "edit-link", data: { id: answer.id, model: 'answer' }
+
+        div id="edit-answer-form-#{answer.id}" class='hide'
+          = render 'answers/form', answer: answer
+
+        = "  "
+        = link_to 'Delete', answer, method: :delete, remote: true

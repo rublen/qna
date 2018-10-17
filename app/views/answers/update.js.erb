@@ -1,12 +1,10 @@
-document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>";
 
-var answerErrors = document.getElementById('edit-answer-form-' + "<%= @answer.id %>").querySelector('.answer-errors')
-var answerBody = document.getElementById('answer-body-' + "<%= @answer.id %>")
-var answerEditLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
+var answerErrors = document.querySelector('.answer-errors');
+var answerNode = document.getElementById('answer-' + "<%= @answer.id %>");
 
 answerErrors.innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
 
 if (answerErrors.innerHTML === '') {
-  answerBody.innerHTML = "<%= @answer.body %>";
-  editHideClassHandler('answer', "<%= @answer.id %>"); // defined in assets/javascripts/edit_links.js
-};
+  answerNode.innerHTML = "<%= j render @answer %>"
+}

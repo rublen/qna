@@ -3,6 +3,10 @@ document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/error
 document.querySelector('.answers').innerHTML += "<%= j render @answer %>";
 document.querySelector('.new-answer-form').querySelector('#answer_body').value = '';
 
+var attachments = document.querySelector('.new-answer-form').querySelectorAll('.nested-fields')
+
+attachments.forEach(function(a) { a.remove() })
+
 editNewAnswerLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
 
 editNewAnswerLink.addEventListener('click', function(event) {

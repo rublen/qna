@@ -25,6 +25,18 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to eq question
     end
 
+    it "assigns the array of question's answers to @answers" do
+      expect(assigns(:answers)).to match_array question.answers
+    end
+
+    it "assigns the array of question's attachments to @attachments" do
+      expect(assigns(:attachments)).to match_array question.attachments
+    end
+
+    it 'assigns a new attachment for @answer' do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
+
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -40,6 +52,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'assigns a new question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'assigns a new attachment for @question' do
+      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
 
     it 'renders new view' do
@@ -65,9 +81,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect { post :create, params: { question: attributes_for(:invalid_question) }, format: :js }.to_not change(Question, :count)
       end
 
-      it 'renders questions/create view' do
+      it 'renders questions/new view' do
         post :create, params: { question: attributes_for(:invalid_question), format: :js }
-        expect(response).to render_template :create
+        expect(response).to render_template :new
       end
     end
   end

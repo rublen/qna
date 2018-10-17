@@ -1,0 +1,19 @@
+p= f.label :title
+.question-errors
+= f.text_field :title
+
+p= f.label :body
+= f.text_area :body
+
+.attachments
+  p Attachments:
+  / - if question.attachments.empty?
+  - f.fields_for :attachments do |a|
+    - render 'attachments/attachment_fields', f: a
+  / - else
+  /   = render question.attachments
+
+  .links
+    = link_to_add_association 'add file', f, :attachments, partial: 'attachments/attachment_fields'
+
+p= f.submit 'Publish'

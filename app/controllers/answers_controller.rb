@@ -7,6 +7,8 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
+    @attachments = @answer.attachments
+
     if @answer.save
       flash.now[:notice] = 'Answer was created successfully.'
     end
@@ -54,6 +56,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :best)
+    params.require(:answer).permit(:body, :best, attachments_attributes: [:file, :_destroy])
   end
 end
