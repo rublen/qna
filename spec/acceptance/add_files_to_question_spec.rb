@@ -19,7 +19,7 @@ feature 'Add files to question', %q{
     fill_in 'Body', with: 'text text text'
 
     click_on 'add file'
-    # save_and_open_page
+
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
 
     click_on 'add file'
@@ -31,10 +31,8 @@ feature 'Add files to question', %q{
 
     visit question_path(Question.last)
 
-    within '.question' do
-      expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
-      expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
-    end
+    expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+    expect(page).to have_link 'rails_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
   end
 
 
@@ -72,12 +70,14 @@ feature 'Add files to question', %q{
       within all('.nested-fields').last do
         attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
       end
+
       click_on 'Publish'
+
     end
 
     visit question_path(question)
-    # save_and_open_page
-    expect(page).to have_link 'spec_helper.rb', href: '/uploads/attachment/file/1/spec_helper.rb'
-    expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/2/rails_helper.rb'
+
+    expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+    expect(page).to have_link 'rails_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
   end
 end

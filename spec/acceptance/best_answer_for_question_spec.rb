@@ -16,7 +16,7 @@ feature 'The best answer for question', %q{
     given(:answer_1) { answers[0].body }
     given(:answer_2) { answers[1].body }
 
-    before do
+    background do
       sign_in(author)
       visit question_path(question)
     end
@@ -43,21 +43,22 @@ feature 'The best answer for question', %q{
 
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
-        within("p:last-child") { click_on '[Mark as the best]' }
-        within("p:first-child") { expect(page).to have_content("#{answer_2}") }
+        within(all('p').last) { click_on '[Mark as the best]' }
+        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
         page.refresh
-        within("p:first-child") { expect(page).to have_content("#{answer_2}") }
+        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
       end
     end
 
 
     scenario "Author can change his mind and choose another best answer", js: true do
       within ".answers" do
-        within("p:last-child") { click_on '[Mark as the best]' }
-        within("p:first-child") { expect(page).to have_content("#{answer_2}") }
+        within(all('p').last) { click_on '[Mark as the best]' }
+        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
 
-        within("p:last-child") { click_on '[Mark as the best]' }
-        within("p:first-child") { expect(page).to have_content("#{answer_1}") }
+        within(all('p').last) { click_on '[Mark as the best]' }
+        save_and_open_page
+        within(all('p').first) { expect(page).to have_content("#{answer_1}") }
       end
     end
   end
