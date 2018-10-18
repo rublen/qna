@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, except: %i[index show]
+  include PublicActions
+
   before_action :set_question, only: %i[show update destroy]
 
   def index

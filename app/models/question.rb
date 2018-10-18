@@ -1,9 +1,8 @@
 class Question < ApplicationRecord
-  has_many :answers, dependent: :destroy
-  has_many :attachments, as: :attachable, dependent: :destroy
-  belongs_to :author, class_name: 'User', foreign_key: 'user_id'
+  include Attachable
 
-  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
+  has_many :answers, dependent: :destroy
+  belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
   validates :title, :body, presence: true
 
