@@ -1,14 +1,12 @@
-div class="nav"
-  div class="navleft"
-    p= link_to 'QnA', root_path
+nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top"
 
-  div class="navright"
+  = link_to 'QnA', root_path, class: "navbar-brand mr-auto"
+
+  div class="navbar-text ml-auto"
     - if user_signed_in?
-      p
-        = "Welcome, #{current_user.email}! | "
-        = link_to 'Log out', destroy_user_session_path, method: :delete
+      = "Welcome, #{current_user.email}! | "
+      = link_to 'Log out', destroy_user_session_path, method: :delete
     - else
-      p
-        = link_to 'Log in', new_user_session_path
-        = ' | '
-        = link_to 'Sign up', new_user_registration_path
+      = link_to 'Log in', new_user_session_path
+      = ' | '
+      = link_to 'Sign up', new_user_registration_path

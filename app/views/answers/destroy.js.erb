@@ -1,4 +1,4 @@
-document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>"
+showFlash("<%= j render 'shared/flash' %>");
 
 var answers = document.querySelector('.answers').innerHTML
 var id = "<%= @answer.id %>";

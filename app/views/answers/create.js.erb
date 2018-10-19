@@ -1,15 +1,16 @@
-document.querySelector('.notice').innerHTML = "<%= flash[:notice] %>";
+showFlash("<%= j render 'shared/flash' %>");
+
 document.querySelector('.answer-errors').innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
 document.querySelector('.answers').innerHTML += "<%= j render @answer %>";
 document.querySelector('.new-answer-form').querySelector('#answer_body').value = '';
 
-var attachments = document.querySelector('.new-answer-form').querySelectorAll('.nested-fields')
+var attachments = document.querySelector('.new-answer-form').querySelectorAll('.nested-fields');
 
-attachments.forEach(function(a) { a.remove() })
+attachments.forEach(function(a) { a.remove() });
 
 editNewAnswerLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
 
 editNewAnswerLink.addEventListener('click', function(event) {
   event.preventDefault();
-  editHideClassHandler('answer', this.dataset.id); // defined in assets/javascripts/answers.js
+  editHideClassHandler('answer', this.dataset.id);
 });
