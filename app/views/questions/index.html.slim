@@ -1,8 +1,10 @@
-.new-question
-  = link_to 'Ask question', new_question_path
+.mt-5.pt-2.pb-2
+  .new-question.container.bg-secondary
+    h5= link_to 'Ask question', new_question_path, class: "text-white"
 
 h1 List of Questions
 
 .questions
-  ul
-    = render @questions
+  ul class="list-group"
+    li class="list-group-item"
+      = render @questions

@@ -1,28 +1,19 @@
-div id="question-#{@question.id}"
-  h1= @question.title
+hr
+.row
+  .col-xs-3.col-md-1.col-lg-1
+    div class="vouting pr-3 justify-content-center" Vouting
 
-  h3= @question.body
+  .col-xs-9.col-md-11.col-lg-11
+    div id="question-#{@question.id}"
+      h1= @question.title
+      h3= @question.body
+      .attachments
+        = render @attachments
 
-  .attachments
-    = render @attachments
-<hr>
-  <div class="container">
-      <div class="alert alert-success pull-right hide">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        You gave a rating of <span id="count">0</span> star(s)
-      </div>
-      <div class="row">
-        <h2>Ratings for Bootstrap 3<p class="lead">Click the stars to vote</p></h2>
-      </div>
-      <div class="row lead">
-          <div id="stars" class="starrr"></div>
-      </div>
-  </div>
-
+h2 Answers:
+hr
 .answers
-  h2 Answers:
   = render @answers
 
-hr
 .new-answer-form
   = render 'answers/form', answer: @answer

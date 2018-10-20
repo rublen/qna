@@ -1,28 +1,34 @@
 - if answer.persisted?
-  div id="answer-#{answer.id}"
-    hr
-    p id="answer-body-#{answer.id}"
-      = answer.body
+  .row id="answer-#{answer.id}"
+    .col-xs-3.col-md-1.col-lg-1
+      div class="vouting pr-3 justify-content-center" Vouting
 
-      - if answer == answer.question.answers.best_first[0]
-        span class="best-answer"
-          = ' [The best answer]'
-      - elsif current_user&.author_of?(answer.question)
-        = '  '
-        = link_to "[Mark as the best]", best_answer_path(answer), method: :patch, remote: true, class: "best-answer"
+    .col-xs-6.col-md-9.col-lg-9
+      p id="answer-body-#{answer.id}"
+        = answer.body
 
-    - unless answer.attachments.empty?
-      .attachments
-        = "Attachments:"
+      - unless answer.attachments.empty?
+        .attachments
+          = "Attachments:"
+          br
+          = render answer.attachments
+
+      .form-group.hide id="edit-answer-form-#{answer.id}"
+        = render 'answers/form', answer: answer
+
+    .col-xs-3.col-md-2.col-lg-2
+      .badge
+        .best-answer
+          - if answer == answer.question.answers.best_first[0]
+            = '[The best answer]'
+          - elsif current_user&.author_of?(answer.question)
+            = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true
+
         br
-        = render answer.attachments
+        .links
+          - if current_user&.author_of?(answer)
+            = link_to 'Edit', '', class: "edit-link text-primary", data: { id: answer.id, model: 'answer' }
 
-    .links
-      - if current_user&.author_of?(answer)
-        = link_to 'Edit', '', class: "edit-link", data: { id: answer.id, model: 'answer' }
-
-        div id="edit-answer-form-#{answer.id}" class='hide'
-          = render 'answers/form', answer: answer
-
-        = "  "
-        = link_to 'Delete', answer, method: :delete, remote: true
+            = "  "
+            = link_to 'Delete', answer, method: :delete, remote: true, class: "text-primary"
+  hr
