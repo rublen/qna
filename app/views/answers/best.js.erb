@@ -1,2 +1,12 @@
 cleanFlash();
-document.querySelector('.answers').innerHTML = "<%= j render @answers %>";
+// document.querySelector('.answers').innerHTML = "<%= j render @answers %>";
+var answers = document.querySelector('.answers');
+var bestAnswerNode = answers.querySelector("#answer-<%= @answer.id%>");
+var answersFirstChild = answers.firstChild;
+var firstChildId = answersFirstChild.id.split('answer-')[1];
+
+answersFirstChild.querySelector(".best-answer").innerHTML = "<a data-remote='true' rel='nofollow' data-method='patch' href='/answers/" + firstChildId + "/best'>Mark as the best</a>";
+
+bestAnswerNode.querySelector(".best-answer").innerHTML = "<span class=\"text-success\">[The best answer]</span>";
+
+answers.insertBefore(bestAnswerNode, answersFirstChild);

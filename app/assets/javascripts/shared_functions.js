@@ -1,5 +1,5 @@
 function editHideClassHandler(model, id) {
-  cleanFlash()
+  cleanFlash();
   document.querySelector('[data-id="' + id + '"]', '[data-model="' + model + '"]').classList.toggle('hide');
   document.querySelector('#edit-' + model + '-form-' + id).classList.toggle('hide');
 };

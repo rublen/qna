@@ -6,5 +6,5 @@ var answerNode = document.getElementById('answer-' + "<%= @answer.id %>");
 answerErrors.innerHTML = "<%= j render 'shared/errors', resource: @answer %>";
 
 if (answerErrors.innerHTML === '') {
-  answerNode.innerHTML = "<%= j render @answer %>".trim()
-}
+  answerNode.outerHTML = "<%= j render @answer %>".trim();
+};

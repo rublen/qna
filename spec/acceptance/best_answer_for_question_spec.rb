@@ -6,7 +6,7 @@ feature 'The best answer for question', %q{
   I want to be able to choose the best answer
 } do
 
-  given!(:author) { create(:user) }
+  given(:author) { create(:user) }
   given(:other_user) { create(:user) }
 
   given(:question) { create(:question, author: author) }
@@ -21,12 +21,12 @@ feature 'The best answer for question', %q{
       visit question_path(question)
     end
 
-    scenario "To choose the best answer author has links wich don't redirect to another page", js: true do
+    scenario "To choose the best answer author has links which don't redirect to another page", js: true do
       within ".answers" do
-        expect(page).to have_link('[Mark as the best]')
-        expect(page.all('.best-answer').size).to eq question.answers.count # внутри '.best-answer' ссылка '[Mark as the best]'
+        expect(page).to have_link('Mark as the best')
+        expect(page.all('.best-answer').size).to eq question.answers.count # внутри '.best-answer' ссылка 'Mark as the best'
 
-        click_on '[Mark as the best]'
+        click_on 'Mark as the best'
         expect(current_path).to eq question_path(question)
       end
     end
@@ -34,31 +34,36 @@ feature 'The best answer for question', %q{
 
     scenario "The best answer becomes first in the list", js: true do
       within ".answers" do
-        within(all('p').first) { expect(page).to have_content("#{answer_1}") }
-        within(all('p').last) { click_on '[Mark as the best]' }
-        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
+
+        within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
+        click_on "Mark as the best"
+
+        page.has_link?('Mark as the best')
+        within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
 
 
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
-        within(all('p').last) { click_on '[Mark as the best]' }
-        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
+        within(all(".row").last) { click_on "Mark as the best" }
+        within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
         page.refresh
-        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
+        within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
 
 
     scenario "Author can change his mind and choose another best answer", js: true do
       within ".answers" do
-        within(all('p').last) { click_on '[Mark as the best]' }
-        within(all('p').first) { expect(page).to have_content("#{answer_2}") }
+        within(all(".row").last) { click_on 'Mark as the best' }
 
-        within(all('p').last) { click_on '[Mark as the best]' }
-        save_and_open_page
-        within(all('p').first) { expect(page).to have_content("#{answer_1}") }
+        within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
+
+        within(all(".row").last) { click_on 'Mark as the best' }
+        page.has_link?('Mark as the best**')
+        # save_and_open_page
+        within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
       end
     end
   end
@@ -67,6 +72,6 @@ feature 'The best answer for question', %q{
   scenario "Not author can't choose the best answer" do
     sign_in(other_user)
     visit question_path(question)
-    within('.answers') { expect(page).to_not have_content '[Mark as the best]' }
+    within('.answers') { expect(page).to_not have_content 'Mark as the best' }
   end
 end

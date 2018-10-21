@@ -1,5 +1,5 @@
 - if answer.persisted?
-  .row id="answer-#{answer.id}"
+  .row.border-bottom id="answer-#{answer.id}"
     .col-xs-3.col-md-1.col-lg-1
       div class="vouting pr-3 justify-content-center" Vouting
 
@@ -18,9 +18,10 @@
 
     .col-xs-3.col-md-2.col-lg-2
       .badge
-        .best-answer
+        .best-answer id="best-answer-#{answer.id}"
           - if answer == answer.question.answers.best_first[0]
-            = '[The best answer]'
+            span.text-success
+              = '[The best answer]'
           - elsif current_user&.author_of?(answer.question)
             = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true
 
@@ -31,4 +32,4 @@
 
             = "  "
             = link_to 'Delete', answer, method: :delete, remote: true, class: "text-primary"
-  hr
+

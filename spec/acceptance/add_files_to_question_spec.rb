@@ -29,6 +29,8 @@ feature 'Add files to question', %q{
 
     click_on 'Publish'
 
+    within('.questions') { page.has_selector?('a') }
+
     visit question_path(Question.last)
 
     expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
@@ -72,12 +74,12 @@ feature 'Add files to question', %q{
       end
 
       click_on 'Publish'
-
     end
+    page.has_link?(question.body)
 
     visit question_path(question)
-
-    expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
-    expect(page).to have_link 'rails_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
+    page.has_link?('rails_helper.rb')
+    expect(page).to have_link "rails_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
+    expect(page).to have_link "spec_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
   end
 end
