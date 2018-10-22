@@ -5,4 +5,8 @@ module AcceptanceHelper
     fill_in 'Password', with: user.password
     click_button 'Log in'
   end
+
+  def wait_a_little_bit
+    page.has_selector?('nonexistent-selector')
+  end
 end

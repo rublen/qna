@@ -6,7 +6,7 @@ feature 'The best answer for question', %q{
   I want to be able to choose the best answer
 } do
 
-  given(:author) { create(:user) }
+  given!(:author) { create(:user) }
   given(:other_user) { create(:user) }
 
   given(:question) { create(:question, author: author) }
@@ -34,11 +34,9 @@ feature 'The best answer for question', %q{
 
     scenario "The best answer becomes first in the list", js: true do
       within ".answers" do
-
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
         click_on "Mark as the best"
-
-        page.has_link?('Mark as the best')
+        2.times { wait_a_little_bit }
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -46,9 +44,11 @@ feature 'The best answer for question', %q{
 
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
-        within(all(".row").last) { click_on "Mark as the best" }
+        click_on "Mark as the best"
+        2.times { wait_a_little_bit }
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
         page.refresh
+        2.times { wait_a_little_bit }
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -56,13 +56,14 @@ feature 'The best answer for question', %q{
 
     scenario "Author can change his mind and choose another best answer", js: true do
       within ".answers" do
-        within(all(".row").last) { click_on 'Mark as the best' }
+        within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
 
+        click_on 'Mark as the best'
+        2.times { wait_a_little_bit }
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
 
-        within(all(".row").last) { click_on 'Mark as the best' }
-        page.has_link?('Mark as the best**')
-        # save_and_open_page
+        click_on 'Mark as the best'
+        2.times { wait_a_little_bit }
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
       end
     end
