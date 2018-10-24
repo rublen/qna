@@ -1,7 +1,12 @@
 - if answer.persisted?
   .row.border-bottom id="answer-#{answer.id}"
     .col-xs-3.col-md-1.col-lg-1
-      div class="vouting pr-3 justify-content-center" Vouting
+      div class="vouting voting-#{answer.id} pr-3 text-secondary" align="center"
+        .vote-up data-voted='0'
+          = octicon "chevron-up", height: 32
+        .vote-sum data-voted='0' 2
+        .vote-down data-voted='0'
+          = octicon "chevron-down", height: 32
 
     .col-xs-6.col-md-9.col-lg-9
       p id="answer-body-#{answer.id}"
