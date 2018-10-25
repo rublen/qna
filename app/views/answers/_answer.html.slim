@@ -1,10 +1,11 @@
 - if answer.persisted?
   .row.border-bottom id="answer-#{answer.id}"
     .col-xs-3.col-md-1.col-lg-1
-      div class="vouting voting-#{answer.id} pr-3 text-secondary" align="center"
+      div class="vouting voting-#{answer.id} pr-3" align="center"
         .vote-up data-voted='0'
-          = octicon "chevron-up", height: 32
-        .vote-sum data-voted='0' 2
+          = link_to octicon("chevron-up", height: 32, class: 'vote-up'), up_votes_path, method: :post, remote: true, data: { type: :json }
+        .vote-sum.text-secondary data-voted='0'
+          = answer.vote_sum
         .vote-down data-voted='0'
           = octicon "chevron-down", height: 32
 

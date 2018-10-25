@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = @question.answers.new
     @answer.attachments.new
+    @answer.votes.new(user_id: current_user.id)
     @answers = @question.answers.best_first
     @attachments = @question.attachments
   end
