@@ -32,7 +32,6 @@ module Voted
   end
 
   private
-
   def set_vote
     @vote = Vote.find(params[:id])
   end
@@ -41,7 +40,4 @@ module Voted
     klass = [Question, Answer].detect{|c| params["#{c.name.underscore}_id"]}
     @votable = klass.find(params["#{klass.name.underscore}_id"])
   end
-
-
-
 end

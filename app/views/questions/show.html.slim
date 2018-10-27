@@ -2,11 +2,7 @@ hr
 .row.border-bottom
   .col-xs-3.col-md-1.col-lg-1
     div class="voting voting-#{@question.id} pr-3 text-secondary" align="center"
-      .vote-up data-voted='0'
-        = octicon "chevron-up", height: 32
-      .vote-sum data-voted='0' 2
-      .vote-down data-voted='0'
-        = octicon "chevron-down", height: 32
+      = render 'votes/voting', votable: @question
 
   .col-xs-9.col-md-11.col-lg-11
     div id="question-#{@question.id}"

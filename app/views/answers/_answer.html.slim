@@ -2,42 +2,7 @@
   .row.border-bottom id="answer-#{answer.id}"
     .col-xs-4.col-md-2.col-lg-1
       div class="vouting voting-#{answer.id} pr-3" align="center"
-        .vote-up
-          - if answer.up_voted?(current_user)
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), unvote_vote_path(answer.vote(current_user)), method: :delete, remote: true, class: 'unvote'
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), up_answer_votes_path(answer), method: :post, remote: true, class: 'vote hide'
-            span class='vote-disabled hide'
-              = octicon("chevron-up", height: 32, class: 'vote-up')
-          - elsif answer.down_voted?(current_user)
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), unvote_vote_path(answer.vote(current_user)), method: :delete, remote: true, class: 'unvote hide'
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), up_answer_votes_path(answer), method: :post, remote: true, class: 'vote hide'
-            span class='vote-disabled'
-              = octicon("chevron-up", height: 32, class: 'vote-up')
-          - else
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), "", method: :delete, remote: true, class: 'unvote hide'
-            = link_to octicon("chevron-up", height: 32, class: 'vote-up'), up_answer_votes_path(answer), method: :post, remote: true, class: 'vote'
-            span class='vote-disabled hide'
-              = octicon("chevron-up", height: 32, class: 'vote-up')
-
-        .vote-sum.text-secondary
-          = answer.vote_sum
-
-        .vote-down
-          - if answer.down_voted?(current_user)
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), unvote_vote_path(answer.vote(current_user)), method: :delete, remote: true, class: 'unvote'
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), down_answer_votes_path(answer), method: :post, remote: true, class: 'vote hide'
-            span class='vote-disabled hide'
-              = octicon("chevron-down", height: 32, class: 'vote-down')
-          - elsif answer.up_voted?(current_user)
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), "", method: :delete, remote: true, class: 'unvote hide'
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), down_answer_votes_path(answer), method: :post, remote: true, class: 'vote hide'
-            span class='vote-disabled'
-              = octicon("chevron-down", height: 32, class: 'vote-down')
-          - else
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), "", method: :delete, remote: true, class: 'unvote hide'
-            = link_to octicon("chevron-down", height: 32, class: 'vote-down'), down_answer_votes_path(answer), method: :post, remote: true, class: 'vote'
-            span class='vote-disabled hide'
-              = octicon("chevron-down", height: 32, class: 'vote-down')
+        = render 'votes/voting', votable: answer
 
 
     .col-xs-8.col-md-10.col-lg-11
