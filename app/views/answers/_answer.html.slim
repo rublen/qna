@@ -2,8 +2,8 @@
   .row.border-bottom id="answer-#{answer.id}"
     .col-xs-4.col-md-2.col-lg-1
       div class="vouting voting-#{answer.id} pr-3" align="center"
-        = render 'votes/voting', votable: answer
-
+        - unless current_user.author_of?(answer)
+          = render 'votes/voting', votable: answer
 
     .col-xs-8.col-md-10.col-lg-11
       p id="answer-body-#{answer.id}"

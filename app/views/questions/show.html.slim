@@ -2,7 +2,8 @@ hr
 .row.border-bottom
   .col-xs-3.col-md-1.col-lg-1
     div class="voting voting-#{@question.id} pr-3 text-secondary" align="center"
-      = render 'votes/voting', votable: @question
+      - unless current_user.author_of?(@question)
+        = render 'votes/voting', votable: @question
 
   .col-xs-9.col-md-11.col-lg-11
     div id="question-#{@question.id}"

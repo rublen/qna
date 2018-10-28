@@ -53,8 +53,7 @@ document.addEventListener('turbolinks:load', function() {
     other.querySelector('a.vote').classList.add('hide')
     other.querySelector('.vote-disabled').classList.remove('hide')
 
-    stopHovering(elem, hoverColor(elem));
-    stopHovering(other, defaultColor)
+    elem.querySelector('.octicon').style.color = hoverColor(elem);
   };
 
   function setVoting(elem, other) {
@@ -68,11 +67,9 @@ document.addEventListener('turbolinks:load', function() {
     other.querySelector('.vote-disabled').classList.add('hide')
     other.querySelector('a.vote').classList.remove('hide')
 
-    getBackHovering(other);
-    getBackHovering(elem)
+    elem.querySelector('.octicon').style.color = "";
   };
 
-  var defaultColor = "#868e96";
   var voteUpHoverColor = "lightgreen";
   var voteDownHoverColor = "red";
 
@@ -80,26 +77,4 @@ document.addEventListener('turbolinks:load', function() {
     var voteUpsArr = Array.prototype.slice.call(voteUps);
     return (voteUpsArr.includes(elem) ? voteUpHoverColor : voteDownHoverColor)
   };
-
-  function stopHovering(elem, color) {
-    console.log('stop hover')
-    elem.addEventListener('mouseover', function(){
-      console.log('stop hover-2')
-      elem.style.color = color
-    });
-    elem.addEventListener('mouseout', function(){
-      elem.style.color = color
-    });
-  };
-
-  function getBackHovering(elem) {
-    console.log('get hover')
-    elem.addEventListener('mouseover', function(){
-      console.log('get hover-2')
-      elem.style.color = hoverColor(elem);
-    });
-    elem.addEventListener('mouseout', function(){
-      elem.style.color = defaultColor
-    });
-  }
 });

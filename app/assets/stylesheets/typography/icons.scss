@@ -3,10 +3,10 @@
   vertical-align: text-top;
   fill: currentColor;
 }
-.vote-up:hover {
+.vote-up.vote-hover:hover {
   color: lightgreen;
 }
-.vote-down:hover {
+.vote-down.vote-hover:hover {
   color: red;
 }
 
