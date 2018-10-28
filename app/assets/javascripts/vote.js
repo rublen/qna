@@ -22,6 +22,9 @@ document.addEventListener('turbolinks:load', function() {
         }
       }
     })
+    voteUp.addEventListener('ajax:error', function(event) {
+      flashAlert(event.detail[0])
+    });
   });
 
   voteDowns.forEach(function(voteDown) {
@@ -41,6 +44,9 @@ document.addEventListener('turbolinks:load', function() {
         }
       }
     })
+    voteDown.addEventListener('ajax:error', function(event) {
+      flashAlert(event.detail[0])
+    });
   });
 
   function setUnvoting(elem, other, voteId) {
@@ -77,4 +83,10 @@ document.addEventListener('turbolinks:load', function() {
     var voteUpsArr = Array.prototype.slice.call(voteUps);
     return (voteUpsArr.includes(elem) ? voteUpHoverColor : voteDownHoverColor)
   };
+
+  var closeButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+
+  function flashAlert(message) {
+    showFlash('<div class="alert alert-danger" role="alert">' + message + closeButton + '</div>')
+  }
 });
