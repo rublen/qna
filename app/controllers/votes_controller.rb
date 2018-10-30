@@ -5,17 +5,24 @@ class VotesController < ApplicationController
   before_action :set_votable, only: %i[up down]
 
   def up
-    set_new_vote_with_value 1
-    act_voting(@vote, :save)
+    unless current_user.author_of?(@votable)
+      set_new_vote_with_value 1
+      act_voting(@vote, :save)
+    end
   end
 
   def down
-    set_new_vote_with_value -1
-    act_voting(@vote, :save)
+    unless current_user.author_of?(@votable)
+      set_new_vote_with_value -1
+      act_voting(@vote, :save)
+    end
   end
 
   def unvote
-    @votable = @vote.votable
-    act_voting(@vote, :destroy)
+    if current_user.author_of?(@vote)
+      @votable = @vote.votable
+      act_voting(@vote, :destroy)
+    end
   end
 end
+

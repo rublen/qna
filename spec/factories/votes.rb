@@ -1,15 +1,11 @@
 FactoryBot.define do
-  factory :question_vote, class: 'Vote' do
+  factory :question_vote, class: Vote do
     association :votable, factory: :question
     association :user
     transient do
       upvoted { true }
     end
-    voted { -1 }
-
-    after(:create) do |vote|
-      vote.voted = -1 unless upvoted
-    end
+    voted { upvoted ? -1 : -1 }
   end
 
 
@@ -19,11 +15,7 @@ FactoryBot.define do
     transient do
       upvoted { true }
     end
-    voted { 1 }
-
-    after(:create) do
-      voted { -1 } unless upvoted
-    end
+    voted { upvoted ? 1 : -1 }
   end
 
   factory :vote do

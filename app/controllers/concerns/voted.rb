@@ -10,19 +10,14 @@ module Voted
 
     def act_voting(vote, act)
       respond_to do |format|
-        if !current_user.author_of?(@votable)
-          if vote.public_send(act)
-            @votable.change_vote_sum
-            format.json { render_json_with_vote_results(vote) }
-          else
-            format.json { render_json_errors(vote) }
-          end
+        if vote.public_send(act)
+          @votable.change_vote_sum
+          format.json { render_json_with_vote_results(vote) }
         else
           format.json { render_json_errors(vote) }
         end
       end
     end
-
   end
 
   private
