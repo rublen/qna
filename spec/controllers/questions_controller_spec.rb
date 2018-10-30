@@ -1,6 +1,10 @@
 require 'rails_helper'
+require_relative 'concerns/public_actions_spec'
+require_relative 'concerns/voted_spec'
 
 RSpec.describe QuestionsController, type: :controller do
+  it_behaves_like "public_actions"
+  it_behaves_like 'voted'
 
   let!(:author) { create(:user) }
 

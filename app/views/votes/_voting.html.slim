@@ -1,10 +1,10 @@
 .vote-up
-  - if votable.up_voted?(current_user)
+  - if votable.upvoted?(current_user)
     = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover", color: "lightgreen"), unvote_vote_path(votable.vote(current_user)), method: :delete, remote: true, class: 'unvote text-secondary'
     = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover"), upvote_path(votable), method: :post, remote: true, class: 'vote text-secondary hide'
     span class='vote-disabled text-secondary hide'
       = octicon("chevron-up", height: 32, class: 'vote-up')
-  - elsif votable.down_voted?(current_user)
+  - elsif votable.downvoted?(current_user)
     = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover"), unvote_vote_path(votable.vote(current_user)), method: :delete, remote: true, class: 'unvote text-secondary hide'
     = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover"), upvote_path(votable), method: :post, remote: true, class: 'vote text-secondary hide'
     span class='vote-disabled text-secondary'
@@ -19,12 +19,12 @@
   = votable.vote_sum
 
 .vote-down
-  - if votable.down_voted?(current_user)
+  - if votable.downvoted?(current_user)
     = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover", color: "red"), unvote_vote_path(votable.vote(current_user)), method: :delete, remote: true, class: 'unvote text-secondary'
     = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover"), downvote_path(votable), method: :post, remote: true, class: 'vote text-secondary hide'
     span class='vote-disabled text-secondary hide'
       = octicon("chevron-down", height: 32, class: 'vote-down')
-  - elsif votable.up_voted?(current_user)
+  - elsif votable.upvoted?(current_user)
     = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover"), "", method: :delete, remote: true, class: 'unvote text-secondary hide'
     = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover"), downvote_path(votable), method: :post, remote: true, class: 'vote text-secondary hide'
     span class='vote-disabled text-secondary'

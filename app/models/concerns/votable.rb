@@ -15,11 +15,11 @@ module Votable
       !!(vote(user))
     end
 
-    def up_voted?(user)
+    def upvoted?(user)
       vote(user)&.voted == 1
     end
 
-    def down_voted?(user)
+    def downvoted?(user)
       vote(user)&.voted == -1
     end
   end

@@ -1,23 +1,24 @@
 require 'rails_helper'
 
-RSpec.describe VotesController, type: :controller do
+RSpec.shared_examples_for "voted" do
   sign_in_user
-  let!(:votable) { create(:answer) }
+  let(:model) { described_class.controller_name.singularize.underscore }
+  let(:votable) { create(model.to_sym) }
   # let(:vote) { create(:vote, votable: votable, user: @user) }
 
 
   describe 'POST #up' do
-    it 'creates a new vote in association with answer' do
-      expect{ post :up, params: { vote: attributes_for(:vote), answer_id: votable.id, format: :json } }.to change(votable.votes, :count).by(1)
+    it 'creates a new vote in association with votable' do
+      expect{ post :up, params: { :vote => attributes_for("#{model}_vote".to_sym), "#{model}_id".to_sym => votable.id, :controller => "votes", :format => :json } }.to change(votable.votes, :count).by(1)
     end
 
     it 'sets new vote with voted value 1' do
-      post :up, params: { vote: attributes_for(:vote), answer_id: votable.id, format: :json }
+      post :up, params: { :vote => attributes_for("#{model}_vote".to_sym), :controller=>"votes", "#{model}_id".to_sym => votable.id, format: :json }
       expect(Vote.last.voted).to eq 1
     end
 
     it 'renders json data with valid attributes' do
-      post :up, params: { vote: attributes_for(:vote), answer_id: votable.id, format: :json }
+      post :up, params: { :vote => attributes_for("#{model}_vote".to_sym), :controller=>"votes", "#{model}_id".to_sym => votable.id, format: :json }
       votable.reload
 
       expect(response.status).to eq(200)
@@ -28,7 +29,7 @@ RSpec.describe VotesController, type: :controller do
     end
 
     it 'renders json data errors with invalid attributes' do
-      post :up, params: { vote: attributes_for(:invalid_vote), answer_id: votable.id, format: :json }
+      post :up, params: { :vote => attributes_for("#{model}_vote".to_sym), :controller=>"votes", "#{model}_id".to_sym => votable.id, user_id: nil, format: :json }
       # assigns(:vote).reload
       # Vote.last.save!
 p assigns(:vote).reload.inspect, '=='
