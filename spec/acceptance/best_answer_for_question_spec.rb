@@ -36,7 +36,7 @@ feature 'The best answer for question', %q{
       within ".answers" do
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
         click_on "Mark as the best"
-        2.times { wait_a_little_bit }
+        sleep(4)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -45,10 +45,10 @@ feature 'The best answer for question', %q{
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
         click_on "Mark as the best"
-        2.times { wait_a_little_bit }
+        sleep(4)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
         page.refresh
-        2.times { wait_a_little_bit }
+        sleep(4)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -59,11 +59,11 @@ feature 'The best answer for question', %q{
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
 
         click_on 'Mark as the best'
-        2.times { wait_a_little_bit }
+        sleep(4)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
 
         click_on 'Mark as the best'
-        2.times { wait_a_little_bit }
+        sleep(4)
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
       end
     end

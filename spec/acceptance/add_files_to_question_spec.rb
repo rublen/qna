@@ -75,10 +75,10 @@ feature 'Add files to question', %q{
 
       click_on 'Publish'
     end
-    wait_a_little_bit
+    sleep(2)
 
     visit question_path(question)
-    wait_a_little_bit
+    sleep(2)
     expect(page).to have_link "rails_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
     expect(page).to have_link "spec_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
   end

@@ -8,39 +8,86 @@ feature 'Vote for the question', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  # given(:vote) { create(:vote, user: user)}
+
+  given(:upvote_link) { find("a[href='/questions/#{question.id}/votes/up']") }
+  given(:downvote_link) { find("a[href='/questions/#{question.id}/votes/down']") }
+  given(:unvote_link) { find("a[href='/votes/#{question.votes[0].id}/unvote']") }
 
   before do
     sign_in(user)
     visit question_path(question)
   end
 
-  scenario 'authenticated user can upvote for the question', js: true do
-#       p find_all("a[href='/questions/#{question.id}/votes/up']")
-p user, question, question.vote_sum, question.votes, '-----------'
-      find("a[href='/questions/#{question.id}/votes/up']").click
-      sleep(20)
-
-      # save_and_open_page
-      # question.reload
-      p question.votes, question.vote_sum
-
+  describe "Authenticated user can" do
+    scenario 'upvote for the question', js: true do
+      upvote_link.click
       within(".vote-sum") { expect(page).to have_content 1 }
-  end
+    end
 
-  scenario 'authenticated user can downvote for the question', js: true do
-      find("a[href='/questions/#{question.id}/votes/down']").click
-      wait_a_little_bit
+    scenario 'downvote for the question', js: true do
+      downvote_link.click
       within(".vote-sum") { expect(page).to have_content -1 }
-  end
+    end
 
-  scenario 'authenticated user can get back his vote (unvote for the question)', js: true do
-      vote
-      wait_a_little_bit
-      find("a[href='/votes/#{vote.id}/unvote']").click
+    scenario 'get back his vote and revote', js: true do
+      upvote_link.click
+      within(".vote-sum") { expect(page).to have_content 1 }
+
+      unvote_link.click
       within(".vote-sum") { expect(page).to have_content 0 }
 
-      find("a[href='/questions/#{question.id}/votes/down']").click
+      downvote_link.click
       within(".vote-sum") { expect(page).to have_content -1 }
+    end
+  end
+
+
+  describe "Links' behavior" do
+    scenario "if question is not voted by user: 'upvote' and 'downvote' links work, 'unvote' is hidden", js: true do
+      expect(upvote_link).to be_visible
+      expect(downvote_link).to be_visible
+      expect(page).to_not have_link(class: 'unvote')
+    end
+
+    scenario "if user upvote the question: 'upvote' link replaced with 'unvote', 'downvote' is disabled", js: true do
+      upvote_link.click
+      sleep(2)
+      expect(upvote_link).to_not be_visible
+      expect(unvote_link).to be_visible
+      expect(page).to_not have_link(class: 'downvote')
+    end
+
+    scenario "if user downvote the question: 'downvote' link replaced with 'unvote', 'upvote' is disabled", js: true do
+      downvote_link.click
+      sleep(2)
+      expect(downvote_link).to_not be_visible
+      expect(unvote_link).to be_visible
+      expect(page).to_not have_link(class: 'upvote')
+    end
+  end
+
+  describe "The author of question" do
+    scenario 'have no voting links' do
+      click_on('Log out')
+      sign_in(question.author)
+      visit question_path(question)
+
+      expect(page).to_not have_css('a.upvote')
+      expect(page).to_not have_css('a.downvote')
+      expect(page).to_not have_css('a.unvote')
+    end
+  end
+
+  describe "Non authenticated user", js: true do
+    scenario "can't vote" do
+      click_on('Log out')
+      visit question_path(question)
+
+      upvote_link.click
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
+
+      downvote_link.click
+      expect(page).to have_content('You need to sign in or sign up before continuing.')
+    end
   end
 end

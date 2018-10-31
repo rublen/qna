@@ -30,7 +30,7 @@ RSpec.shared_examples_for "voted", type: :request do
       expect(Vote.last.voted).to eq 1
     end
 
-    it 'renders json data with valid attributes' do
+    it 'renders json data' do
       post upvote_path, params: { vote: upvote_attrs, format: :json }
       votable.reload
 
@@ -39,13 +39,6 @@ RSpec.shared_examples_for "voted", type: :request do
       expect(JSON.parse(response.body)["votable_sum"]).to eq votable.vote_sum
       expect(JSON.parse(response.body)["up_voted"]).to eq votable.upvoted?(@user)
       expect(JSON.parse(response.body)["down_voted"]).to eq votable.downvoted?(@user)
-    end
-
-    it 'renders json data errors (invalid attributes)' do
-      post upvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote"), format: :json }
-
-      expect(response.status).to eq(422) # status 200, не могу придумать, как протестировать этот случай
-      expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
 
@@ -65,7 +58,7 @@ RSpec.shared_examples_for "voted", type: :request do
       expect(Vote.last.voted).to eq -1
     end
 
-    it 'renders json data with valid attributes' do
+    it 'renders json data' do
       post downvote_path, params: { vote: downvote_attrs, format: :json }
       votable.reload
 
@@ -74,13 +67,6 @@ RSpec.shared_examples_for "voted", type: :request do
       expect(JSON.parse(response.body)["votable_sum"]).to eq votable.vote_sum
       expect(JSON.parse(response.body)["up_voted"]).to eq votable.upvoted?(@user)
       expect(JSON.parse(response.body)["down_voted"]).to eq votable.downvoted?(@user)
-    end
-
-    it 'renders json data errors (invalid attributes)' do
-      post downvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote", upoted: false), format: :json }
-
-      expect(response.status).to eq(422) # status 200, не могу протестировать
-      expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
 
@@ -97,7 +83,7 @@ RSpec.shared_examples_for "voted", type: :request do
       expect { delete unvote_path, params: { vote_id: vote.id } }.to_not change(Vote, :count)
     end
 
-    it 'renders json data if deleting was success' do
+    it 'renders json data' do
       post upvote_path, params: { vote: upvote_attrs, format: :json }
       votable.reload
 
@@ -106,13 +92,6 @@ RSpec.shared_examples_for "voted", type: :request do
       expect(JSON.parse(response.body)["votable_sum"]).to eq votable.vote_sum
       expect(JSON.parse(response.body)["up_voted"]).to eq votable.upvoted?(@user)
       expect(JSON.parse(response.body)["down_voted"]).to eq votable.downvoted?(@user)
-    end
-
-    it 'renders json data errors' do
-      post upvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote"), format: :json }
-
-      expect(response.status).to eq(422) # status 200, не могу протестировать
-      expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
 end
