@@ -26,13 +26,13 @@ FactoryBot.define do
 
   factory :question_invalid_vote, class: Vote do
     association :votable, factory: :question
-    user_id { nil }
-    voted { 1 }
+    association :user
+    voted { 100 }
   end
 
   factory :answer_invalid_vote, class: Vote do
     association :votable, factory: :answer
-    user_id { nil }
-    voted { 1 }
+    association :user
+    voted { -100 }
   end
 end

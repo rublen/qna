@@ -4,7 +4,7 @@ module Votable
     has_many :votes, as: :votable, dependent: :destroy
 
     def change_vote_sum
-      update(vote_sum: votes.sum(:voted))
+      update!(vote_sum: votes.sum(:voted))
     end
 
     def vote(user)

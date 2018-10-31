@@ -43,8 +43,8 @@ RSpec.shared_examples_for "voted", type: :request do
 
     it 'renders json data errors (invalid attributes)' do
       post upvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote"), format: :json }
-      # p '---', @user, votable, Vote.last
-      expect(response.status).to eq(422) # status 200, vote создается как обычно, **_invalid_vote не срабатывает, там user_id { nil }
+
+      expect(response.status).to eq(422) # status 200, не могу придумать, как протестировать этот случай
       expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
@@ -79,7 +79,7 @@ RSpec.shared_examples_for "voted", type: :request do
     it 'renders json data errors (invalid attributes)' do
       post downvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote", upoted: false), format: :json }
 
-      expect(response.status).to eq(422) # status 200, vote создается как обычно, **_invalid_vote не срабатывает, там user_id { nil }
+      expect(response.status).to eq(422) # status 200, не могу протестировать
       expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
@@ -111,7 +111,7 @@ RSpec.shared_examples_for "voted", type: :request do
     it 'renders json data errors' do
       post upvote_path, params: { :vote => attributes_for(:"#{model}_invalid_vote"), format: :json }
 
-      expect(response.status).to eq(422) # status 200, vote создается как обычно, **_invalid_vote не срабатывает, там user_id { nil }
+      expect(response.status).to eq(422) # status 200, не могу протестировать
       expect(JSON.parse(response.body)["error"]).to eq("User must exist")
     end
   end
