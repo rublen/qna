@@ -7,20 +7,20 @@ module Votable
       update!(vote_sum: votes.sum(:voted))
     end
 
-    def vote(user)
-      votes.where(user: user)[0]
+    def vote_by(user)
+      votes.where(user: user).first
     end
 
     def voted?(user)
-      !!(vote(user))
+      !!(vote_by(user))
     end
 
     def upvoted?(user)
-      vote(user)&.voted == 1
+      vote_by(user)&.voted == 1
     end
 
     def downvoted?(user)
-      vote(user)&.voted == -1
+      vote_by(user)&.voted == -1
     end
   end
 end

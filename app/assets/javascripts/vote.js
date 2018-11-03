@@ -2,24 +2,23 @@ document.addEventListener('turbolinks:load', function() {
   var voteUps = document.querySelectorAll('.vote-up');
   var voteDowns = document.querySelectorAll('.vote-down');
 
-  var voteUp = document.querySelector('.vote-up');
   var votes, voteId, upVoted, downVoted;
 
   voteUps.forEach(function(voteUp) {
     voteUp.addEventListener('ajax:success', function(event) {
-      votes = JSON.parse(event.detail[2].responseText).votable_sum;
-      voteId = JSON.parse(event.detail[2].responseText).vote_id;
-      upVoted = JSON.parse(event.detail[2].responseText).up_voted;
-      downVoted = JSON.parse(event.detail[2].responseText).down_voted;
+      cleanFlash()
+      votes = event.detail[0].votable_sum;
+      voteId = event.detail[0].vote_id;
+      upVoted = event.detail[0].up_voted;
+      downVoted = event.detail[0].down_voted;
 
       voteUp.parentElement.querySelector('.vote-sum').textContent = votes;
       var voteDown = voteUp.parentElement.querySelector('.vote-down');
 
-      if (upVoted == true) {
+      if (upVoted) {
         setUnvoting(voteUp, voteDown, voteId)
-      } else { if (downVoted == false) {
+      } else if (!downVoted) {
         setVoting(voteUp, voteDown)
-        }
       }
     })
     voteUp.addEventListener('ajax:error', function(event) {
@@ -29,19 +28,19 @@ document.addEventListener('turbolinks:load', function() {
 
   voteDowns.forEach(function(voteDown) {
     voteDown.addEventListener('ajax:success', function(event) {
-      votes = JSON.parse(event.detail[2].responseText).votable_sum;
-      voteId = JSON.parse(event.detail[2].responseText).vote_id;
-      upVoted = JSON.parse(event.detail[2].responseText).up_voted;
-      downVoted = JSON.parse(event.detail[2].responseText).down_voted;
+      cleanFlash()
+      votes = event.detail[0].votable_sum;
+      voteId = event.detail[0].vote_id;
+      upVoted = event.detail[0].up_voted;
+      downVoted = event.detail[0].down_voted;
 
       voteDown.parentElement.querySelector('.vote-sum').textContent = votes;
       var voteUp = voteDown.parentElement.querySelector('.vote-up');
 
-      if (downVoted == true) {
+      if (downVoted) {
         setUnvoting(voteDown, voteUp, voteId)
-      } else { if (upVoted == false) {
+      } else if (!upVoted) {
         setVoting(voteDown, voteUp)
-        }
       }
     })
     voteDown.addEventListener('ajax:error', function(event) {
@@ -58,8 +57,6 @@ document.addEventListener('turbolinks:load', function() {
     other.querySelector('a.unvote').classList.add('hide')
     other.querySelector('a.vote').classList.add('hide')
     other.querySelector('.vote-disabled').classList.remove('hide')
-
-    elem.querySelector('.octicon').style.color = hoverColor(elem);
   };
 
   function setVoting(elem, other) {
@@ -72,16 +69,6 @@ document.addEventListener('turbolinks:load', function() {
     other.querySelector('a.unvote').classList.add('hide')
     other.querySelector('.vote-disabled').classList.add('hide')
     other.querySelector('a.vote').classList.remove('hide')
-
-    elem.querySelector('.octicon').style.color = "";
-  };
-
-  var voteUpHoverColor = "lightgreen";
-  var voteDownHoverColor = "red";
-
-  function hoverColor(elem) {
-    var voteUpsArr = Array.prototype.slice.call(voteUps);
-    return (voteUpsArr.includes(elem) ? voteUpHoverColor : voteDownHoverColor)
   };
 
   var closeButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
