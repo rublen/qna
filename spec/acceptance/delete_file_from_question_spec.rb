@@ -15,7 +15,10 @@ feature 'Delete files from question', %q{
     visit question_path(question)
 
     expect(page).to have_link 'rails_helper.rb'
-    click_on 'del'
+
+    expect(page).to have_css("a[href='#{attachment_path(attachment)}']")
+    find("a[href='#{attachment_path(attachment)}']").click
+
     expect(page).to_not have_link 'rails_helper.rb'
   end
 
@@ -23,6 +26,6 @@ feature 'Delete files from question', %q{
     sign_in(create(:user))
     visit question_path(question)
 
-    expect(page).to_not have_button 'del'
+    expect(page).to_not have_css("a[href='#{attachment_path(attachment)}']")
   end
 end

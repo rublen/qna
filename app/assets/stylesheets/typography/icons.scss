@@ -1,0 +1,12 @@
+.octicon {
+  display: inline-block;
+  vertical-align: text-top;
+  fill: currentColor;
+}
+.vote-up.vote-hover:hover {
+  color: lightgreen;
+}
+.vote-down.vote-hover:hover {
+  color: red;
+}
+

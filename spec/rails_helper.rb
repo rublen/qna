@@ -34,7 +34,10 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.extend ControllerMacros, type: :controller
+  config.extend ControllerMacros, type: :request
+  # config.include RequestSpecHelper, type: :request - ???????????
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -70,4 +73,5 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
+  FactoryBot.allow_class_lookup = false
 end
