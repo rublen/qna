@@ -15,29 +15,29 @@ feature 'Delete question', %q{
     sign_in(author)
     visit questions_path
 
-    within '.questions' do
-      expect(page).to have_content question.title
-      click_on 'Delete'
-    end
+    within('.questions') { click_on question.title }
+    expect(current_path).to eq question_path(question)
 
-      expect(current_path).to eq questions_path
-      expect(page).to_not have_content question.title
-      expect(page).to have_content 'Question was deleted successfully.'
+    within('.question') { click_on 'Delete' }
+    expect(current_path).to eq questions_path
+
+    expect(page).to_not have_content question.title
+    expect(page).to have_content 'Question was deleted successfully.'
   end
 
   scenario "Not author can't delete question" do
     sign_in(other_user)
-    visit questions_path
+    visit question_path(question)
 
-    within '.questions' do
+    within '.question' do
       expect(page).to_not have_content 'Delete'
     end
   end
 
   scenario "Non-authenticated user can't delete question" do
-    visit questions_path
+    visit question_path(question)
 
-    within '.questions' do
+    within '.question' do
       expect(page).to_not have_content 'Delete'
     end
   end

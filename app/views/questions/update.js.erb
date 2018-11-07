@@ -1,12 +1,20 @@
 showFlash("<%= j render 'shared/flash' %>");
 
-var questionErrors = document.getElementById('edit-question-form-' + "<%= @question.id %>").querySelector('.question-errors');
-var questionTitle = document.getElementById('question-title-' + "<%= @question.id %>");
+var question = document.querySelector('.question');
+var questionErrors = question.querySelector('.question-errors');
+
+var questionTitle = question.querySelector('.question-title');
+var questionBody = question.querySelector('.question-body');
+var questionAttachments = question.querySelector('.attachments');
+
 var questionEditLink = document.querySelector('[data-id="<%= @question.id %>"]', '[data-model="question"]');
+
 
 questionErrors.innerHTML = "<%= j render 'shared/errors', resource: @question %>";
 
-if (questionErrors.innerHTML === '') {
-  questionTitle.innerHTML = '<%= link_to @question.title, question_path(@question) %>';
+if (questionErrors.innerHTML == '') {
+  questionTitle.textContent = '<%= @question.title %>';
+  questionBody.textContent = '<%= @question.body %>';
+  questionAttachments.innerHTML = '<%= j render @question.attachments %>'
   editHideClassHandler('question', "<%= @question.id %>");
 };

@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require action_cable
 //= require activestorage
 //= require turbolinks
 //= require jquery
@@ -18,3 +19,7 @@
 //= require bootstrap
 //= require popper
 //= require_tree .
+
+// var App = App || {};
+
+// App.cable = ActionCable.createConsumer();

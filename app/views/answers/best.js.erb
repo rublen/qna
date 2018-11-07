@@ -1,12 +1,20 @@
 cleanFlash();
-// document.querySelector('.answers').innerHTML = "<%= j render @answers %>";
+
 var answers = document.querySelector('.answers');
-var bestAnswerNode = answers.querySelector("#answer-<%= @answer.id%>");
+
+// former best answer: remove best-mark, add link "mark as the best"
 var answersFirstChild = answers.firstChild;
 var firstChildId = answersFirstChild.id.split('answer-')[1];
+answersFirstChild.querySelector(".best-mark").remove();
+answersFirstChild.querySelector(".best-answer").innerHTML = "<a class='text-secondary' data-remote='true' rel='nofollow' data-method='patch' href='/answers/" + firstChildId + "/best'>Mark as the best</a>";
 
-answersFirstChild.querySelector(".best-answer").innerHTML = "<a data-remote='true' rel='nofollow' data-method='patch' href='/answers/" + firstChildId + "/best'>Mark as the best</a>";
+// new best answer: remove "mark as the best" link, add "best" mark, move the answer on the first place
+var bestAnswerNode = answers.querySelector("#answer-<%= @answer.id%>");
+bestAnswerNode.querySelector(".best-answer").innerHTML = ""
 
-bestAnswerNode.querySelector(".best-answer").innerHTML = "<span class=\"text-success\">[The best answer]</span>";
+var bestMark = document.createElement("div");
+bestMark.innerHTML = "✓<small>the best</small>";
+bestMark.classList.add("best-mark", "text-success", "center");
+bestAnswerNode.querySelector(".voting").append(bestMark);
 
 answers.insertBefore(bestAnswerNode, answersFirstChild);
