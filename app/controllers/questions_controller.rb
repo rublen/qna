@@ -14,6 +14,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    gon.question_id = @question.id
     @answer = @question.answers.new
     @answer.attachments.new
 
@@ -65,7 +66,7 @@ class QuestionsController < ApplicationController
     ActionCable.server.broadcast('questions',
       ApplicationController.render(
         partial: 'questions/question',
-        locals: { question: @question, current_user: current_user }
+        locals: { question: @question }
       )
     )
   end

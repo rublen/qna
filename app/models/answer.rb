@@ -1,6 +1,8 @@
 class Answer < ApplicationRecord
   include Attachable, Votable
 
+  after_create :publish_answer
+
   belongs_to :question
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
@@ -18,5 +20,12 @@ class Answer < ApplicationRecord
       question.best_answer&.update!(best: false)
       update!(best: true)
     end
+  end
+
+  private
+  def publish_answer
+    answer = Answer.last
+    question_id = answer.question.id
+    ActionCable.server.broadcast("question-#{question_id}", { new_answer: answer, attachments: answer.attachments }.to_json)
   end
 end

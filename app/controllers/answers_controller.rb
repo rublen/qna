@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy best]
   before_action :set_question, only: %i[create]
   before_action :set_answers, only: %i[destroy best]
+  # after_action :publish_answer, only: %[create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -57,4 +58,8 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(:body, :best, attachments_attributes: [:file, :_destroy])
   end
+
+  # def publish_answer
+  #   ActionCable.server.broadcast("question-#{@question.id}", "new answer for question #{@question.title}")
+  # end
 end
