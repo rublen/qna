@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy best]
   before_action :set_question, only: %i[create]
   before_action :set_answers, only: %i[destroy best]
-  # after_action :publish_answer, only: %[create]
+  after_action :publish_answer, only: %[create]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -59,7 +59,18 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, :best, attachments_attributes: [:file, :_destroy])
   end
 
-  # def publish_answer
-  #   ActionCable.server.broadcast("question-#{@question.id}", "new answer for question #{@question.title}")
-  # end
+  def publish_answer
+    ActionCable.server.broadcast("question-#{@question.id}", {
+      answer: @answer,
+      attachments: @answer.attachments,
+      vote_template: render_voting
+    }.to_json)
+  end
+
+  def render_voting
+    ApplicationController.render(
+      partial: 'votes/voting',
+      locals: { votable: @answer, current_user: other_user }
+    )
+  end
 end

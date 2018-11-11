@@ -47,33 +47,33 @@ document.addEventListener('turbolinks:load', function() {
       flashAlert(event.detail[0])
     });
   });
-
-  function setUnvoting(elem, other, voteId) {
-    elem.querySelector('a.vote').classList.add('hide')
-    elem.querySelector('.vote-disabled').classList.add('hide')
-    elem.querySelector('a.unvote').classList.remove('hide')
-    elem.querySelector('a.unvote').href = "/votes/" + voteId + "/unvote"
-
-    other.querySelector('a.unvote').classList.add('hide')
-    other.querySelector('a.vote').classList.add('hide')
-    other.querySelector('.vote-disabled').classList.remove('hide')
-  };
-
-  function setVoting(elem, other) {
-    elem.querySelector('a.unvote').href = ""
-    elem.querySelector('a.unvote').classList.add('hide')
-    elem.querySelector('.vote-disabled').classList.add('hide')
-    elem.querySelector('a.vote').classList.remove('hide')
-
-    other.querySelector('a.unvote').href = ""
-    other.querySelector('a.unvote').classList.add('hide')
-    other.querySelector('.vote-disabled').classList.add('hide')
-    other.querySelector('a.vote').classList.remove('hide')
-  };
-
-  var closeButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-
-  function flashAlert(message) {
-    showFlash('<div class="alert alert-danger" role="alert">' + message + closeButton + '</div>')
-  }
 });
+
+function setUnvoting(elem, other, voteId) {
+  elem.querySelector('a.vote').classList.add('hide')
+  elem.querySelector('.vote-disabled').classList.add('hide')
+  elem.querySelector('a.unvote').classList.remove('hide')
+  elem.querySelector('a.unvote').href = "/votes/" + voteId + "/unvote"
+
+  other.querySelector('a.unvote').classList.add('hide')
+  other.querySelector('a.vote').classList.add('hide')
+  other.querySelector('.vote-disabled').classList.remove('hide')
+};
+
+function setVoting(elem, other) {
+  elem.querySelector('a.unvote').href = ""
+  elem.querySelector('a.unvote').classList.add('hide')
+  elem.querySelector('.vote-disabled').classList.add('hide')
+  elem.querySelector('a.vote').classList.remove('hide')
+
+  other.querySelector('a.unvote').href = ""
+  other.querySelector('a.unvote').classList.add('hide')
+  other.querySelector('.vote-disabled').classList.add('hide')
+  other.querySelector('a.vote').classList.remove('hide')
+};
+
+var closeButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+
+function flashAlert(message) {
+  showFlash('<div class="alert alert-danger" role="alert">' + message + closeButton + '</div>')
+}

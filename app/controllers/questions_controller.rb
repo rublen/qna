@@ -15,9 +15,10 @@ class QuestionsController < ApplicationController
 
   def show
     gon.question_id = @question.id
+    gon.question_author_id = @question.author.id
+
     @answer = @question.answers.new
     @answer.attachments.new
-
     @answer.votes.new
     @answers = @question.answers.best_first
     @attachments = @question.attachments

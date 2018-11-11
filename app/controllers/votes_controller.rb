@@ -6,6 +6,7 @@ class VotesController < ApplicationController
     unless current_user.author_of?(@votable)
       set_new_vote_with_value 1
       act_voting(@vote, :save)
+      gon.vote_id = @vote.id
     end
   end
 
@@ -13,6 +14,7 @@ class VotesController < ApplicationController
     unless current_user.author_of?(@votable)
       set_new_vote_with_value -1
       act_voting(@vote, :save)
+      gon.vote_id = @vote.id
     end
   end
 
