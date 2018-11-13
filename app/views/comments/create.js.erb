@@ -1,0 +1,11 @@
+showFlash("<%= j render 'shared/flash' %>");
+
+var commentable = document.querySelector("#" + "<%= @comment.commentable_type.underscore %>" + "-" + "<%= @commentable.id %>")
+var commentErrors = commentable.querySelector('.comment-errors')
+commentErrors.innerHTML = "<%= j render 'shared/errors', resource: @comment %>";
+
+if (commentErrors.innerHTML == "") {
+  commentable.querySelector('.comments').querySelector('.collection-group').innerHTML += "<%= j render @comment %>";
+  commentable.querySelector('.new-comment-form').classList.add('hide');
+  commentable.querySelector('.add-comment-link').classList.remove('hide')
+};

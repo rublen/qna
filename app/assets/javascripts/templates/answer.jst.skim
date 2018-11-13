@@ -5,7 +5,7 @@
 
   .col-xs-4.col-md-2.col-lg-1
     div class="voting voting-#{answer.id} pr-3" align="center"
-      == this.vote_template
+      == JST["shared/voting"]({answer_id: answer.id})
 
     - if answer.best
       .best-mark.text-success.center id="best-answer-#{answer.id}"

@@ -38,3 +38,10 @@
             - if (answer != answer.question.answers.best_first[0]) && (current_user&.author_of?(answer.question))
               = ' | '
               = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true, class: "text-secondary"
+
+      .comments
+        small
+          ul.collection-group= render answer.comments
+          = link_to 'Add comment', '', class: 'add-comment-link'
+          .new-comment-form.hide
+            = render 'comments/form', resource: answer

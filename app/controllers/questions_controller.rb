@@ -22,6 +22,8 @@ class QuestionsController < ApplicationController
     @answer.votes.new
     @answers = @question.answers.best_first
     @attachments = @question.attachments
+
+    @comment = @question.comments.new
   end
 
   def create

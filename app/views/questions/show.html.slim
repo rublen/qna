@@ -19,8 +19,14 @@ hr
           = form_with model: @question do |f|
             = render 'form_content', question: @question, f: f
 
-        = "  "
-        = link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
+        =< link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
+
+      .comments
+        small
+          ul.collection-group= render @question.comments
+          = link_to 'Add comment', '', class: 'add-comment-link'
+          .new-comment-form.hide
+            = render 'comments/form', resource: @question
 
 h2 Answers:
 .answers
@@ -28,4 +34,3 @@ h2 Answers:
 
 .new-answer-form
   = render 'answers/form', answer: @answer
-

@@ -1,24 +1,29 @@
-/ - up_unvote_classes = votable.upvoted?(current_user)  ? "unvote text-secondary" : "unvote text-secondary hide"
-/ - down_unvote_classes = votable.downvoted?(current_user)  ? "unvote text-secondary" : "unvote text-secondary hide"
-/ - unvote_path = votable.voted?(current_user) ? unvote_vote_path(votable.vote_by(current_user)) : ""
+.voting.voting-131.pr-3 align="center"
+  .vote-up
+    a.unvote.text-secondary.hide data-remote="true" rel="nofollow" data-method="delete" href=""
+      svg height="32" class="octicon octicon-chevron-up vote-up vote-hover" color="lightgreen" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+        path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
 
-/ - vote_classes = votable.voted?(current_user) ? 'vote text-secondary hide' : 'vote text-secondary'
+    a.vote.text-secondary data-remote="true" rel="nofollow" data-method="post" href="/answers/#{answer_id}/votes/up"
+      svg height="32" class="octicon octicon-chevron-up vote-up vote-hover" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+        path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
 
-/ - up_disabled_classes = votable.downvoted?(current_user) ? "vote-disabled text-secondary" : "vote-disabled text-secondary hide"
-/ - down_disabled_classes = votable.upvoted?(current_user) ? "vote-disabled text-secondary" : "vote-disabled text-secondary hide"
-
-/ .vote-up
-/   = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover", color: "lightgreen"), unvote_path, method: :delete, remote: true, class: up_unvote_classes
-/   = link_to octicon("chevron-up", height: 32, class: "vote-up vote-hover"), upvote_path(votable), method: :post, remote: true, class: vote_classes
-/   span class=up_disabled_classes
-/     = octicon("chevron-up", height: 32, class: "vote-up")
+    span.vote-disabled.text-secondary.hide
+      svg height="32" class="octicon octicon-chevron-up vote-up" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true">
+        path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
 
 
-/ .vote-sum.text-secondary
-/   = votable.vote_sum
+  .vote-sum.text-secondary 0
 
-/ .vote-down
-/   = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover", color: "red"), unvote_path, method: :delete, remote: true, class: down_unvote_classes
-/   = link_to octicon("chevron-down", height: 32, class: "vote-down vote-hover"), downvote_path(votable), method: :post, remote: true, class: vote_classes
-/   span class=down_disabled_classes
-/     = octicon("chevron-down", height: 32, class: "vote-down")
+  .vote-down
+    a.unvote.text-secondary.hide data-remote="true" rel="nofollow" data-method="delete" href=""
+      svg height="32" class="octicon octicon-chevron-down vote-down vote-hover" color="red" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+        path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"
+
+    a.vote.text-secondary data-remote="true" rel="nofollow" data-method="post" href="/answers/#{answer_id}/votes/down"
+      svg height="32" class="octicon octicon-chevron-down vote-down vote-hover" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+        path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"
+
+    span.vote-disabled.text-secondary.hide
+      svg height="32" class="octicon octicon-chevron-down vote-down" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+        path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"

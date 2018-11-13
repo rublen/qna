@@ -1,0 +1,9 @@
+= form_with model: [resource, @comment] do |f|
+
+  h6= f.label :body, 'Your comment'
+  .comment-errors
+  = f.text_area :body
+
+  p
+    = f.submit 'Add comment'
+    =< button_to 'Cancel', "", class: 'comment-form-cancel'

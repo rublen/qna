@@ -28,23 +28,36 @@ document.addEventListener('turbolinks:load', function() {
           var upVoted = false;
           var downVoted = false;
 
-          voteUp.addEventListener('click', function() {
-            cleanFlash();
-            if (upVoted) {
-              setUnvoting(voteUp, voteDown, gon.vote_id)
-            } else if (!downVoted) {
-              setVoting(voteUp, voteDown)
-            }
-          });
+          if (!downVoted) {
+            voteUp.addEventListener('click', function() {
+              cleanFlash();
+              console.log('**gon.vote_id:' + gon.vote_id);
+              var voteSum = voteUp.parentElement.querySelector('.vote-sum');
+              var sum = parseInt(voteSum.textContent);
+              voteSum.textContent = sum++;
+              upVoted = !upVoted
+              if (upVoted) {
+                setUnvoting(voteUp, voteDown, gon.vote_id)
+              } else {
+                setVoting(voteUp, voteDown)
+              }
+            })
+          };
 
-          voteDown.addEventListener('click', function() {
-            cleanFlash();
-            if (downVoted) {
-              setUnvoting(voteDown, voteUp, gon.vote_id)
-            } else if (!upVoted) {
-              setVoting(voteDown, voteUp)
-            }
-          })
+          if (!upVoted) {
+            voteDown.addEventListener('click', function() {
+              cleanFlash();
+              downVoted = !downVoted
+              console.log('**gon.vote_id:' + gon.vote_id)
+              var voteSum = voteDown.parentElement.querySelector('.vote-sum')
+              voteSum.textContent = parseInt(voteSum.textContent)--;
+              if (downVoted) {
+                setUnvoting(voteDown, voteUp, gon.vote_id)
+              } else {
+                setVoting(voteDown, voteUp)
+              }
+            })
+          }
         }
       }
       // JST["templates/#{template}"](data)
