@@ -26,7 +26,7 @@ hr
           ul.collection-group= render @question.comments
           = link_to 'Add comment', '', class: 'add-comment-link'
           .new-comment-form.hide
-            = render 'comments/form', resource: @question
+            = render 'comments/form', commentable: @question, comment: @comment
 
 h2 Answers:
 .answers

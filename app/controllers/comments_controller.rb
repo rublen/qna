@@ -6,6 +6,7 @@ class CommentsController < ApplicationController
     @comment = @commentable.comments.new(comment_params)
     @comment.user = current_user
     @comment.save
+    publish_to_stream
   end
 
   def destroy
@@ -29,5 +30,13 @@ class CommentsController < ApplicationController
 
   def comment_params
     params.require(:comment).permit(:body)
+  end
+
+  def publish_to_stream
+    ActionCable.server.broadcast("question-#{question_id}", { comment: @comment }.to_json)
+  end
+
+  def question_id
+    @comment.commentable_type == 'Question' ? @commentable.id : @commentable.question.id
   end
 end

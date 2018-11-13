@@ -19,11 +19,12 @@ class QuestionsController < ApplicationController
 
     @answer = @question.answers.new
     @answer.attachments.new
+    # @answer_comment = @answer.comments.new
     @answer.votes.new
-    @answers = @question.answers.best_first
-    @attachments = @question.attachments
 
     @comment = @question.comments.new
+    @answers = @question.answers.best_first
+    @attachments = @question.attachments
   end
 
   def create
