@@ -1,6 +1,7 @@
 require 'rails_helper'
 require_relative 'concerns/attachable_spec'
 require_relative 'concerns/votable_spec'
+require_relative 'concerns/commentable_spec'
 
 RSpec.describe Answer, type: :model do
   it { should have_many(:votes).dependent(:destroy) }
@@ -11,6 +12,7 @@ RSpec.describe Answer, type: :model do
 
   it_should_behave_like "attachable"
   it_should_behave_like "votable"
+  it_should_behave_like "commentable"
 
   it "sets default value 'false' for 'best' attribute" do
     expect(create(:answer)).to_not be_best

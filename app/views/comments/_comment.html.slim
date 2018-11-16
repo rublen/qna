@@ -2,6 +2,6 @@
 
   li class="comment-#{comment.id} collection-group-item border-bottom"
     == "#{comment.body} <span class='text-secondary'>- #{comment.user.email}, #{comment.created_at.strftime('%F %T')}</span>"
-    - if current_user.author_of?(comment)
+    - if current_user&.author_of?(comment)
       = link_to 'Delete', comment, method: :delete, remote: true, class: :badge
 

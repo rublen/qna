@@ -62,15 +62,7 @@ class AnswersController < ApplicationController
   def publish_answer
     ActionCable.server.broadcast("question-#{@question.id}", {
       answer: @answer,
-      attachments: @answer.attachments,
-      vote_template: render_voting
+      attachments: @answer.attachments
     }.to_json)
-  end
-
-  def render_voting
-    ApplicationController.render(
-      partial: 'votes/voting',
-      locals: { votable: @answer, current_user: other_user }
-    )
   end
 end

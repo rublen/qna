@@ -5,7 +5,7 @@
 
   .col-xs-4.col-md-2.col-lg-1
     div class="voting voting-#{answer.id} pr-3" align="center"
-      == JST["shared/voting"]({answer_id: answer.id})
+      == JST["templates/voting"](answer)
 
     - if answer.best
       .best-mark.text-success.center id="best-answer-#{answer.id}"
@@ -23,18 +23,16 @@
         br
         / = render answer.attachments
 
-    .form-group.hide id="edit-answer-form-#{answer.id}"
-      / = render 'answers/form', answer: this
+    small
+      span.best-answer
+        - if (!answer.best) && (gon.current_user_id == gon.question_author_id)
+          a.text-secondary data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{answer.id}/best" Mark as the best
+
+      .comments
+          ul.collection-group
+            a.add-comment-link href="" Add comment
+            .new-comment-form.hide
+              form action="/answers/#{answer.id}/comments" accept-charset="UTF-8" data-remote="true" method="post"
+                == '<input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="aPxYUGVsSJzCclB1vcqwfML/73LkJRuaGZVzaw91j3WluJzzHr27B7qnKuR0SYnCfixa/iHW9PoeLvI3tZ7IFQ=="><h6><label for="comment_body">Your comment</label></h6><div class="comment-errors"></div><textarea name="comment[body]" id="comment_body"></textarea><p><input type="submit" name="commit" value="Add comment" data-disable-with="Add comment"> <input class="comment-form-cancel" type="submit" value="Cancel"><input type="hidden" name="authenticity_token" value="aPxYUGVsSJzCclB1vcqwfML/73LkJRuaGZVzaw91j3WluJzzHr27B7qnKuR0SYnCfixa/iHW9PoeLvI3tZ7IFQ=="></p></form><p></p></div>'
 
 
-    .links
-      .badge
-        / - if current_user&.author_of?(answer)
-        /   = link_to 'Edit', '', class: "edit-link text-secondary", data: { id: answer.id, model: 'answer' }
-
-        /   = ' | '
-        /   = link_to 'Delete', answer, method: :delete, remote: true, class: "text-secondary"
-
-        span.best-answer
-          - if (!answer.best) && (gon.current_user_id == gon.question_author_id)
-            a.text-secondary data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{answer.id}/best" Mark as the best

@@ -71,9 +71,3 @@ function setVoting(elem, other) {
   other.querySelector('.vote-disabled').classList.add('hide')
   other.querySelector('a.vote').classList.remove('hide')
 };
-
-var closeButton = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
-
-function flashAlert(message) {
-  showFlash('<div class="alert alert-danger" role="alert">' + message + closeButton + '</div>')
-}

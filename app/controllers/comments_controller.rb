@@ -33,7 +33,14 @@ class CommentsController < ApplicationController
   end
 
   def publish_to_stream
-    ActionCable.server.broadcast("question-#{question_id}", { comment: @comment }.to_json)
+    ActionCable.server.broadcast("question-#{question_id}", { comment: {
+      id: @comment.id,
+      body: @comment.body,
+      user_email: @comment.user.email,
+      user_id: @comment.user_id,
+      created_at: @comment.created_at.strftime('%F %T'),
+      commentable_css_id: "##{@comment.commentable_type.underscore}-#{@commentable.id}"
+    }}.to_json)
   end
 
   def question_id

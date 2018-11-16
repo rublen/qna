@@ -50,7 +50,8 @@ RSpec.shared_examples_for "voted", type: :request do
 
     it "don't allow for the author of votable to vote for it" do
       sign_in(votable.author)
-      expect { post downvote_path, params: { vote: attributes_for(:"#{model}_vote", user_id: votable.author.id, upvoted: false) } }.to_not change(Vote, :count)
+      post downvote_path, params: { vote: vote, user_id: votable.author.id }
+      expect(response.status).to eq 204 # no content
     end
 
     it 'sets new vote with voted value -1' do

@@ -1,0 +1,28 @@
+.vote-up
+  a.unvote.text-secondary.hide data-remote="true" rel="nofollow" data-method="delete" href=""
+    svg height="32" class="octicon octicon-chevron-up vote-up vote-hover" color="lightgreen" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+      path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
+
+  a.vote.text-secondary data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@id}/votes/up"
+    svg height="32" class="octicon octicon-chevron-up vote-up vote-hover" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+      path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
+
+  span.vote-disabled.text-secondary.hide
+    svg height="32" class="octicon octicon-chevron-up vote-up" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true">
+      path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"
+
+
+.vote-sum.text-secondary= 0
+
+.vote-down
+  a.unvote.text-secondary.hide data-remote="true" rel="nofollow" data-method="delete" href=""
+    svg height="32" class="octicon octicon-chevron-down vote-down vote-hover" color="red" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+      path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"
+
+  a.vote.text-secondary data-remote="true" rel="nofollow" data-method="post" href="/answers/#{@id}/votes/down"
+    svg height="32" class="octicon octicon-chevron-down vote-down vote-hover" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+      path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"
+
+  span.vote-disabled.text-secondary.hide
+    svg height="32" class="octicon octicon-chevron-down vote-down" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"
+      path fill-rule="evenodd" d="M5 11L0 6l1.5-1.5L5 8.25 8.5 4.5 10 6l-5 5z"

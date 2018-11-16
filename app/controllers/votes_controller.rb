@@ -6,7 +6,6 @@ class VotesController < ApplicationController
     unless current_user.author_of?(@votable)
       set_new_vote_with_value 1
       act_voting(@vote, :save)
-      gon.vote_id = @vote.id
     end
   end
 
@@ -14,7 +13,6 @@ class VotesController < ApplicationController
     unless current_user.author_of?(@votable)
       set_new_vote_with_value -1
       act_voting(@vote, :save)
-      gon.vote_id = @vote.id
     end
   end
 
@@ -38,6 +36,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if vote.public_send(act)
         @votable.change_vote_sum
+        publish_vote if [:up, :down].include? act
         format.json { render_json_with_vote_results(vote) }
       else
         format.json { render_json_errors(vote) }
@@ -65,5 +64,15 @@ class VotesController < ApplicationController
 
   def render_json_errors(item)
     render json: { error: item.errors.full_messages }, status: 422
+  end
+
+  def publish_vote
+    ActionCable.server.broadcast("question-#{@question_id}", {
+      vote_id: @vote.id
+    }.to_json)
+  end
+
+  def question_id
+    @vote.votable_type == 'Question' ? @votable.id : @votable.question.id
   end
 end
