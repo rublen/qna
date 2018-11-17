@@ -69,4 +69,31 @@ feature 'Comment for the answer', %q{
       end
     end
   end
+
+  context "Multiple sessions" do
+    scenario "comment appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.answers' do
+          click_on 'Add comment'
+          fill_in 'Your comment',  with: "comment answer"
+          click_on 'Add comment'
+
+          expect(page).to have_content 'comment answer'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'comment answer'
+      end
+    end
+  end
 end

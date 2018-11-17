@@ -14,7 +14,7 @@
 
     .col-xs-8.col-md-10.col-lg-11
       p id="answer-body-#{answer.id}"
-        p= "#{answer.body}"
+        = "#{answer.body}"
 
       - unless answer.attachments.empty?
         .attachments.badge

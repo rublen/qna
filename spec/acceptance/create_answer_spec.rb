@@ -45,4 +45,102 @@ feature 'Create Answer', %q{
     end
   end
 
+
+  context "Multiple sessions" do
+    scenario "answer appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('other_user') do
+        sign_in(create(:user))
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.new-answer-form' do
+          fill_in 'Your answer', with: "answer_body"
+          click_on 'add file'
+          attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+          click_on 'Publish'
+        end
+        within('.answers') do
+          expect(page).to have_content "answer_body"
+          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+        end
+      end
+
+      answer = Answer.last
+
+      Capybara.using_session('other_user') do
+        within '.answers' do
+          expect(page).to have_content "answer_body"
+          expect(page).to_not have_link 'Edit'
+          expect(page).to_not have_link "Delete", href: "/answers/#{answer.id}"
+
+          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+          expect(page).to_not have_link "Delete", href: "/attachments/#{Attachment.last.id}"
+
+          within '.comments' do
+            click_on 'Add comment'
+            expect(page).to have_selector 'textarea'
+            expect(page).to have_button 'Cancel'
+          end
+          within '.voting' do
+            expect(page).to have_link href: "/answers/#{answer.id}/votes/up"
+            expect(page).to have_link href: "/answers/#{answer.id}/votes/down"
+            expect(page).to have_content "#{answer.vote_sum}"
+
+            # expect { click_link(href: "/answers/#{answer.id}/votes/up") }.to change(answer, :vote_sum).by(1)
+            # click_link(href: "/answers/#{answer.id}/votes/up")
+            # expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
+            # expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
+            # expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
+
+            # click_link(href: "/answers/#{answer.id}/votes/down")
+          end
+        end
+      end
+    end
+
+    scenario "answer appears on guest's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.new-answer-form' do
+          fill_in 'Your answer', with: "answer_body"
+          click_on 'Publish'
+        end
+        within('.answers') { expect(page).to have_content "answer_body" }
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to have_content "answer_body"
+          expect(page).to_not have_link 'Edit'
+          expect(page).to_not have_link "Delete", href: "/answers/#{answer.id}"
+
+          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+          expect(page).to_not have_link "Delete", href: "/attachments/#{Attachment.last.id}"
+
+          click_on 'Add comment'
+        end
+        expect(page).to have_content "You need to sign in or sign up before continuing."
+        within '.answers' do
+          # save_and_open_page
+          expect(page).to have_link href="/answers/#{answer.id}/votes/up" # не видит
+          expect(page).to have_link href="/answers/#{answer.id}/votes/down"
+          expect(page).to have_content "#{answer.vote_sum}"
+        end
+      end
+    end
+  end
 end

@@ -20,19 +20,18 @@
     - if attachments[0]
       .attachments.badge
         = "Attachments:"
-        br
-        / = render answer.attachments
+        - for attachment in attachments
+          == JST["templates/attachment"](attachment)
 
-    small
-      span.best-answer
+    span.best-answer
+      small
         - if (!answer.best) && (gon.current_user_id == gon.question_author_id)
           a.text-secondary data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{answer.id}/best" Mark as the best
 
-      .comments
-          ul.collection-group
-            a.add-comment-link href="" Add comment
-            .new-comment-form.hide
-              form action="/answers/#{answer.id}/comments" accept-charset="UTF-8" data-remote="true" method="post"
-                == '<input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="aPxYUGVsSJzCclB1vcqwfML/73LkJRuaGZVzaw91j3WluJzzHr27B7qnKuR0SYnCfixa/iHW9PoeLvI3tZ7IFQ=="><h6><label for="comment_body">Your comment</label></h6><div class="comment-errors"></div><textarea name="comment[body]" id="comment_body"></textarea><p><input type="submit" name="commit" value="Add comment" data-disable-with="Add comment"> <input class="comment-form-cancel" type="submit" value="Cancel"><input type="hidden" name="authenticity_token" value="aPxYUGVsSJzCclB1vcqwfML/73LkJRuaGZVzaw91j3WluJzzHr27B7qnKuR0SYnCfixa/iHW9PoeLvI3tZ7IFQ=="></p></form><p></p></div>'
-
+    .comments
+      small
+        ul.collection-group
+        a.add-comment-link href="" Add comment
+        .new-comment-form.hide
+          == JST["templates/new_comment_form"](answer)
 

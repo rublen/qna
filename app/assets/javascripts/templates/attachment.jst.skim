@@ -1,0 +1,4 @@
+br
+a target="_blank" href="#{@file.url}"
+  = @file.url.split('/').pop()
+

@@ -19,48 +19,43 @@ document.addEventListener('turbolinks:load', function() {
           answers.innerHTML += JST["templates/answer"](data);
 
           var answer = document.querySelector('#answer-' + data.answer.id);
-          var voteUp = answer.querySelector('.vote-up');
-          var voteDown = answer.querySelector('.vote-down');
           var addCommentLink = answer.querySelector('a.add-comment-link');
-          var upVoted = false;
-          var downVoted = false;
 
-
-          voteUp.addEventListener('click', function() {
-            if (!downVoted) {
-              cleanFlash();
-              console.log('**data.vote_id:' + data.vote_id);
-              var voteSum = voteUp.parentElement.querySelector('.vote-sum');
-              var sum = parseInt(voteSum.textContent);
-              voteSum.textContent = ++sum;
-              upVoted = !upVoted
-              if (upVoted) {
-                setUnvoting(voteUp, voteDown, data.vote_id)
-              } else {
-                setVoting(voteUp, voteDown)
-              }
-            }
-          });
-
-          voteDown.addEventListener('click', function() {
-            if (!upVoted) {
-              cleanFlash();
-              downVoted = !downVoted
-              console.log('**data.vote_id:' + data.vote_id)
-              var voteSum = voteDown.parentElement.querySelector('.vote-sum')
-              var sum = parseInt(voteSum.textContent);
-              voteSum.textContent = --sum;
-              if (downVoted) {
-                setUnvoting(voteDown, voteUp, data.vote_id)
-              } else {
-                setVoting(voteDown, voteUp)
-              }
-            }
-          })
           addCommentLink.addEventListener('click', function(event) {
             event.preventDefault();
             addCommentLinkHandler(this)
           })
+        };
+
+        if (data.vote && data.vote.votable_user_id != gon.current_user_id) {
+          cleanFlash();
+          var answer = document.querySelector(data.vote.votable_css_id);
+          var voteUp = answer.querySelector('.vote-up');
+          var voteDown = answer.querySelector('.vote-down');
+
+          var upVoted = data.vote.upvoted;
+          var downVoted = data.vote.downvoted;
+
+          var voteSum = voteUp.parentElement.querySelector('.vote-sum')
+          voteSum.textContent = data.vote.vote_sum;
+
+          if (data.vote.user_id == gon.current_user_id) {
+            if (!downVoted) {
+              console.log('**data.vote.id:' + data.vote.id);
+              if (upVoted) {
+                setUnvoting(voteUp, voteDown, data.vote.id)
+              } else {
+                setVoting(voteUp, voteDown)
+              }
+            };
+            if (!upVoted) {
+              if (downVoted) {
+                setUnvoting(voteDown, voteUp, data.vote.id)
+              } else {
+                setVoting(voteDown, voteUp)
+              }
+            }
+          }
         }
 
         if (data.comment && data.comment.user_id != gon.current_user_id) {

@@ -7,8 +7,7 @@ feature 'Comment for the question', %q{
 } do
 
   given(:user) { create(:user) }
-  given (:question) { create(:question) }
-  # given!(:answer) { create(:answer, question: question) }
+  given(:question) { create(:question) }
 
   before do
     sign_in(user)
@@ -66,6 +65,34 @@ feature 'Comment for the question', %q{
 
       scenario 'can not delete the comment', js: true do
         expect(page).to_not have_link 'Delete', href: comment_path(comment.id)
+      end
+    end
+  end
+
+
+  context "Multiple sessions" do
+    scenario "comment appears on another user's page", js: true do
+      Capybara.using_session('user') do
+        sign_in(user)
+        visit question_path(question)
+      end
+
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        within '.question' do
+          click_on 'Add comment'
+          fill_in 'Your comment',  with: "comment question"
+          click_on 'Add comment'
+
+          expect(page).to have_content 'comment question'
+        end
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'comment question'
       end
     end
   end

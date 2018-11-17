@@ -1,6 +1,7 @@
 class VotesController < ApplicationController
   before_action :set_vote, only: %i[unvote]
   before_action :set_votable, only: %i[up down]
+  # after_action :publish_vote, only: %i[up down]
 
   def up
     unless current_user.author_of?(@votable)
@@ -36,7 +37,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if vote.public_send(act)
         @votable.change_vote_sum
-        publish_vote if [:up, :down].include? act
+        publish_to_stream
         format.json { render_json_with_vote_results(vote) }
       else
         format.json { render_json_errors(vote) }
@@ -66,13 +67,19 @@ class VotesController < ApplicationController
     render json: { error: item.errors.full_messages }, status: 422
   end
 
-  def publish_vote
-    ActionCable.server.broadcast("question-#{@question_id}", {
-      vote_id: @vote.id
-    }.to_json)
+  def publish_to_stream
+    ActionCable.server.broadcast("question-#{question_id}", { vote:
+      { id: @vote.id,
+        user_id: @vote.user_id,
+        upvoted: @votable.upvoted?(current_user),
+        downvoted: @votable.downvoted?(current_user),
+        vote_sum: @votable.vote_sum,
+        votable_user_id: @votable.author.id,
+        votable_css_id: "##{@vote.votable_type.underscore}-#{@votable.id}" }
+    }.to_json) if @vote
   end
 
   def question_id
-    @vote.votable_type == 'Question' ? @votable.id : @votable.question.id
+    @votable_type == 'Question' ? @votable.id : @votable.question.id
   end
 end
