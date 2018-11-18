@@ -74,12 +74,13 @@ class VotesController < ApplicationController
         upvoted: @votable.upvoted?(current_user),
         downvoted: @votable.downvoted?(current_user),
         vote_sum: @votable.vote_sum,
+        votable_id: @votable.id,
         votable_user_id: @votable.author.id,
         votable_css_id: "##{@vote.votable_type.underscore}-#{@votable.id}" }
     }.to_json) if @vote
   end
 
   def question_id
-    @votable_type == 'Question' ? @votable.id : @votable.question.id
+    @vote.votable_type == 'Question' ? @votable.id : @votable.question.id
   end
 end

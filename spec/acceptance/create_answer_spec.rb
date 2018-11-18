@@ -92,13 +92,20 @@ feature 'Create Answer', %q{
             expect(page).to have_link href: "/answers/#{answer.id}/votes/down"
             expect(page).to have_content "#{answer.vote_sum}"
 
-            # expect { click_link(href: "/answers/#{answer.id}/votes/up") }.to change(answer, :vote_sum).by(1)
-            # click_link(href: "/answers/#{answer.id}/votes/up")
-            # expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
-            # expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
-            # expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
+            expect { click_link(href: "/answers/#{answer.id}/votes/up") }.to change(answer, :vote_sum).by(1)
+            expect(page).to have_content '1'
+            expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
+            expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
+            expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
 
-            # click_link(href: "/answers/#{answer.id}/votes/down")
+            expect { click_link(href: "/votes/#{answer.votes.last.id}/unvote" }.to change(answer, :vote_sum).by(-1)
+            expect(page).to have_content '1'
+
+            expect { click_link(href: "/answers/#{answer.id}/votes/down") }.to change(answer, :vote_sum).by(-1)
+            expect(page).to have_content '-1'
+            expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
+            expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
+            expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
           end
         end
       end
@@ -122,6 +129,8 @@ feature 'Create Answer', %q{
         within('.answers') { expect(page).to have_content "answer_body" }
       end
 
+      answer = Answer.last
+
       Capybara.using_session('guest') do
         within '.answers' do
           expect(page).to have_content "answer_body"
@@ -135,7 +144,6 @@ feature 'Create Answer', %q{
         end
         expect(page).to have_content "You need to sign in or sign up before continuing."
         within '.answers' do
-          # save_and_open_page
           expect(page).to have_link href="/answers/#{answer.id}/votes/up" # не видит
           expect(page).to have_link href="/answers/#{answer.id}/votes/down"
           expect(page).to have_content "#{answer.vote_sum}"

@@ -1,6 +1,5 @@
 class AnswersChannel < ApplicationCable::Channel
   def subscribed
-    p '**********************', params
     stream_from "question-#{params[:question_id]}"
   end
 
