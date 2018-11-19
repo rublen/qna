@@ -2,41 +2,31 @@ class QuestionsController < ApplicationController
   include PublicActions
 
   before_action :set_question, only: %i[show update destroy]
-  after_action :publish_question, only: %i[create]
+  before_action :set_answer, only: %i[show]
+  after_action :publish_to_stream, only: %i[create]
 
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def new
     @question = Question.new
     @attachment = @question.attachments.new
+    respond_with(@question)
   end
 
   def show
     gon.question_id = @question.id
     gon.question_author_id = @question.author.id
-
-    @answer = @question.answers.new
-    @answer.attachments.new
-    # @answer_comment = @answer.comments.new
-    @answer.votes.new
-
-    @comment = @question.comments.new
     @answers = @question.answers.best_first
-    @attachments = @question.attachments
+    respond_with(@question)
   end
 
   def create
-    @question = current_user.questions.new(question_params)
-
-    if @question.save
-      redirect_to questions_path, notice: 'Your question was successfully created'
-    else
-      render 'new'
-    end
+    respond_with(@question = current_user.questions.create(question_params))
   end
 
+  # не respond-ила, потому что 1) flash.now, 2) подключила CollectionResponder для create, для update не нужно
   def update
     if current_user.author_of? @question
       flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
@@ -47,13 +37,10 @@ class QuestionsController < ApplicationController
 
   def destroy
     if current_user.author_of? @question
-      @question.destroy
-      flash[:notice] = 'Question was deleted successfully.'
+      respond_with(@question.destroy)
     else
       flash[:alert] = 'This action is permitted only for author.'
     end
-
-    redirect_to questions_path
   end
 
   private
@@ -65,7 +52,11 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
   end
 
-  def publish_question
+  def set_answer
+    @answer = @question.answers.new
+  end
+
+  def publish_to_stream
     return if @question.errors.any?
     ActionCable.server.broadcast('questions',
       ApplicationController.render(

@@ -18,7 +18,7 @@ feature 'Create question', %q{
 
     click_on 'Publish'
 
-    expect(page).to have_content 'Your question was successfully created'
+    expect(page).to have_content 'Question was successfully created.'
   end
 
   scenario 'Authenticated user can not create invalid question' do
