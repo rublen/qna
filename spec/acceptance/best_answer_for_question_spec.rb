@@ -13,18 +13,17 @@ feature 'The best answer for question', %q{
   given!(:answers) { create_list(:answer, 2, question: question) }
 
   context "The author of question can choose the best answer" do
-    given(:answer_1) { answers[0].body }
-    given(:answer_2) { answers[1].body }
+    given(:answer_1) { answers[1].body }
+    given(:answer_2) { answers[0].body }
 
     background do
       sign_in(author)
       visit question_path(question)
     end
 
-    scenario "To choose the best answer author has links which don't redirect to another page", js: true do
+    scenario "There are so many links 'Mark as the best' as answers minus 1, link doesn't redirect to another page", js: true do
       within ".answers" do
-        expect(page).to have_link('Mark as the best')
-        expect(page.all('.best-answer').size).to eq question.answers.count # внутри '.best-answer' ссылка 'Mark as the best'
+        expect(page.all('a', text: 'Mark as the best').size).to eq(question.answers.count - 1)
 
         click_on 'Mark as the best'
         expect(current_path).to eq question_path(question)
@@ -36,7 +35,7 @@ feature 'The best answer for question', %q{
       within ".answers" do
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
         click_on "Mark as the best"
-        sleep(4)
+        sleep(1)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -45,10 +44,10 @@ feature 'The best answer for question', %q{
     scenario "After reloading page the best answer is still first in the list", js: true do
       within ".answers" do
         click_on "Mark as the best"
-        sleep(4)
+        sleep(1)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
         page.refresh
-        sleep(4)
+        sleep(1)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
       end
     end
@@ -59,11 +58,11 @@ feature 'The best answer for question', %q{
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
 
         click_on 'Mark as the best'
-        sleep(4)
+        sleep(1)
         within(all(".row").first) { expect(page).to have_content("#{answer_2}") }
 
         click_on 'Mark as the best'
-        sleep(4)
+        sleep(1)
         within(all(".row").first) { expect(page).to have_content("#{answer_1}") }
       end
     end

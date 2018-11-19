@@ -2,6 +2,7 @@ class QuestionsController < ApplicationController
   include PublicActions
 
   before_action :set_question, only: %i[show update destroy]
+  after_action :publish_question, only: %i[create]
 
   def index
     @questions = Question.all
@@ -13,10 +14,15 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    gon.question_id = @question.id
+    gon.question_author_id = @question.author.id
+
     @answer = @question.answers.new
     @answer.attachments.new
-
+    # @answer_comment = @answer.comments.new
     @answer.votes.new
+
+    @comment = @question.comments.new
     @answers = @question.answers.best_first
     @attachments = @question.attachments
   end
@@ -57,5 +63,15 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, attachments_attributes: [:file, :_destroy])
+  end
+
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast('questions',
+      ApplicationController.render(
+        partial: 'questions/question',
+        locals: { question: @question }
+      )
+    )
   end
 end

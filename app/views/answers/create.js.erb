@@ -8,9 +8,16 @@ var attachments = document.querySelector('.new-answer-form').querySelectorAll('.
 
 attachments.forEach(function(a) { a.remove() });
 
-editNewAnswerLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
+var editNewAnswerLink = document.querySelector('[data-id="<%= @answer.id %>"]', '[data-model="answer"]');
 
 editNewAnswerLink.addEventListener('click', function(event) {
   event.preventDefault();
   editHideClassHandler('answer', this.dataset.id);
 });
+
+var addCommentLink = document.querySelector("#answer-" + "<%= @answer.id %>").querySelector('a.add-comment-link')
+
+addCommentLink.addEventListener('click', function(event) {
+  event.preventDefault();
+  addCommentLinkHandler(this)
+})

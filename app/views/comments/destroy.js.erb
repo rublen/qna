@@ -1,0 +1,5 @@
+showFlash("<%= j render 'shared/flash' %>");
+
+var comment = document.querySelector('li.comment-' + "<%= @comment.id %>")
+
+comment.parentNode.removeChild(comment)

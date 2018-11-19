@@ -19,7 +19,7 @@ RSpec.shared_examples_for "votable" do
   end
 
   it "finds user's vote for the votable" do
-    expect(votable.vote(user)).to eq vote
+    expect(votable.vote_by(user)).to eq vote
   end
 
   it "returns 'true' if user has voted for this item" do

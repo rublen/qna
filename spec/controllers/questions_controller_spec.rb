@@ -1,10 +1,12 @@
 require 'rails_helper'
 require_relative 'shared_examples/public_actions_spec'
 require_relative 'shared_examples/voted_spec'
+require_relative 'shared_examples/commented_spec'
 
 RSpec.describe QuestionsController, type: :controller do
   it_behaves_like "public_actions"
   it_behaves_like 'voted'
+  it_behaves_like 'commented'
 
   let!(:author) { create(:user) }
 

@@ -13,12 +13,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions, concerns: [:votable] do
-    resources :answers, shallow: true, concerns: [:votable], except: %i[index new show] do
+  concern :commentable do
+    resources :comments, shallow: true, only: %i[create destroy] do
+      post :create, on: :collection
+      delete :destroy, on: :member
+    end
+  end
+
+  resources :questions, concerns: [:votable, :commentable] do
+    resources :answers, shallow: true, concerns: [:votable, :commentable], except: %i[index new show] do
       patch :best, on: :member
     end
   end
 
   resources :attachments, only: :destroy
 
+  mount ActionCable.server => '/cable'
 end

@@ -26,6 +26,8 @@ end
 
 Capybara.javascript_driver = :selenium_chrome_headless
 
+Capybara.server = :puma
+
 RSpec.configure do |config|
   # setting different from Selenium js-driver
   # Capybara.javascript_driver = :webkit

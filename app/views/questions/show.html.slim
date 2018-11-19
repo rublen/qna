@@ -7,10 +7,26 @@ hr
 
   .col-xs-9.col-md-11.col-lg-11
     div id="question-#{@question.id}"
-      h1= @question.title
-      h3= @question.body
+      h1.question-title = @question.title
+      h3.question-body = @question.body
       .attachments
         = render @attachments
+
+      - if current_user&.author_of?(@question)
+        = link_to 'Edit', '', class: "edit-link badge text-secondary", data: { model: 'question', id: @question.id }
+
+        div id="edit-question-form-#{@question.id}" class='hide'
+          = form_with model: @question do |f|
+            = render 'form_content', question: @question, f: f
+
+        =< link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
+
+      .comments
+        small
+          ul.collection-group= render @question.comments
+          = link_to 'Add comment', '', class: 'add-comment-link'
+          .new-comment-form.hide
+            = render 'comments/form', commentable: @question, comment: @comment
 
 h2 Answers:
 .answers

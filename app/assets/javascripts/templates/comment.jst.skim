@@ -1,0 +1,2 @@
+  li class="comment-#{@id} collection-group-item border-bottom"
+    == "#{@body} <span class='text-secondary'>- #{@user_email}, #{@created_at}</span>"

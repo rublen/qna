@@ -62,9 +62,9 @@ feature 'Add files to question', %q{
 
   scenario 'User adds files when edits his question', js: true do
     question
-    visit questions_path
+    visit question_path(question)
 
-    within '.questions' do
+    within '.question' do
       click_on 'Edit'
       click_on 'add file'
       attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
@@ -72,14 +72,11 @@ feature 'Add files to question', %q{
       within all('.nested-fields').last do
         attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
       end
-
       click_on 'Publish'
-    end
-    sleep(2)
 
-    visit question_path(question)
-    sleep(2)
-    expect(page).to have_link "rails_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
-    expect(page).to have_link "spec_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+      sleep(2)
+      expect(page).to have_link "rails_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/rails_helper.rb/
+      expect(page).to have_link "spec_helper.rb", href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+    end
   end
 end

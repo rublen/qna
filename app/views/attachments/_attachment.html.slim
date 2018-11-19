@@ -1,7 +1,7 @@
 - if attachment.persisted?
 
-  = link_to attachment.file.filename, attachment.file.url, target: :_blank, class: "badge"
+  = link_to attachment.file.filename, attachment.file.url, target: :_blank
 
   - if current_user&.author_of?(attachment.attachable)
-    = link_to  octicon('trashcan'), attachment, method: :delete, remote: true, class: "text-danger"
+    = link_to  octicon('trashcan'), attachment, method: :delete, remote: true, class: "text-danger ml-2"
   br

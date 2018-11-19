@@ -1,0 +1,37 @@
+- answer = this.answer
+- attachments = this.attachments
+
+.row.border-bottom id="answer-#{answer.id}"
+
+  .col-xs-4.col-md-2.col-lg-1
+    div class="voting voting-#{answer.id} pr-3" align="center"
+      == JST["templates/voting"](answer)
+
+    - if answer.best
+      .best-mark.text-success.center id="best-answer-#{answer.id}"
+        = "✓"
+        small the best
+
+
+  .col-xs-8.col-md-10.col-lg-11
+    p id="answer-body-#{answer.id}"
+      p= "#{answer.body}"
+
+    - if attachments[0]
+      .attachments.badge
+        = "Attachments:"
+        - for attachment in attachments
+          == JST["templates/attachment"](attachment)
+
+    span.best-answer
+      small
+        - if (!answer.best) && (gon.current_user_id == gon.question_author_id)
+          a.text-secondary data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{answer.id}/best" Mark as the best
+
+    .comments
+      small
+        ul.collection-group
+        a.add-comment-link href="" Add comment
+        .new-comment-form.hide
+          == JST["templates/new_comment_form"](answer)
+
