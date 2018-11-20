@@ -10,7 +10,7 @@ hr
       h1.question-title = @question.title
       h3.question-body = @question.body
       .attachments
-        = render @attachments
+        = render @question.attachments
 
       - if current_user&.author_of?(@question)
         = link_to 'Edit', '', class: "edit-link badge text-secondary", data: { model: 'question', id: @question.id }
@@ -26,7 +26,7 @@ hr
           ul.collection-group= render @question.comments
           = link_to 'Add comment', '', class: 'add-comment-link'
           .new-comment-form.hide
-            = render 'comments/form', commentable: @question, comment: @comment
+            = render 'comments/form', commentable: @question, comment: @question.comments.new
 
 h2 Answers:
 .answers

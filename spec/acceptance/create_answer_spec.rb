@@ -98,8 +98,9 @@ feature 'Create Answer', %q{
             expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
             expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
 
-            expect { click_link(href: "/votes/#{answer.votes.last.id}/unvote" }.to change(answer, :vote_sum).by(-1)
-            expect(page).to have_content '1'
+            click_link(href: "/votes/#{answer.votes.last.id}/unvote")
+            expect(answer.vote_sum).to eq 0
+            expect(page).to have_content '0'
 
             expect { click_link(href: "/answers/#{answer.id}/votes/down") }.to change(answer, :vote_sum).by(-1)
             expect(page).to have_content '-1'
