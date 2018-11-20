@@ -29,6 +29,7 @@ function addCommentLinkHandler(link) {
     cleanFlash();
 
     var form = link.parentElement.querySelector('.new-comment-form');
+    console.log(form)
     form.querySelector('textarea').value = "";
     form.querySelector('.comment-errors').innerHTML = "";
     form.classList.remove('hide');

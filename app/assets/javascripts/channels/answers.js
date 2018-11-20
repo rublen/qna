@@ -20,13 +20,18 @@ document.addEventListener('turbolinks:load', function() {
 
 
         if (data.answer && data.answer.user_id != gon.current_user_id) {
-          answers.innerHTML += JST["templates/answer"](data);
+          var el = document.createElement('div')
+          el.innerHTML = JST["templates/answer"](data);
+          answers.appendChild(el);
           added_answers.push(data.answer.id);
 
           // 'Add comment' link handling
           var answer = document.querySelector('#answer-' + data.answer.id);
           var addCommentLink = answer.querySelector('a.add-comment-link');
-          addCommentLinkHandler(addCommentLink)
+          addCommentLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            addCommentLinkHandler(this)
+          })
         };
 
 
