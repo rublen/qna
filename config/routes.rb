@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+
+  devise_scope :user do
+    resources :users, controller: 'omniauth_callbacks' do
+      get :oauth_enter_email, on: :member
+      patch :oauth_update_email, on: :member
+    end
+  end
 
   concern :votable do
     resources :votes, shallow: true, only: %i[up down unvote] do

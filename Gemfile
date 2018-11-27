@@ -47,12 +47,18 @@ gem 'octicons_helper'
 gem 'gon'
 gem 'skim'
 gem 'responders', '~> 2.0'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'dotenv'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails'
   gem 'factory_bot_rails'
+  gem 'letter_opener'
 end
 
 group :development do
