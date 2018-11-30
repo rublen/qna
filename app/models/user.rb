@@ -8,7 +8,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:github, :facebook, :twitter]
+         :omniauthable, omniauth_providers: [:github, :facebook]
 
   def author_of?(item)
     item.user_id == id
