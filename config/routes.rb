@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     resources :users, controller: 'omniauth_callbacks' do
-      get :oauth_enter_email, on: :member
+      get :oauth_enter_email, on: :collection
       patch :oauth_update_email, on: :member
     end
   end

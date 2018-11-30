@@ -7,7 +7,7 @@
 
       = form_for(@user, url: oauth_update_email_user_path(@user)) do |f|
         .field
-          = f.label :email
+          = f.label :email, class: 'mr-3'
           = f.email_field :email, autofocus: true
         .actions.mt-2.mb-2
           = f.submit "Submit"
