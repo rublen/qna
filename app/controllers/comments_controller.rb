@@ -2,6 +2,8 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[destroy]
   before_action :set_commentable, only: %i[create]
 
+  authorize_resource
+
   def create
     @comment = @commentable.comments.new(comment_params)
     @comment.user = current_user
@@ -10,11 +12,11 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-     if current_user.author_of? @comment
+     # if current_user.author_of? @comment
       flash.now[:notice] = 'Comment was deleted successfully.' if @comment.destroy
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    # else
+    #   flash.now[:alert] = 'This action is permitted only for author.'
+    # end
   end
 
   private

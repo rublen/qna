@@ -5,7 +5,7 @@ RSpec.shared_examples_for "voted", type: :request do
 
   let(:model) { described_class.controller_name.singularize.underscore }
   let(:votable) { create(model.to_sym) }
-  let(:vote) { create(:vote, user: @user)}
+  let!(:vote) { create(:vote, user: @user)}
 
   let(:upvote_path) { polymorphic_path([:up, votable, Vote]) }
   let(:downvote_path) { polymorphic_path([:down, votable, Vote]) }
@@ -20,9 +20,11 @@ RSpec.shared_examples_for "voted", type: :request do
       expect { post upvote_path, params: { vote: upvote_attrs, format: :json } }.to change(votable.votes, :count).by(1)
     end
 
-    it "don't allow for the author of votable to vote for it" do
+    it "don't allow for the author of votable to upvote for it" do
       sign_in(votable.author)
-      expect { post upvote_path, params: { vote: attributes_for(:"#{model}_vote", user_id: votable.author.id) } }.to_not change(Vote, :count)
+
+      # expect { post upvote_path, params: { vote: upvote_attrs, user_id: votable.author.id, format: :json } }.to_not change(Vote, :count)
+      expect { post upvote_path, params: { "#{model}_id".to_sym => votable.id, format: :json } }.to_not change(Vote, :count)
     end
 
     it 'sets voted value 1 for new vote' do
@@ -48,10 +50,11 @@ RSpec.shared_examples_for "voted", type: :request do
       expect { post downvote_path, params: { vote: downvote_attrs, format: :json } }.to change(votable.votes, :count).by(1)
     end
 
-    it "don't allow for the author of votable to vote for it" do
+    it "don't allow for the author of votable to downvote for it" do
       sign_in(votable.author)
-      post downvote_path, params: { vote: vote, user_id: votable.author.id }
-      expect(response.status).to eq 204 # no content
+      expect { post downvote_path, params: { "#{model}_id".to_sym => votable.id, format: :json } }.to_not change(Vote, :count)
+      # post downvote_path, params: { vote: vote, user_id: votable.author.id, format: :json }
+      # expect(response.status).to eq 204 # no content
     end
 
     it 'sets new vote with voted value -1' do

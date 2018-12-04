@@ -5,6 +5,9 @@ class QuestionsController < ApplicationController
   before_action :set_answer, only: %i[show]
   after_action :publish_to_stream, only: %i[create]
 
+  authorize_resource
+  skip_authorization_check only: %i[index show]
+
   def index
     respond_with(@questions = Question.all)
   end
@@ -26,21 +29,20 @@ class QuestionsController < ApplicationController
     respond_with(@question = current_user.questions.create(question_params))
   end
 
-  # не respond-ила, потому что 1) flash.now, 2) подключила CollectionResponder для create, для update не нужно
   def update
-    if current_user.author_of? @question
+    # if current_user.author_of? @question
       flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    # else
+    #   flash.now[:alert] = 'This action is permitted only for author.'
+    # end
   end
 
   def destroy
-    if current_user.author_of? @question
+    # if current_user.author_of? @question
       respond_with(@question.destroy)
-    else
-      flash[:alert] = 'This action is permitted only for author.'
-    end
+    # else
+    #   flash[:alert] = 'This action is permitted only for author.'
+    # end
   end
 
   private

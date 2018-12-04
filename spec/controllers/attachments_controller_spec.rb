@@ -53,12 +53,12 @@ RSpec.describe AttachmentsController, type: :controller do
       sign_in_user
       let!(:attachment) { create(:attachment) }
 
-      it 'assigns requested answer to @answer' do
+      it 'assigns requested attachment to @attachment' do
         delete :destroy, params: { id: attachment, format: :js }
         expect(assigns(:attachment)).to eq attachment
       end
 
-      it 'tries to delete answer' do
+      it 'tries to delete attachment' do
         expect { delete :destroy, params: { id: attachment, format: :js } }.to_not change(Attachment, :count)
       end
 

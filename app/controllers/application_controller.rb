@@ -15,4 +15,12 @@ class ApplicationController < ActionController::Base
   def other_user
     User.find_by(email: 'other_user@mail.com')
   end
+
+  rescue_from CanCan::AccessDenied do |e|
+    flash.now[:alert] = e.message
+    # p '***//**//***', "#{controller_name}/#{action_name}"
+    render action_name if lookup_context.exists?("#{controller_name}/#{action_name}")
+  end
+
+  check_authorization
 end

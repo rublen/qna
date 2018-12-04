@@ -118,7 +118,7 @@ RSpec.describe AnswersController, type: :controller do
       it "recieves the flash-message about no permission for this action" do
         patch :update, params: { id: answer, answer: attributes_for(:answer), format: :js }
 
-        expect(flash[:alert]).to eq 'This action is permitted only for author.'
+        expect(flash[:alert]).to eq 'You are not authorized to access this page.'
       end
 
       it 'renders answers/update view' do
@@ -173,7 +173,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:user) { create(:user) }
     let(:question) { create(:question, author: user) }
     let!(:answer_1) { create(:answer, question: question) }
-    let!(:answer_2) { create(:answer, question: question) }
+    let!(:answer_2) { create(:answer, question: question, best: true) }
 
     context "Assigning" do
       before do
