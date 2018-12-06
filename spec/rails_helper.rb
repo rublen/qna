@@ -75,3 +75,5 @@ RSpec.configure do |config|
   end
   FactoryBot.allow_class_lookup = false
 end
+
+OmniAuth.config.test_mode = true

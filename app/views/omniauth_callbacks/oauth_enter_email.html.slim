@@ -1,0 +1,14 @@
+.row.justify-content-center.mt-3.pt-3
+  .col.col-md-4
+
+    h2 Enter email, please
+
+    .container.border.border-primary.rounded.mt-3.mb-3.pt-3
+
+      = form_for(@user, url: oauth_update_email_user_path(@user)) do |f|
+        .field
+          = f.label :email, class: 'mr-3'
+          = f.email_field :email, autofocus: true
+        .actions.mt-2.mb-2
+          = f.submit "Submit"
+
