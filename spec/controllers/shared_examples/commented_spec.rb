@@ -5,7 +5,7 @@ RSpec.shared_examples_for "commented", type: :request do
   let(:user) { create :user }
   let(:model) { described_class.controller_name.singularize.underscore }
   let(:commentable) { create(model.to_sym) }
-  let!(:comment) { create(:comment, commentable: commentable, user: user)}
+  let!(:comment) { create(:comment, commentable: commentable, author: user)}
 
   let(:create_comment_path) { polymorphic_path([commentable, Comment]) }
 

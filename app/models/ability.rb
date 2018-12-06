@@ -2,33 +2,43 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new # guest user (not logged in)
-    if user
-      if user.admin?
-        can :manage, :all
-        # cannot [:up, :down], Vote do |vote|
-        #   user.author_of?(vote.votable)
-        # end
-        # cannot :unvote, Vote do |vote|
-        #   !user.author_of?(vote)
-        # end
+    @user = user
+
+    @user ||= User.new # guest user (not logged in)
+    if @user
+      if @user.admin?
+        admin_abilities
       else
-        can :read, :all
-        can :create, :all
-        can [:update, :destroy], [Question, Answer, Comment], user_id: user.id
-        can :best, Answer do |answer|
-          user.author_of?(answer.question)
-        end
-        can :destroy, Attachment do |attachment|
-          user.author_of?(attachment.attachable)
-        end
-        can [:up, :down], Vote do |vote|
-          !user.author_of?(vote.votable)
-        end
-        can :unvote, Vote, user_id: user.id
+        user_abilities
       end
     else
-      can :read, :all
+      guest_abilities
     end
+  end
+
+  private
+  attr_reader :user
+
+  def guest_abilities
+    can :read, :all
+  end
+
+  def admin_abilities
+    can :manage, :all
+  end
+
+  def user_abilities
+    can :read, :all
+    can :create, :all
+
+    can [:update, :destroy], [Question, Answer, Comment], author: user
+    can :best, Answer, question: { author: user }
+
+    can :destroy, Attachment, attachable: { author: user }
+
+    can [:up, :down], Vote do |vote|
+      !user.author_of?(vote.votable)
+    end
+    can :unvote, Vote, user: user
   end
 end

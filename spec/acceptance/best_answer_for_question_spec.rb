@@ -10,11 +10,12 @@ feature 'The best answer for question', %q{
   given(:other_user) { create(:user) }
 
   given(:question) { create(:question, author: author) }
-  given!(:answers) { create_list(:answer, 2, question: question) }
+  given!(:answer1) { create(:answer, question: question, best: true) }
+  given!(:answer2) { create(:answer, question: question) }
 
   context "The author of question can choose the best answer" do
-    given(:answer_1) { answers[1].body }
-    given(:answer_2) { answers[0].body }
+    given(:answer_1) { answer1.body }
+    given(:answer_2) { answer2.body }
 
     background do
       sign_in(author)
@@ -24,7 +25,6 @@ feature 'The best answer for question', %q{
     scenario "There are so many links 'Mark as the best' as answers minus 1, link doesn't redirect to another page", js: true do
       within ".answers" do
         expect(page.all('a', text: 'Mark as the best').size).to eq(question.answers.count - 1)
-
         click_on 'Mark as the best'
         expect(current_path).to eq question_path(question)
       end

@@ -22,9 +22,7 @@ RSpec.shared_examples_for "voted", type: :request do
 
     it "don't allow for the author of votable to upvote for it" do
       sign_in(votable.author)
-
-      # expect { post upvote_path, params: { vote: upvote_attrs, user_id: votable.author.id, format: :json } }.to_not change(Vote, :count)
-      expect { post upvote_path, params: { "#{model}_id".to_sym => votable.id, format: :json } }.to_not change(Vote, :count)
+      expect { post upvote_path, params: { votable: votable, user: votable.author, format: :json } }.to_not change(Vote, :count)
     end
 
     it 'sets voted value 1 for new vote' do
@@ -52,9 +50,7 @@ RSpec.shared_examples_for "voted", type: :request do
 
     it "don't allow for the author of votable to downvote for it" do
       sign_in(votable.author)
-      expect { post downvote_path, params: { "#{model}_id".to_sym => votable.id, format: :json } }.to_not change(Vote, :count)
-      # post downvote_path, params: { vote: vote, user_id: votable.author.id, format: :json }
-      # expect(response.status).to eq 204 # no content
+      expect { post downvote_path, params: { votable: votable, user: votable.author, format: :json } }.to_not change(Vote, :count)
     end
 
     it 'sets new vote with voted value -1' do

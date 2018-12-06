@@ -24,7 +24,8 @@ RSpec.describe Ability do
   context 'for user' do
     let(:user) { create(:user) }
     let(:other) { create(:user) }
-    let!(:answer) { create(:answer) }
+    let!(:user_answer) { create(:answer, author: user) }
+    let!(:other_answer) { create(:answer, author: other) }
 
 
     it { should_not be_able_to :manage, :all }
@@ -37,31 +38,32 @@ RSpec.describe Ability do
     it { should be_able_to :destroy, create(:question, author: user), user: user }
     it { should_not be_able_to :destroy, create(:question, author: other), user: user }
 
-    it { should be_able_to :update, create(:answer, author: user), user: user }
-    it { should_not be_able_to :update, create(:answer, author: other), user: user }
+    it { should be_able_to :update, user_answer, user: user }
+    it { should_not be_able_to :update, other_answer, user: user }
 
-    it { should be_able_to :destroy, create(:answer, author: user), user: user }
-    it { should_not be_able_to :destroy, create(:answer, author: other), user: user }
+    it { should be_able_to :destroy, user_answer, user: user }
+    it { should_not be_able_to :destroy, other_answer, user: user }
 
+    # updating comments hasn't performed yet
     # it { should be_able_to :update, create(:comment, user_id: user.id), user: user }
     # it { should_not be_able_to :update, create(:comment, user_id: other.id), user: user }
 
     it { should be_able_to :destroy, create(:comment, user_id: user.id), user: user }
     it { should_not be_able_to :destroy, create(:comment, user_id: other.id), user: user }
 
-    it { should be_able_to :best, answer, user: answer.question.author }
-    it { should_not be_able_to :best, answer, user: user }
+    it { should be_able_to :best, create(:answer, question: create(:question, author: user)), user: user }
+    it { should_not be_able_to :best, other_answer, user: user }
 
-    it { should be_able_to :destroy, create(:attachment, attachable: answer), user: answer.author }
-    it { should_not be_able_to :destroy, create(:attachment, attachable: answer), user: user }
+    it { should be_able_to :destroy, create(:attachment, attachable: user_answer), user: user }
+    it { should_not be_able_to :destroy, create(:attachment, attachable: other_answer), user: user }
 
-    it { should be_able_to :up, answer.votes.new(voted: 1), user: user }
-    it { should_not be_able_to :up, answer.votes.new(voted: 1), user: answer.author }
+    it { should be_able_to :up, Vote, votable: other_answer, user: user }
+    it { should_not be_able_to :up, Vote, votable: user_answer, user: user }
 
-    it { should be_able_to :down, answer.votes.new(voted: -1), user: user }
-    it { should_not be_able_to :down, answer.votes.new(voted: -1), user: answer.author }
+    it { should be_able_to :down, Vote, votable: other_answer, user: user }
+    it { should_not be_able_to :down, Vote, votable: user_answer, user: user }
 
-    it { should be_able_to :unvote, create(:vote, votable: answer, user: user), user: user }
-    it { should_not be_able_to :unvote, create(:vote, votable: answer, user: user), user: other }
+    it { should be_able_to :unvote, create(:vote, user: user), user: user }
+    it { should_not be_able_to :unvote, create(:vote), user: other }
   end
 end

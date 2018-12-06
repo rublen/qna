@@ -6,7 +6,7 @@
         - unless current_user&.author_of?(answer)
           = render 'votes/voting', votable: answer
 
-      - if answer == answer.question.answers.best_first[0]
+      - if answer.best
         .best-mark.text-success.center id="best-answer-#{answer.id}"
           = "✓"
           small the best
@@ -28,15 +28,17 @@
 
       .links
         .badge
-          - if current_user&.author_of?(answer)
+          - if can?(:update, answer)
             = link_to 'Edit', '', class: "edit-link text-secondary", data: { id: answer.id, model: 'answer' }
 
+          - if can?(:destroy, answer)
             = ' | '
             = link_to 'Delete', answer, method: :delete, remote: true, class: "text-secondary"
 
           span.best-answer
-            - if (answer != answer.question.answers.best_first[0]) && (current_user&.author_of?(answer.question))
-              = ' | '
+            - if (!answer.best && can?(:best, answer))
+              - if can?(:update, answer)
+                = ' | '
               = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true, class: "text-secondary"
 
       .comments

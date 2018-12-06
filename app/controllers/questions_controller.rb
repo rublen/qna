@@ -30,19 +30,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    # if current_user.author_of? @question
-      flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
-    # else
-    #   flash.now[:alert] = 'This action is permitted only for author.'
-    # end
+    flash.now[:notice] = 'Your question was successfully updated' if @question.update(question_params)
   end
 
   def destroy
-    # if current_user.author_of? @question
-      respond_with(@question.destroy)
-    # else
-    #   flash[:alert] = 'This action is permitted only for author.'
-    # end
+    respond_with(@question.destroy)
   end
 
   private

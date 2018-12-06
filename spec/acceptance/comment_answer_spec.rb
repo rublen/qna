@@ -52,7 +52,7 @@ feature 'Comment for the answer', %q{
 
 
     describe "Non authenticated user:" do
-      given(:comment) { create(:answer_comment, user: user) }
+      given(:comment) { create(:answer_comment, author: user) }
 
       before do
         click_on 'Log out'
