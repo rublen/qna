@@ -3,7 +3,7 @@
 
     .col-xs-4.col-md-2.col-lg-1
       div class="voting voting-#{answer.id} pr-3" align="center"
-        - unless current_user&.author_of?(answer)
+        - if can?(:vote, answer) || can?(:unvote, answer.vote_by(current_user))
           = render 'votes/voting', votable: answer
 
       - if answer.best

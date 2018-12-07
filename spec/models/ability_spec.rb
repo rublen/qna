@@ -57,11 +57,11 @@ RSpec.describe Ability do
     it { should be_able_to :destroy, create(:attachment, attachable: user_answer), user: user }
     it { should_not be_able_to :destroy, create(:attachment, attachable: other_answer), user: user }
 
-    it { should be_able_to :up, Vote, votable: other_answer, user: user }
-    it { should_not be_able_to :up, Vote, votable: user_answer, user: user }
+    it { should be_able_to :up, other_answer, user: user }
+    it { should_not be_able_to :up, user_answer, user_id: user.id }
 
-    it { should be_able_to :down, Vote, votable: other_answer, user: user }
-    it { should_not be_able_to :down, Vote, votable: user_answer, user: user }
+    it { should be_able_to :down, other_answer, user: user }
+    it { should_not be_able_to :down, user_answer, user: user }
 
     it { should be_able_to :unvote, create(:vote, user: user), user: user }
     it { should_not be_able_to :unvote, create(:vote), user: other }

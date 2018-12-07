@@ -16,6 +16,7 @@ class Ability
     end
   end
 
+
   private
   attr_reader :user
 
@@ -31,13 +32,13 @@ class Ability
     can :read, :all
     can :create, :all
 
-    can [:update, :destroy], [Question, Answer, Comment], author: user
-    can :best, Answer, question: { author: user }
+    can [:update, :destroy], [Question, Answer, Comment], user_id: user.id
+    can :best, Answer, question: { user_id: user.id }
 
-    can :destroy, Attachment, attachable: { author: user }
+    can :destroy, Attachment, attachable: { user_id: user.id }
 
-    can [:up, :down], Vote do |vote|
-      !user.author_of?(vote.votable)
+    can [:up, :down, :vote], [Question, Answer] do |resource|
+      !user.author_of?(resource) && !resource.voted?(user)
     end
     can :unvote, Vote, user: user
   end

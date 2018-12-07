@@ -5,14 +5,14 @@ class VotesController < ApplicationController
   authorize_resource only: :unvote
 
   def up
+    authorize!(:up, @votable)
     set_new_vote_with_value 1
-    authorize!(:up, @vote) unless current_user.author_of?(@votable)
     act_voting(@vote, :save)
   end
 
   def down
+    authorize!(:down, @votable)
     set_new_vote_with_value -1
-    authorize!(:down, @vote) unless current_user.author_of?(@votable)
     act_voting(@vote, :save)
   end
 

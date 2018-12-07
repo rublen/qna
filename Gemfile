@@ -51,7 +51,6 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
-gem 'dotenv'
 gem 'cancancan'
 
 group :development, :test do
