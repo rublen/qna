@@ -1,11 +1,15 @@
 class AttachmentsController < ApplicationController
-  def destroy
-    @attachment = Attachment.find(params[:id])
+  before_action :set_attachment, only: :destroy
 
-    if current_user.author_of? @attachment.attachable
-      flash.now[:notice] = 'Attachment was deleted successfully.' if @attachment.destroy
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+  authorize_resource
+
+  def destroy
+    flash.now[:notice] = 'Attachment was deleted successfully.' if @attachment.destroy
+  end
+
+  private
+
+  def set_attachment
+    @attachment = Attachment.find(params[:id])
   end
 end

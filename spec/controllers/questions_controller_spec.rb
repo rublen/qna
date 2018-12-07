@@ -142,7 +142,7 @@ RSpec.describe QuestionsController, type: :controller do
       it "recieves the flash-message about no permission for this action" do
         patch :update, params: { id: question, question: attributes_for(:question), format: :js }
 
-        expect(flash[:alert]).to eq 'This action is permitted only for author.'
+        expect(flash[:alert]).to eq "You are not authorized to access this page."
       end
 
       it 'renders questions/update view' do

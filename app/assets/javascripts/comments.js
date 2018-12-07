@@ -4,7 +4,6 @@ document.addEventListener('turbolinks:load', function() {
   if (addCommentLinks.length) {
     addCommentLinks.forEach(function(link) {
       link.addEventListener('click', function(event) {
-        console.log('Cooom!');
         event.preventDefault();
         addCommentLinkHandler(this)
       })

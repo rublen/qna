@@ -7,12 +7,15 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :gon_current_user, unless: :devise_controller?
 
+  check_authorization only: [Answer, Question, Comment, Attachment, Vote]
+
+  rescue_from CanCan::AccessDenied do |e|
+    flash.now[:alert] = e.message
+    render action_name if lookup_context.exists?("#{controller_name}/#{action_name}")
+  end
+
   private
   def gon_current_user
     gon.current_user_id = current_user.id if current_user
-  end
-
-  def other_user
-    User.find_by(email: 'other_user@mail.com')
   end
 end

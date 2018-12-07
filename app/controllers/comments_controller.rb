@@ -2,19 +2,17 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[destroy]
   before_action :set_commentable, only: %i[create]
 
+  authorize_resource
+
   def create
     @comment = @commentable.comments.new(comment_params)
-    @comment.user = current_user
+    @comment.author = current_user
     @comment.save
     publish_to_stream
   end
 
   def destroy
-     if current_user.author_of? @comment
-      flash.now[:notice] = 'Comment was deleted successfully.' if @comment.destroy
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    flash.now[:notice] = 'Comment was deleted successfully.' if @comment.destroy
   end
 
   private
@@ -36,7 +34,7 @@ class CommentsController < ApplicationController
     ActionCable.server.broadcast("question-#{question_id}", { comment:
       { id: @comment.id,
         body: @comment.body,
-        user_email: @comment.user.email,
+        user_email: @comment.author.email,
         user_id: @comment.user_id,
         created_at: @comment.created_at.strftime('%F %T'),
         commentable_css_id: "##{@comment.commentable_type.underscore}-#{@commentable.id}" }

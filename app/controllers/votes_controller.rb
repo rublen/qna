@@ -1,34 +1,31 @@
 class VotesController < ApplicationController
   before_action :set_vote, only: %i[unvote]
   before_action :set_votable, only: %i[up down]
-  # after_action :publish_vote, only: %i[up down]
+
+  authorize_resource only: :unvote
 
   def up
-    unless current_user.author_of?(@votable)
-      set_new_vote_with_value 1
-      act_voting(@vote, :save)
-    end
+    authorize!(:up, @votable)
+    set_new_vote_with_value 1
+    act_voting(@vote, :save)
   end
 
   def down
-    unless current_user.author_of?(@votable)
-      set_new_vote_with_value -1
-      act_voting(@vote, :save)
-    end
+    authorize!(:down, @votable)
+    set_new_vote_with_value -1
+    act_voting(@vote, :save)
   end
 
   def unvote
-    if current_user.author_of?(@vote)
-      @votable = @vote.votable
-      act_voting(@vote, :destroy)
-    end
+    @votable = @vote.votable
+    act_voting(@vote, :destroy)
   end
 
 
   private
 
   def set_new_vote_with_value(voted_value)
-    @vote = @votable.votes.new()
+    @vote = @votable.votes.new
     @vote.user = current_user
     @vote.voted = voted_value
   end

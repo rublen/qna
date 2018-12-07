@@ -4,6 +4,8 @@ class AnswersController < ApplicationController
   before_action :set_answers, only: %i[destroy best]
   after_action :publish_to_stream, only: %[create]
 
+  authorize_resource
+
   def create
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
@@ -15,30 +17,17 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if current_user.author_of? @answer
-      @question = @answer.question
-      flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    @question = @answer.question
+    flash.now[:notice] = 'Answer was updated successfully.' if @answer.update(answer_params)
   end
 
   def destroy
-    if current_user.author_of? @answer
-      flash.now[:notice] = 'Answer was deleted successfully.' if @answer.destroy
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    flash.now[:notice] = 'Answer was deleted successfully.' if @answer.destroy
   end
 
   def best
     @question = @answer.question
-
-    if current_user.author_of?(@question)
-      @answer.mark_the_best
-    else
-      flash.now[:alert] = 'This action is permitted only for author.'
-    end
+    @answer.mark_the_best
   end
 
   private

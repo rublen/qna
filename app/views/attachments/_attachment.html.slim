@@ -2,6 +2,6 @@
 
   = link_to attachment.file.filename, attachment.file.url, target: :_blank
 
-  - if current_user&.author_of?(attachment.attachable)
+  - if can?(:destroy, attachment)
     = link_to  octicon('trashcan'), attachment, method: :delete, remote: true, class: "text-danger ml-2"
   br
