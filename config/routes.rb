@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resource :profiles do
         get :me, on: :collection
+        get :others, on: :collection
       end
     end
   end
