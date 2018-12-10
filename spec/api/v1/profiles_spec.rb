@@ -42,15 +42,15 @@ describe 'Profile API' do
   end
 
 
-  describe "GET /others" do
+  describe "GET /index" do
     context "unauthorized" do
       it "returns 401 status if there is no access_token" do
-        get '/api/v1/profiles/others', params: { format: :json }
+        get '/api/v1/profiles', params: { format: :json }
         expect(response.status).to eq 401
       end
 
       it "returns 401 status if access_token is invalid" do
-        get '/api/v1/profiles/others', params: { format: :json, access_token: '123456' }
+        get '/api/v1/profiles', params: { format: :json, access_token: '123456' }
         expect(response.status).to eq 401
       end
     end
@@ -62,7 +62,7 @@ describe 'Profile API' do
 
       before do
         sign_in me
-        get '/api/v1/profiles/others', params: { format: :json, access_token: access_token.token }
+        get '/api/v1/profiles', params: { format: :json, access_token: access_token.token }
       end
 
       it "returns status 200" do

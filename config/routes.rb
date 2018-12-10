@@ -41,9 +41,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resource :profiles do
+      resource :profiles, only: %i[index me] do
         get :me, on: :collection
-        get :others, on: :collection
+        get :index, on: :collection
       end
     end
   end
