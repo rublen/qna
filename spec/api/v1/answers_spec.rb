@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe 'Answers API' do
-  let(:me) { create :user }
-  let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+  let(:access_token) { create(:access_token) }
   let(:question) { create :question }
   let!(:answer) { create :answer, question: question }
   let!(:comments) { create_list :comment, 2, commentable: answer }
@@ -22,13 +21,9 @@ describe 'Answers API' do
     end
 
     context "authorized" do
-      let(:me) { create :user }
-      let!(:access_token) { create(:access_token, resource_owner_id: me.id) }
+      let!(:access_token) { create(:access_token) }
 
-      before do
-        sign_in me
-        get "/api/v1/answers/#{answer.id}", params: { format: :json, access_token: access_token.token }
-      end
+      before { get "/api/v1/answers/#{answer.id}", params: { format: :json, access_token: access_token.token } }
 
       it "returns status 200" do
         expect(response).to be_successful
@@ -78,12 +73,16 @@ describe 'Answers API' do
     end
 
     context "Authorized" do
-      before { sign_in me }
-
       it "returns status :created and location header with new answer url" do
-        post "/api/v1/questions/#{question.id}/answers", params: { body: "API body", access_token: access_token.token }
+        post "/api/v1/questions/#{question.id}/answers", params: { body: "API body", access_token: access_token.token, format: :json }
         expect(response).to have_http_status :created
         expect(response.headers['Location']).to eq api_v1_answer_url(Answer.last)
+      end
+
+      it "returns json with new answer" do
+        post "/api/v1/questions/#{question.id}/answers", params: { body: "API body", access_token: access_token.token, format: :json }
+        expect(response.body).to be_json_eql("API body".to_json).at_path("body")
+        expect(response.body).to be_json_eql(Answer.last.id.to_json).at_path("id")
       end
 
       it 'with valid params creates a new answer' do
