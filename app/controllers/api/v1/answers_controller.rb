@@ -1,19 +1,18 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-  skip_before_action :verify_authenticity_token, only: %[create]
-
   before_action :set_question, only: %i[create]
   before_action :set_answer, only: %i[show]
+
+  authorize_resource
 
   def show
     respond_with @answer, serializer: DetailedAnswerSerializer
   end
 
   def create
-    authorize!(:create, Answer)
     answer = @question.answers.new(answer_params)
     answer.user_id = current_resource_owner.id
     if answer.save
-      head :created, location: api_v1_answer_url(answer)
+      render json: answer, location: api_v1_answer_url(answer), status: :created
     else
       head :unprocessable_entity
     end

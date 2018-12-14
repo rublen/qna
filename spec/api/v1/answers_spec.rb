@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe 'Answers API' do
-  let(:me) { create :user }
-  let(:access_token) { create(:access_token, resource_owner_id: me.id) }
+  let(:access_token) { create(:access_token) }
   let(:question) { create :question }
   let!(:answer) { create :answer, question: question }
   let!(:comments) { create_list :comment, 2, commentable: answer }
