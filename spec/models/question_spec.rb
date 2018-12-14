@@ -1,11 +1,7 @@
 require 'rails_helper'
-require_relative 'concerns/attachable_spec'
-require_relative 'concerns/votable_spec'
-require_relative 'concerns/commentable_spec'
 
 RSpec.describe Question, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
-  it { should have_many(:votes).dependent(:destroy) }
   it { should belong_to(:author) }
 
   it { should validate_presence_of :title }
