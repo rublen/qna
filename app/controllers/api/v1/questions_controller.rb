@@ -1,7 +1,6 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  skip_before_action :verify_authenticity_token, only: %[create]
   before_action :set_question, only: %i[show]
-
-  authorize_resource
 
   def index
     @questions = Question.all
@@ -13,10 +12,11 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def create
+    authorize!(:create, Question)
     question = Question.new(question_params)
     question.user_id = current_resource_owner.id
     if question.save
-      render json: question, location: api_v1_question_url(question), status: :created
+      head :created, location: api_v1_question_url(question)
     else
       head :unprocessable_entity
     end
