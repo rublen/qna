@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include Attachable, Votable, Commentable
+  after_create :xxx
 
   belongs_to :question
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
@@ -18,5 +19,9 @@ class Answer < ApplicationRecord
       question.best_answer&.update!(best: false)
       update!(best: true)
     end
+  end
+
+  def xxx
+    XxxJob.perform_later(self)
   end
 end

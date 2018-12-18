@@ -41,5 +41,7 @@ class Ability
       !user.author_of?(resource) && !resource.voted?(user)
     end
     can :unvote, Vote, user: user
+
+    can :destroy, Subscription, user_id: user.id
   end
 end

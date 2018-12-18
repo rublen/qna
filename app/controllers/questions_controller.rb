@@ -27,6 +27,7 @@ class QuestionsController < ApplicationController
 
   def create
     respond_with(@question = current_user.questions.create(question_params))
+    flash[:notice] = "You were automatically subscribed to created question. You can unsubscribe any moment." if @question.subscriptions
   end
 
   def update

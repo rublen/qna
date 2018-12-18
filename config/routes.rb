@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   root to: 'questions#index'
 
   use_doorkeeper
@@ -33,6 +34,8 @@ Rails.application.routes.draw do
     resources :answers, shallow: true, concerns: [:votable, :commentable], except: %i[index new show] do
       patch :best, on: :member
     end
+
+    resources :subscriptions, shallow: true, only: [:create, :destroy]
   end
 
   resources :attachments, only: :destroy

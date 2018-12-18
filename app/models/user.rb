@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :answers
   has_many :votes
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
@@ -53,6 +54,12 @@ class User < ApplicationRecord
         authorizations.where(provider: provider).last.update!(confirmed: true)
       end
       self
+    end
+  end
+
+  def self.send_daily_digest
+    find_each do |user|
+      DailyMailer.digest(user).deliver_now
     end
   end
 end

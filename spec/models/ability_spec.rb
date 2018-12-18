@@ -65,5 +65,8 @@ RSpec.describe Ability do
 
     it { should be_able_to :unvote, create(:vote, user: user), user: user }
     it { should_not be_able_to :unvote, create(:vote), user: other }
+
+    it { should be_able_to :destroy, create(:subscription, user: user), user: user }
+    it { should_not be_able_to :destroy, create(:subscription, user: other), user: user }
   end
 end

@@ -69,6 +69,11 @@ RSpec.describe QuestionsController, type: :controller do
         post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to questions_path
       end
+
+      it 'sets message to flash[:notice]' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(flash[:notice]).to include "You were automatically subscribed"
+      end
     end
 
     context 'with invalide attributes' do
