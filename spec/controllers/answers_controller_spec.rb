@@ -1,6 +1,4 @@
 require 'rails_helper'
-require_relative 'shared_examples/voted_spec'
-require_relative 'shared_examples/commented_spec'
 
 RSpec.describe AnswersController, type: :controller do
   it_behaves_like 'voted'
