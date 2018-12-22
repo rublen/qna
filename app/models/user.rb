@@ -57,9 +57,11 @@ class User < ApplicationRecord
     end
   end
 
-  def self.send_daily_digest
-    find_each do |user|
-      DailyMailer.digest(user).deliver_now
-    end
+  def daily_subscribed?
+    !subscriptions.where(question_id: 0).empty?
+  end
+
+  def author_subscribed?(question)
+    !subscriptions.where(question_id: question).empty?
   end
 end

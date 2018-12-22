@@ -7,6 +7,7 @@ RSpec.describe Question, type: :model do
 
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
+  it { should validate_exclusion_of(:id).in_array([0]) }
 
   it_should_behave_like "attachable"
   it_should_behave_like "votable"
@@ -26,6 +27,19 @@ RSpec.describe Question, type: :model do
   describe "after_create callback #subscribe" do
     it "creates new subscription" do
       expect { question.save }.to change(question.subscriptions, :count).by(1)
+    end
+  end
+
+  describe ".last_day_list scope" do
+    let(:old_question) { create(:question, created_at: Time.now - 2.day) }
+    before { question.save }
+
+    it 'include fresh question' do
+      expect(Question.last_day_list).to include(question)
+    end
+
+    it 'does not include old question' do
+      expect(Question.last_day_list).to_not include(old_question)
     end
   end
 end

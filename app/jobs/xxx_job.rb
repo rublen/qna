@@ -1,7 +1,8 @@
 class XxxJob < ApplicationJob
   queue_as :default
 
-  def perform(answer)
-    answer.update!(body: answer.body + "♥♥♥")
+  def perform(id)
+    answer = Answer.find(id)
+    answer.update!(body: answer.body + "😉")
   end
 end

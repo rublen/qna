@@ -1,3 +1,9 @@
-' Daily#digest
+' QNA Daily digest
 = "\r\n" * 2
-' #{@greeting + ", find me in app/views/daily_mailer/digest.text.slim"}
+' #{@greeting}
+= "\r\n" * 2
+
+- @questions.each do |question|
+  ' #{question.body}: #{question_url(question)}
+  = "\r\n" * 2
+

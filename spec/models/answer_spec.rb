@@ -14,7 +14,7 @@ RSpec.describe Answer, type: :model do
     expect(create(:answer)).to_not be_best
   end
 
-  describe "best answer" do
+  describe "#best answer" do
     let(:question) { create(:question) }
     let!(:answer_1) { create(:answer, question: question) }
     let!(:answer_2) { create(:answer, question: question, best: true) }
@@ -36,6 +36,29 @@ RSpec.describe Answer, type: :model do
         answer_1.mark_the_best
         expect(answer_1.reload).to be_best
       end
+    end
+  end
+
+  describe "#follow_question_mails" do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+    let!(:subscription) { create(:subscription, user: user, question_id: question.id) }
+    let!(:answer) { build(:answer, question: question) }
+
+    it "should receive #follow_question_mails after create" do
+      expect(answer).to receive(:follow_question_mails)
+      answer.save
+    end
+
+    it 'should send emails to the question subscribers' do
+      expect(FollowQuestionJob).to receive(:perform_later).with(question)
+      answer.save
+    end
+
+    it "shoul not send email after update" do
+      answer.save
+      expect(answer).to_not receive(:follow_question_mails)
+      answer.update(body: "123")
     end
   end
 end

@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include Attachable, Votable, Commentable
+  after_create :follow_question_mails
   after_create :xxx
 
   belongs_to :question
@@ -21,7 +22,13 @@ class Answer < ApplicationRecord
     end
   end
 
+  private
+
   def xxx
-    XxxJob.perform_later(self)
+    XxxJob.perform_later(self.id)
+  end
+
+  def follow_question_mails
+    FollowQuestionJob.perform_now(question)
   end
 end
