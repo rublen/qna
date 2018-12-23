@@ -2,3 +2,7 @@ h1 QNA Daily digest
 p = @greeting
 - @questions.each do |question|
   = link_to question.title, question_url(question)
+
+br
+p
+  = link_to 'Unsubscribe', unsubscribe_subscription_url(@subscription)

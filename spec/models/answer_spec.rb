@@ -43,7 +43,7 @@ RSpec.describe Answer, type: :model do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
     let!(:subscription) { create(:subscription, user: user, question_id: question.id) }
-    let!(:answer) { build(:answer, question: question) }
+    let(:answer) { build(:answer, question: question) }
 
     it "should receive #follow_question_mails after create" do
       expect(answer).to receive(:follow_question_mails)

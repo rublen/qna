@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :gon_current_user, unless: :devise_controller?
 
-  check_authorization only: [Answer, Question, Comment, Attachment, Vote]
+  check_authorization only: [Answer, Question, Comment, Attachment, Vote, Subscription]
 
   rescue_from CanCan::AccessDenied do |e|
     flash.now[:alert] = e.message

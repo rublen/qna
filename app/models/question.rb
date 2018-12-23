@@ -5,10 +5,9 @@ class Question < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
-  validates :id, exclusion: { in: [0] }
   validates :title, :body, presence: true
 
-  after_create :subscribe
+  after_create :subscribe_author
 
   scope :last_day_list, -> { where("created_at > ?", Time.now - 1.day) }
 
@@ -17,7 +16,8 @@ class Question < ApplicationRecord
   end
 
   private
-  def subscribe
+  def subscribe_author
     subscriptions.create(user: author)
+    Subscription.create(user: author, question: nil) unless author.daily_subscribed?
   end
 end

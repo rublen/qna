@@ -169,12 +169,25 @@ RSpec.describe User, type: :model do
 
   describe "#daily_subscribed?" do
     it 'returns true if user subscribed to daily digest' do
-      create(:subscription, user: user, question_id: 0)
+      create(:daily_subscription, user: user)
       expect(user.daily_subscribed?).to be true
     end
 
     it 'returns false if user does not subscribed to daily digest' do
       expect(user.daily_subscribed?).to be false
+    end
+  end
+
+  describe "#subscribed?(question)" do
+    let(:question) { create :question }
+    let!(:subscription) { create(:subscription, question: question, user: user) }
+
+    it 'returns true for subscribed user' do
+      expect(user.subscribed?(question)).to be true
+    end
+
+    it 'returns false if user does not subscribed for question' do
+      expect(create(:user).daily_subscribed?).to be false
     end
   end
 end

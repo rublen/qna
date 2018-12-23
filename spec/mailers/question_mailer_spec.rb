@@ -5,7 +5,7 @@ RSpec.describe QuestionMailer, type: :mailer do
   describe ".fresh_answer" do
     let(:user) { create(:user) }
     let(:question) { create(:question) }
-    let!(:subscription) { create(:subscription, user: user, question_id: question.id) }
+    let!(:subscription) { create(:subscription, user: user, question: question) }
 
     let(:mail) { QuestionMailer.fresh_answer(question, user) }
 
@@ -19,8 +19,8 @@ RSpec.describe QuestionMailer, type: :mailer do
       expect(mail.body.encoded).to include(question.title)
     end
 
-    it "renders the body and include 'Unfollow'" do
-      expect(mail.body.encoded).to include('Unfollow')
+    it "renders the body and include 'Unsubscribe'" do
+      expect(mail.body.encoded).to include('Unsubscribe')
     end
   end
 

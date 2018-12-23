@@ -14,9 +14,7 @@
 # end
 #
 every 1.days do
-
   runner "DailyMailerJob.perform_later"
-
 end
 
 # Learn more: http://github.com/javan/whenever

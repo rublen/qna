@@ -1,16 +1,27 @@
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[destroy]
+  before_action :set_subscription, only: %i[destroy email_unsubscribe]
 
   authorize_resource
 
   def create
-    @subscription = Subscription.new(user: current_user, question_id: current_question.id)
+    @subscription = Subscription.new(user: current_user, question: current_question)
     if @subscription.save
       flash.now[:notice] = "You are subscribed."
     else
       flash.now[:alert] = "Subscription wasn't created."
     end
   end
+
+  def create_daily_subscription
+    @subscription = Subscription.new(user: current_user)
+    if @subscription.save!
+      flash.now[:notice] = "You are subscribed."
+    else
+      flash.now[:alert] = "Subscription wasn't created."
+    end
+  end
+
+  def email_unsubscribe; end
 
   def destroy
     if @subscription.destroy

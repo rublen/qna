@@ -35,7 +35,14 @@ Rails.application.routes.draw do
       patch :best, on: :member
     end
 
-    resources :subscriptions, shallow: true, only: [:create, :destroy]
+    resources :subscriptions, shallow: true, only: [:create, :destroy] do
+      # get :destroy, on: :member
+    end
+  end
+
+  resources :subscriptions, only: [] do
+    post 'daily' => :create_daily_subscription, as: :daily, on: :collection
+    get 'unsubscribe' => :email_unsubscribe, as: :unsubscribe, on: :member
   end
 
   resources :attachments, only: :destroy

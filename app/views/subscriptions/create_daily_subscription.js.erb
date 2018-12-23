@@ -1,0 +1,7 @@
+showFlash("<%= j render('shared/flash') %>");
+
+var subscript = document.querySelector('.subscriptions').querySelector('a');
+
+subscript.text = "Unsubscribe";
+subscript.href = "/subscriptions/" + "<%= @subscription.id %>";
+subscript.dataset.method = "delete"

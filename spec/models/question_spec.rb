@@ -7,7 +7,6 @@ RSpec.describe Question, type: :model do
 
   it { should validate_presence_of :title }
   it { should validate_presence_of :body }
-  it { should validate_exclusion_of(:id).in_array([0]) }
 
   it_should_behave_like "attachable"
   it_should_behave_like "votable"
@@ -24,9 +23,14 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  describe "after_create callback #subscribe" do
-    it "creates new subscription" do
+  describe "after_create callback #subscribe_author" do
+    it "subscribes user for this question" do
       expect { question.save }.to change(question.subscriptions, :count).by(1)
+    end
+
+    it "subscribes user for daily notitfications" do
+      expect { question.save }.to change(Subscription.where(question: nil), :count).by(1)
+      expect(question.author).to be_daily_subscribed
     end
   end
 

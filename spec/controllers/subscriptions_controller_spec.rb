@@ -2,28 +2,55 @@ require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
 
-  describe "GET #create" do
+  describe "POST #create" do
     sign_in_user
     let(:question) { create(:question) }
 
     it "returns http success" do
-      post :create, params: { question_id: question }
+      post :create, params: { question_id: question, format: :js }
       expect(response).to have_http_status(:success)
     end
 
     it 'saves a new subscription in the DB in association with user' do
-      expect { post :create, params: { question_id: question } }.to change(@user.subscriptions, :count).by(1)
+      expect { post :create, params: { question_id: question, format: :js } }.to change(@user.subscriptions, :count).by(1)
     end
   end
 
-  describe "GET #destroy" do
+  describe "POST #create_daily_subscription" do
+    sign_in_user
+
+    it "returns http success" do
+      post :create_daily_subscription, params: { format: :js }
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'saves a new subscription in the DB in association with user' do
+      expect { post :create_daily_subscription, params: { format: :js } }.to change(@user.subscriptions, :count).by(1)
+    end
+  end
+
+  describe "GET #email_unsubscribe" do
+    sign_in_user
+    let!(:subscription) { create(:subscription) }
+    before { get :email_unsubscribe, params: { id: subscription } }
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'rendres template subscriptions/email_unsubscribe' do
+      expect(response).to render_template 'email_unsubscribe'
+    end
+  end
+
+  describe "DELETE #destroy" do
     let!(:subscription) { create(:subscription) }
     let(:user) { subscription.user }
     before { sign_in user }
 
     context 'User can delete his subscription' do
       it "returns http success" do
-        delete :destroy, params: { id: subscription }
+        delete :destroy, params: { id: subscription, format: :js }
         expect(response).to have_http_status(:success)
       end
 

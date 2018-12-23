@@ -5,10 +5,10 @@ RSpec.describe DailyMailerJob, type: :job do
     let!(:users) { create_list(:user, 2) }
     let!(:unsubscribed_user) { create(:user) }
 
-    before { 2.times { |i| create(:daily_subscription, user: users[i]) } }
+    before { create(:daily_subscription, user: users.last) }
 
     context "List of today's questions is not empty" do
-      before { create :question }
+      before { create :question, author: users.first }
 
       it "should send 2 letters" do
         allow(nil).to receive(:deliver_now)
