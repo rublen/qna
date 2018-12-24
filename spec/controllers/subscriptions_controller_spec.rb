@@ -16,19 +16,6 @@ RSpec.describe SubscriptionsController, type: :controller do
     end
   end
 
-  describe "POST #create_daily_subscription" do
-    sign_in_user
-
-    it "returns http success" do
-      post :create_daily_subscription, params: { format: :js }
-      expect(response).to have_http_status(:success)
-    end
-
-    it 'saves a new subscription in the DB in association with user' do
-      expect { post :create_daily_subscription, params: { format: :js } }.to change(@user.subscriptions, :count).by(1)
-    end
-  end
-
   describe "GET #email_unsubscribe" do
     sign_in_user
     let!(:subscription) { create(:subscription) }

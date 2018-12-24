@@ -58,7 +58,7 @@ class User < ApplicationRecord
   end
 
   def daily_subscribed?
-    !subscriptions.where(question_id: nil).empty?
+    !subscriptions.daily.empty?
   end
 
   def subscribed?(question)

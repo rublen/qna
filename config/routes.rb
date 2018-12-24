@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   end
 
   resources :subscriptions, only: [] do
-    post 'daily' => :create_daily_subscription, as: :daily, on: :collection
+    post 'daily' => :create, as: :daily, on: :collection
     get 'unsubscribe' => :email_unsubscribe, as: :unsubscribe, on: :member
   end
 

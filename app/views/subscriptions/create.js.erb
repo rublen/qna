@@ -2,6 +2,6 @@ showFlash("<%= j render('shared/flash') %>");
 
 var subscript = document.querySelector('.subscriptions').querySelector('a');
 
-subscript.text = "Unfollow";
+subscript.text = (subscript.text == "Follow" ? "Unfollow" : "Unsubscribe");
 subscript.href = "/subscriptions/" + "<%= @subscription.id %>";
-subscript.dataset.method = "delete"
+subscript.dataset.method = "delete";

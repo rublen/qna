@@ -42,7 +42,6 @@ class Ability
     end
     can :unvote, Vote, user: user
 
-    can :create_daily_subscription, Subscription, user_id: user.id
     can :destroy, Subscription, user_id: user.id
   end
 end

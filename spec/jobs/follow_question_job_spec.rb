@@ -8,7 +8,7 @@ RSpec.describe FollowQuestionJob, type: :job do
   describe "#perform" do
 
     it "should send 2 letters" do
-      allow(nil).to receive(:deliver_now)
+      allow(nil).to receive(:deliver_later)
       create(:subscription, question_id: question.id)
       create(:subscription)
 
@@ -29,11 +29,5 @@ RSpec.describe FollowQuestionJob, type: :job do
       FollowQuestionJob.perform_now(question)
     end
   end
-
-  describe "Enqueued job" do
-    it "matches with enqueued job" do
-      ActiveJob::Base.queue_adapter = :test
-      expect { FollowQuestionJob.perform_later(question) }.to have_enqueued_job(FollowQuestionJob).with(question)
-    end
-  end
 end
+

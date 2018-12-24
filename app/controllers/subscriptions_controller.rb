@@ -4,17 +4,8 @@ class SubscriptionsController < ApplicationController
   authorize_resource
 
   def create
-    @subscription = Subscription.new(user: current_user, question: current_question)
+    @subscription = Subscription.new(user: current_user, question_id: params[:question_id])
     if @subscription.save
-      flash.now[:notice] = "You are subscribed."
-    else
-      flash.now[:alert] = "Subscription wasn't created."
-    end
-  end
-
-  def create_daily_subscription
-    @subscription = Subscription.new(user: current_user)
-    if @subscription.save!
       flash.now[:notice] = "You are subscribed."
     else
       flash.now[:alert] = "Subscription wasn't created."
@@ -30,11 +21,6 @@ class SubscriptionsController < ApplicationController
   end
 
   private
-
-  def current_question
-    Question.find(params[:question_id])
-  end
-
   def set_subscription
     @subscription = Subscription.find(params[:id])
   end
