@@ -11,8 +11,9 @@ RSpec.describe DailyMailerJob, type: :job do
       before { create :question, author: users.first }
 
       it "should send 2 letters" do
-        # allow(nil).to receive(:deliver_later)
-        2.times { |i| expect(DailyMailer).to receive(:digest).with(users[i]).and_call_original }
+        allow(nil).to receive(:deliver_later)
+        expect(DailyMailer).to receive(:digest).exsactly(2).times
+        # 2.times { |i| expect(DailyMailer).to receive(:digest).with(users[i]).and_call_original }
         subject.perform_now
       end
 
