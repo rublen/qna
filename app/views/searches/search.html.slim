@@ -1,0 +1,15 @@
+h1.pt-3 Search
+= render 'searches/search_form'
+hr
+
+- if @items && !@items.empty?
+  - @items.each do |i|
+    p.border-bottom
+      = i.inspect
+      =< link_to_question(i)
+
+  .d-flex.justify-content-center
+    small== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1
+- else
+  p.text-secondary.pl-3
+    em= "Nothing to show"

@@ -4,6 +4,7 @@ var answers = document.querySelector('.answers');
 
 // former best answer: remove best-mark, add link "mark as the best"
 var answersFirstChild = answers.firstChild;
+
 var firstChildId = answersFirstChild.id.split('answer-')[1];
 answersFirstChild.querySelector(".best-mark").remove();
 answersFirstChild.querySelector(".best-answer").innerHTML = "<a class='text-secondary' data-remote='true' rel='nofollow' data-method='patch' href='/answers/" + firstChildId + "/best'>Mark as the best</a>";
@@ -18,3 +19,4 @@ bestMark.classList.add("best-mark", "text-success", "center");
 bestAnswerNode.querySelector(".voting").append(bestMark);
 
 answers.insertBefore(bestAnswerNode, answersFirstChild);
+

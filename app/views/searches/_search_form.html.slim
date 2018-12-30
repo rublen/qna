@@ -1,0 +1,14 @@
+.search-form
+  = form_with url: search_path, method: :get, local: true do |f|
+    = f.text_field :search, placeholder: params[:search]
+    = f.submit 'Search'
+    p.pt-2
+      strong= "Only in: "
+      =< f.radio_button("search_options", 'Question')
+      em=< f.label :questions
+      =< f.radio_button("search_options", 'Answer')
+      em= f.label :answers
+      =< f.radio_button("search_options", 'Comment')
+      em=< f.label :comments
+      =< f.radio_button("search_options", 'User')
+      em=< f.label :users
