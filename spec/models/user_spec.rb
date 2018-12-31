@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers) }
   it { should have_many(:votes) }
   it { should have_many(:authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
@@ -163,6 +164,30 @@ RSpec.describe User, type: :model do
       it 'returns the same user' do
         expect(temp_user.oauth_confirm_email('github', '123456', 'real@mail.com')).to eq temp_user
       end
+    end
+  end
+
+  describe "#daily_subscribed?" do
+    it 'returns true if user subscribed to daily digest' do
+      create(:daily_subscription, user: user)
+      expect(user.daily_subscribed?).to be true
+    end
+
+    it 'returns false if user does not subscribed to daily digest' do
+      expect(user.daily_subscribed?).to be false
+    end
+  end
+
+  describe "#subscribed?(question)" do
+    let(:question) { create :question }
+    let!(:subscription) { create(:subscription, question: question, user: user) }
+
+    it 'returns true for subscribed user' do
+      expect(user.subscribed?(question)).to be true
+    end
+
+    it 'returns false if user does not subscribed for question' do
+      expect(create(:user).daily_subscribed?).to be false
     end
   end
 end

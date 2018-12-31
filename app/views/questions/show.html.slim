@@ -35,3 +35,11 @@ h2 Answers:
 
 .new-answer-form
   = render 'answers/form', answer: @answer
+
+.subscriptions
+  = "You can "
+  - if current_user&.subscribed?(@question)
+    = link_to 'Unfollow', current_user.subscriptions.find_by(question: @question), method: :delete, remote: true
+  - else
+    = link_to 'Follow', question_subscriptions_path(@question.id), method: :post, remote: true
+  = " this question"

@@ -1,0 +1,13 @@
+showFlash("<%= j render('shared/flash') %>");
+
+var subscript = document.querySelector('.subscriptions').querySelector('a');
+
+if (subscript.text == "Unfollow") {
+  subscript.text = "Follow";
+  subscript.href = "/questions/" + "<%= @subscription.question_id %>" + "/subscriptions";
+  subscript.dataset.method = "post";
+} else {
+  subscript.text = "Subscribe";
+  subscript.href = "/subscriptions/daily";
+  subscript.dataset.method = "post";
+}

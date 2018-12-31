@@ -1,0 +1,6 @@
+h1.mt-3 QNA#Unsubscribe
+
+p
+  = "Are you really want to "
+  = link_to 'Unsubscribe', subscription_url(@subscription), method: :delete
+  = " from the notifications?"

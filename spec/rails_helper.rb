@@ -12,6 +12,9 @@ require 'rspec/rails'
 # Add CanCan mathers
 require "cancan/matchers"
 
+require "sidekiq/testing"
+Sidekiq::Testing.fake!
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -80,3 +83,4 @@ RSpec.configure do |config|
 end
 
 OmniAuth.config.test_mode = true
+RSpec::Mocks.configuration.allow_message_expectations_on_nil = true

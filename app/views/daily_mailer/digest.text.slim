@@ -1,0 +1,13 @@
+' QNA Daily digest
+= "\r\n" * 2
+' #{@greeting}
+= "\r\n" * 2
+
+- @questions.each do |question|
+  ' #{question.body}: #{question_url(question)}
+  = "\r\n" * 2
+
+= "\r\n" * 2
+
+' Unsubscribe:
+' #{unsubscribe_subscription_url(@subscription)}
