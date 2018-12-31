@@ -6,7 +6,8 @@ RSpec.shared_examples_for "public_actions" do
 
   describe 'GET #index' do
     it "responds with success" do
-      get :index
+      allow(Question).to receive(:search).with('', limit: 500) { Question.all }
+      get :index, params: { question_search: '' }
       expect(response.status).to eq(200)
     end
   end

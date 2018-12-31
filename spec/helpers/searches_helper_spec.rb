@@ -1,15 +1,25 @@
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the SearchesHelper. For example:
-#
-# describe SearchesHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe SearchesHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "link_to_question with parameter 'item'" do
+    it "returns link to question if item is question" do
+      item = create(:question)
+      expect(helper.link_to_question(item)).to include "href=\"#{question_path(item)}\""
+    end
+
+    it "returns link to parent question if item is answer" do
+      item = create(:answer)
+      expect(helper.link_to_question(item)).to include "href=\"#{question_path(item.question)}\""
+    end
+
+    it "returns link to question if item is comment and it's commentable is question" do
+      item = create(:question_comment)
+      expect(helper.link_to_question(item)).to include "href=\"#{question_path(item.commentable)}\""
+    end
+
+    it "returns link to answer's question if item is comment and it's commentable is answer" do
+      item = create(:answer_comment)
+      expect(helper.link_to_question(item)).to include "href=\"#{question_path(item.commentable.question)}\""
+    end
+  end
 end
