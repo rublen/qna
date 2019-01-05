@@ -8,8 +8,11 @@ RSpec.describe QuestionsController, type: :controller do
   let!(:author) { create(:user) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2, author: author) }
-    before { get :index }
+    let!(:questions) { create_list(:question, 2, author: author) }
+    before do
+      allow(Question).to receive(:search).with('', limit: 500) { Question.all }
+      get :index, params: { question_search: '' }
+    end
 
     it 'populates an array of all questions' do
       expect(assigns(:questions)).to match_array(questions)
@@ -19,6 +22,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template(:index)
     end
   end
+
 
   describe 'GET #show' do
     let(:question) { create(:question, author: author) }
@@ -41,6 +45,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+
   describe 'GET #new' do
     sign_in_user
     before { get :new }
@@ -57,6 +62,7 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to render_template :new
     end
   end
+
 
   describe 'POST #create' do
     sign_in_user

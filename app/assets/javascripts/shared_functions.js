@@ -6,7 +6,7 @@ function cleanFlash() {
 function showFlash(innerHtml) {
   cleanFlash();
   var flash = document.createElement('div');
-  var nodeAfterFlash = document.querySelector('.navbar').nextSibling;
+  var nodeAfterFlash = document.getElementById('main-container');
 
   flash.innerHTML = innerHtml.trim();
   document.body.insertBefore(flash, nodeAfterFlash);

@@ -11,7 +11,6 @@ Capybara.register_driver :headless_chrome do |app|
 end
 
 Capybara.javascript_driver = :selenium_chrome_headless
-
 Capybara.server = :puma
 
 RSpec.configure do |config|
@@ -20,6 +19,7 @@ RSpec.configure do |config|
 
   # spec/support/acceptance_helper.rb
   config.include AcceptanceHelper, type: :feature
+  config.include SphinxHelpers, type: :feature
 
   #turn off transactional fixtures to be able to use other strategies for cleaning test DB
   config.use_transactional_fixtures = false
@@ -27,6 +27,10 @@ RSpec.configure do |config|
   # DatabaseCleaner settings
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    # Ensure sphinx directories exist for the test environment
+    ThinkingSphinx::Test.init
+    # Configure and start Sphinx, and automatically stop Sphinx at the end of the test suite.
+    ThinkingSphinx::Test.start_with_autostop
   end
 
   config.before(:each) do
@@ -35,6 +39,8 @@ RSpec.configure do |config|
 
   config.before(:each, js: true) do
     DatabaseCleaner.strategy = :truncation
+    # Index data when running an acceptance spec.
+    ThinkingSphinx::Test.index
   end
 
   config.before(:each) do

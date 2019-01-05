@@ -18,7 +18,7 @@ feature 'User registers', %q{
     expect(page).to have_content 'Email has already been taken'
   end
 
-  scenario 'Non-registered user tries to sign up' do
+  scenario 'Non-registered user tries to sign up', js: true do
     visit new_user_registration_path
     fill_in 'Email', with: 'test_user@mail.com'
     fill_in 'Password', with: 'test_user.password'

@@ -1,18 +1,36 @@
-.mt-5.pt-2.pb-2
-  .new-question.container.bg-secondary
-    h5= link_to 'Ask question', new_question_path, class: "text-white"
+.row
+  .questions.container.col-xs-7.col-md-8.col-lg-8.bg-light
+    .mt-3.pt-2.pb-2
+      .new-question.container.bg-secondary
+        h5= link_to 'Ask question', new_question_path, class: "text-white"
 
-h1 List of Questions
+    h1.inline List of Questions
+    p
+      small= form_with url: questions_path, method: :get, local: true do |f|
+        = f.text_field :question_search, placeholder: params[:question_search]
+        = f.submit 'Find question'
 
-.questions
-  ul class="list-group"
-    = render @questions
+    ul.list-group
+      li.list-group-item
+        strong.row.text-secondary id="question-title"
+          .col-xs-9.col-md-10.col-lg-10 Question title
+          .col-xs-3.col-md-2.col-lg-2 Votes
+        - if @questions && !@questions.empty?
+          = render @questions
+          .d-flex.justify-content-center
+            small== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1
+        - else
+          li.list-group-item.text-secondary.text-center
+            em Nothing to show
 
-.subscriptions
+  .searchbar.container.col-xs-5.col-md-4.col-lg-4.mt-3
+    h3.pb-2 SearchBar
+    small= render 'searches/search_form'
+
+.subscriptions.pt-3
   = "You can "
   - if current_user&.daily_subscribed?
     = link_to 'Unsubscribe', current_user.subscriptions.find_by(question: nil), method: :delete, remote: true
   - else
     = link_to 'Subscribe', daily_subscriptions_path, method: :post, remote: true
   = " daily emails with new questions."
-
