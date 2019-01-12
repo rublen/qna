@@ -78,6 +78,6 @@ class VotesController < ApplicationController
   end
 
   def question_id
-    @vote.votable_type == 'Question' ? @votable.id : @votable.question.id
+    @vote.votable_type == 'Question' ? @votable.id : @votable.question_id
   end
 end

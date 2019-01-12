@@ -27,11 +27,6 @@ RSpec.describe Question, type: :model do
     it "subscribes user for this question" do
       expect { question.save }.to change(question.subscriptions, :count).by(1)
     end
-
-    it "subscribes user for daily notitfications" do
-      expect { question.save }.to change(Subscription.where(question: nil), :count).by(1)
-      expect(question.author).to be_daily_subscribed
-    end
   end
 
   describe ".last_day_list scope" do

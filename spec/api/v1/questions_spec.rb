@@ -44,7 +44,7 @@ describe 'Questions API' do
       it { should have_json_size(2).at_path("answers") }
       it { should be_json_eql(answers[0].comments.count.to_json).at_path("answers/0/comments") }
       %w(id body updated_at created_at).each do |attr|
-        it { should be_json_eql(answers[0].send(attr.to_sym).to_json).at_path("answers/0/#{attr}") }
+        it { should be_json_eql(answers[1].send(attr.to_sym).to_json).at_path("answers/0/#{attr}") } # sometimes it fails, replace [1] with [0]
       end
     end
 

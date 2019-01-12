@@ -8,13 +8,15 @@ RSpec.describe Subscription, type: :model do
 
   describe "belongs_to :question, optional: true" do
     it "creates subscription without question" do
-      expect { create(:subscription, question: nil) }.to change(Subscription, :count).by(1)
+      user = create :user
+      user.subscriptions.first.delete
+      expect { create(:subscription, user: user, question: nil) }.to change(Subscription, :count).by(1)
     end
   end
 
   describe ".daily scope" do
     let(:subscription) { create :subscription }
-    let(:daily_subscription) { create :daily_subscription }
+    let(:daily_subscription) { create(:user).subscriptions.first }
 
     it "returns only daily subscriptions" do
       expect(Subscription.daily).to match [daily_subscription]

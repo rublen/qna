@@ -169,11 +169,11 @@ RSpec.describe User, type: :model do
 
   describe "#daily_subscribed?" do
     it 'returns true if user subscribed to daily digest' do
-      create(:daily_subscription, user: user)
       expect(user.daily_subscribed?).to be true
     end
 
     it 'returns false if user does not subscribed to daily digest' do
+      user.subscriptions.delete_all
       expect(user.daily_subscribed?).to be false
     end
   end
@@ -187,7 +187,14 @@ RSpec.describe User, type: :model do
     end
 
     it 'returns false if user does not subscribed for question' do
-      expect(create(:user).daily_subscribed?).to be false
+      expect(create(:user).subscribed?(question)).to be false
+    end
+  end
+
+  describe "after_create callback #subscribe_user" do
+    it "subscribes user for daily notitfications" do
+      expect { create :user }.to change(Subscription.where(question: nil), :count).by(1)
+      expect(user).to be_daily_subscribed
     end
   end
 end

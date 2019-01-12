@@ -1,14 +1,6 @@
 showFlash("<%= j render 'shared/flash' %>");
 
-var answers = document.querySelector('.answers').innerHTML
-var id = "<%= @answer.id %>";
+var answers = document.querySelector('.answers');
+var answer = answers.querySelector("#answer-" + <%= @answer.id %>);
 
-answers = answers.split('<p id="answer-body-');
-
-for (var i = 0; i < answers.length; i++) {
-  if (answers[i].substring(0, id.length) === id) {
-    delete answers[i]
-  }
-}
-
-document.querySelector('.answers').innerHTML = answers.join('<p id="answer-body-');
+answer.parentNode.removeChild(answer);

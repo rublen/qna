@@ -11,6 +11,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:github, :facebook]
 
+  after_create :subscribe_user
+
   def author_of?(item)
     item.user_id == id
   end
@@ -63,5 +65,11 @@ class User < ApplicationRecord
 
   def subscribed?(question)
     !subscriptions.where(question_id: question).empty?
+  end
+
+  private
+
+  def subscribe_user
+    subscriptions.create(question: nil)
   end
 end

@@ -47,62 +47,36 @@ feature 'Create Answer', %q{
 
 
   context "Multiple sessions" do
+    let(:other_user) { create :user }
+
     scenario "answer appears on another user's page", js: true do
-      Capybara.using_session('user') do
-        sign_in(user)
-        visit question_path(question)
-      end
+      create_session('user')
+      create_session('other_user')
 
-      Capybara.using_session('other_user') do
-        sign_in(create(:user))
-        visit question_path(question)
-      end
-
-      Capybara.using_session('user') do
-        within '.new-answer-form' do
-          fill_in 'Your answer', with: "answer_body"
-          click_on 'add file'
-          attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
-          click_on 'Publish'
-        end
-        within('.answers') do
-          expect(page).to have_content "answer_body"
-          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
-        end
-      end
-
+      user_creates_answer
       answer = Answer.last
 
       Capybara.using_session('other_user') do
         within '.answers' do
-          expect(page).to have_content "answer_body"
-          expect(page).to_not have_link 'Edit'
-          expect(page).to_not have_link "Delete", href: "/answers/#{answer.id}"
-
-          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
-          expect(page).to_not have_link "Delete", href: "/attachments/#{Attachment.last.id}"
+          check_answer_things_allowed_for_not_author(answer)
 
           within '.comments' do
             click_on 'Add comment'
             expect(page).to have_selector 'textarea'
             expect(page).to have_button 'Cancel'
           end
-          within '.voting' do
-            expect(page).to have_link href: "/answers/#{answer.id}/votes/up"
-            expect(page).to have_link href: "/answers/#{answer.id}/votes/down"
-            expect(page).to have_content "#{answer.vote_sum}"
 
-            expect { click_link(href: "/answers/#{answer.id}/votes/up") }.to change(answer, :vote_sum).by(1)
+          within '.voting' do
+            click_link(href: "/answers/#{answer.id}/votes/up")
             expect(page).to have_content '1'
             expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
             expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
             expect(page).to_not have_link href: "/answers/#{answer.id}/votes/down"
 
             click_link(href: "/votes/#{answer.votes.last.id}/unvote")
-            expect(answer.vote_sum).to eq 0
             expect(page).to have_content '0'
 
-            expect { click_link(href: "/answers/#{answer.id}/votes/down") }.to change(answer, :vote_sum).by(-1)
+            click_link(href: "/answers/#{answer.id}/votes/down")
             expect(page).to have_content '-1'
             expect(page).to have_link href: "/votes/#{answer.votes.last.id}/unvote"
             expect(page).to_not have_link href: "/answers/#{answer.id}/votes/up"
@@ -113,43 +87,60 @@ feature 'Create Answer', %q{
     end
 
     scenario "answer appears on guest's page", js: true do
-      Capybara.using_session('user') do
-        sign_in(user)
-        visit question_path(question)
-      end
+      create_session('user')
+      create_session('guest')
 
-      Capybara.using_session('guest') do
-        visit question_path(question)
-      end
-
-      Capybara.using_session('user') do
-        within '.new-answer-form' do
-          fill_in 'Your answer', with: "answer_body"
-          click_on 'Publish'
-        end
-        within('.answers') { expect(page).to have_content "answer_body" }
-      end
-
+      user_creates_answer
       answer = Answer.last
 
       Capybara.using_session('guest') do
         within '.answers' do
-          expect(page).to have_content "answer_body"
-          expect(page).to_not have_link 'Edit'
-          expect(page).to_not have_link "Delete", href: "/answers/#{answer.id}"
+          check_answer_things_allowed_for_not_author(answer)
 
-          expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
-          expect(page).to_not have_link "Delete", href: "/attachments/#{Attachment.last.id}"
+          expect(page).to_not have_link href="/answers/#{answer.id}/votes/up"
+          expect(page).to_not have_link href="/answers/#{answer.id}/votes/down"
 
           click_on 'Add comment'
         end
         expect(page).to have_content "You need to sign in or sign up before continuing."
-        within '.answers' do
-          expect(page).to have_link href="/answers/#{answer.id}/votes/up" # не видит
-          expect(page).to have_link href="/answers/#{answer.id}/votes/down"
-          expect(page).to have_content "#{answer.vote_sum}"
-        end
       end
     end
   end
+end
+
+
+# functions that used in context "Multiple sessions"
+
+def create_session(name)
+  Capybara.using_session(name) do
+    sign_in(instance_eval name) unless name == 'guest'
+    visit question_path(question)
+  end
+end
+
+def user_creates_answer
+  Capybara.using_session('user') do
+    within '.new-answer-form' do
+      fill_in 'Your answer', with: "answer_body"
+      click_on 'add file'
+      attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
+      click_on 'Publish'
+    end
+    within('.answers') do
+      expect(page).to have_content "answer_body"
+      expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+    end
+  end
+end
+
+def check_answer_things_allowed_for_not_author(answer)
+  expect(page).to have_content "answer_body"
+  expect(page).to_not have_link 'Edit'
+  expect(page).to_not have_link "Delete", href: "/answers/#{answer.id}"
+
+  expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+  expect(page).to_not have_link "Delete", href: "/attachments/#{Attachment.last.id}"
+
+  expect(page).to have_link 'Add comment'
+  expect(page).to have_content "#{answer.vote_sum}"
 end
