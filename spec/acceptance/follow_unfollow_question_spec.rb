@@ -21,7 +21,7 @@ feature 'Follow/Unfollow the question', %q{
       click_on 'Follow'
       expect(current_path).to eq question_path(question)
       expect(page).to_not have_link 'Follow'
-      expect(page).to have_link 'Unfollow', href: "/subscriptions/#{user.subscriptions.first.id}"
+      expect(page).to have_link 'Unfollow', href: "/subscriptions/#{user.subscriptions.find_by(question: question).id}"
       click_on 'Unfollow'
       expect(page).to_not have_link 'Unfollow'
       expect(page).to have_link 'Follow', href: "/questions/#{question.id}/subscriptions"

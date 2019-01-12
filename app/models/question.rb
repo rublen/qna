@@ -16,8 +16,8 @@ class Question < ApplicationRecord
   end
 
   private
+
   def subscribe_author
     subscriptions.create(user: author)
-    Subscription.create(user: author, question: nil) unless author.daily_subscribed?
   end
 end

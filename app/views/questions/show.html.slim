@@ -1,8 +1,10 @@
 hr
 .row.question.border-bottom
   .col-xs-3.col-md-1.col-lg-1
-    - unless current_user&.author_of?(@question)
-      div class="voting pr-3 text-secondary" align="center"
+    div class="voting pr-3 text-secondary" align="center"
+      - if current_user&.author_of?(@question)
+        = render 'votes/voting_disabled', votable: @question
+      - else
         = render 'votes/voting', votable: @question
 
   .col-xs-9.col-md-11.col-lg-11

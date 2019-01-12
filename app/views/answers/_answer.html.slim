@@ -5,6 +5,8 @@
       div class="voting voting-#{answer.id} pr-3" align="center"
         - if can?(:vote, answer) || can?(:unvote, answer.vote_by(current_user))
           = render 'votes/voting', votable: answer
+        - else
+          = render 'votes/voting_disabled', votable: answer
 
       - if answer.best
         .best-mark.text-success.center id="best-answer-#{answer.id}"

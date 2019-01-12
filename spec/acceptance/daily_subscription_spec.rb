@@ -15,16 +15,16 @@ feature 'Daily subscription', %q{
     end
 
     scenario "subscribe/unsubscribe for daily mailings", js: true do
+      expect(page).to have_link 'Unsubscribe', href: "/subscriptions/#{user.subscriptions.first.id}"
+      click_on 'Unsubscribe'
+
+      expect(page).to_not have_link 'Unsubscribe'
       expect(page).to have_link 'Subscribe', href: "/subscriptions/daily"
 
       click_on 'Subscribe'
       expect(current_path).to eq questions_path
       expect(page).to_not have_link 'Subscribe'
       expect(page).to have_link 'Unsubscribe', href: "/subscriptions/#{user.subscriptions.first.id}"
-
-      click_on 'Unsubscribe'
-      expect(page).to_not have_link 'Unsubscribe'
-      expect(page).to have_link 'Subscribe', href: "/subscriptions/daily"
     end
   end
 

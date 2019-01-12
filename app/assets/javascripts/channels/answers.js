@@ -14,7 +14,7 @@ document.addEventListener('turbolinks:load', function() {
       },
 
       received: function(data) {
-        console.log('recived: ' + data);
+        console.log('received: ' + data);
 
         data = JSON.parse(data);
 
@@ -35,31 +35,34 @@ document.addEventListener('turbolinks:load', function() {
         };
 
 
-        if (data.vote && data.vote.votable_user_id != gon.current_user_id) {
+        if (data.vote) {
           var answer = document.querySelector(data.vote.votable_css_id);
           answer.querySelector('.vote-sum').textContent = data.vote.vote_sum;
 
-          // handling vote/unvite links 1) for real-time added answers, 2) for user-voter's page
-          console.log('added_answers: '+added_answers)
-          if (added_answers.includes(data.vote.votable_id) && data.vote.user_id == gon.current_user_id) {
-          var voteUp = answer.querySelector('.vote-up');
-          var voteDown = answer.querySelector('.vote-down');
-          var upVoted = data.vote.upvoted;
-          var downVoted = data.vote.downvoted;
+          if (data.vote.votable_user_id != gon.current_user_id) {
 
-            if (!downVoted) {
-              console.log('**data.vote.id:' + data.vote.id);
-              if (upVoted) {
-                setUnvoting(voteUp, voteDown, data.vote.id)
-              } else {
-                setVoting(voteUp, voteDown)
-              }
-            };
-            if (!upVoted) {
-              if (downVoted) {
-                setUnvoting(voteDown, voteUp, data.vote.id)
-              } else {
-                setVoting(voteDown, voteUp)
+            // handling vote/unvote links 1) for real-time added answers, 2) for user-voter's page
+            console.log('added_answers: '+added_answers)
+            if (added_answers.includes(data.vote.votable_id) && data.vote.user_id == gon.current_user_id) {
+            var voteUp = answer.querySelector('.vote-up');
+            var voteDown = answer.querySelector('.vote-down');
+            var upVoted = data.vote.upvoted;
+            var downVoted = data.vote.downvoted;
+
+              if (!downVoted) {
+                console.log('**data.vote.id:' + data.vote.id);
+                if (upVoted) {
+                  setUnvoting(voteUp, voteDown, data.vote.id)
+                } else {
+                  setVoting(voteUp, voteDown)
+                }
+              };
+              if (!upVoted) {
+                if (downVoted) {
+                  setUnvoting(voteDown, voteUp, data.vote.id)
+                } else {
+                  setVoting(voteDown, voteUp)
+                }
               }
             }
           }

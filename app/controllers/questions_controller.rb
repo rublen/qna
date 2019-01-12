@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
   skip_authorization_check only: %i[index show]
 
   def index
-    @pagy, @questions = pagy_array(Question.search(params[:question_search], limit: 500), items: 20)
+    @pagy, @questions = pagy_array(questions, items: 20)
     respond_with(@questions)
   end
 
@@ -39,6 +39,14 @@ class QuestionsController < ApplicationController
   end
 
   private
+  def questions
+    @questions = if params[:question_search]
+      Question.search(params[:question_search], limit: 500)
+    else
+      Question.all
+    end
+  end
+
   def set_question
     @question = Question.find(params[:id])
   end

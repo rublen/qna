@@ -33,4 +33,4 @@
     = link_to 'Unsubscribe', current_user.subscriptions.find_by(question: nil), method: :delete, remote: true
   - else
     = link_to 'Subscribe', daily_subscriptions_path, method: :post, remote: true
-  = " daily emails with new questions."
+  = " daily newsletters with new questions."

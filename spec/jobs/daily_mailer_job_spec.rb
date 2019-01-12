@@ -1,11 +1,11 @@
-require 'rails_helper'
+ require 'rails_helper'
 
 RSpec.describe DailyMailerJob, type: :job do
   describe "#perform" do
     let!(:users) { create_list(:user, 2) }
     let!(:unsubscribed_user) { create(:user) }
 
-    before { create(:daily_subscription, user: users.last) }
+    before { unsubscribed_user.subscriptions.delete_all }
 
     context "List of today's questions is not empty" do
       before { create :question, author: users.first }
