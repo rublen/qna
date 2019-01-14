@@ -9,7 +9,9 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:github, :facebook]
+         :omniauthable, omniauth_providers: [:github]
+         # !for development and test environments comment line above and uncomment line beneath
+         # :omniauthable, omniauth_providers: [:github, :facebook]
 
   after_create :subscribe_user
 
