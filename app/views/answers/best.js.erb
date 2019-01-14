@@ -6,7 +6,8 @@ var answers = document.querySelector('.answers');
 var answersFirstChild = answers.firstChild;
 
 var firstChildId = answersFirstChild.id.split('answer-')[1];
-answersFirstChild.querySelector(".best-mark").remove();
+var bestMark = answersFirstChild.querySelector(".best-mark");
+if(bestMark) { bestMark.remove() };
 answersFirstChild.querySelector(".best-answer").innerHTML = "<a class='text-secondary' data-remote='true' rel='nofollow' data-method='patch' href='/answers/" + firstChildId + "/best'>Mark as the best</a>";
 
 // new best answer: remove "mark as the best" link, add "best" mark, move the answer on the first place

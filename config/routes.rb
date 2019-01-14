@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-
   root to: 'questions#index'
+
+  mount ActionCable.server => '/cable'
 
   use_doorkeeper
 
@@ -48,8 +49,6 @@ Rails.application.routes.draw do
   end
 
   resources :attachments, only: :destroy
-
-  mount ActionCable.server => '/cable'
 
   namespace :api do
     namespace :v1 do
