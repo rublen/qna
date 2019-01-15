@@ -8,5 +8,9 @@ test:
 
 production:
   mysql41: 9308
+  pid_file: /home/deployer/qna/shared/tmp/searchd.pid
+  indices_location: /home/deployer/qna/shared/db/sphinx
+  configuration_file: /home/deployer/qna/shared/config/production.sphinx.conf
+  binlog_path: /home/deployer/qna/shared/binlog
   morphology: stem_en
   morphology: stem_ru
