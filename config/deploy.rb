@@ -8,7 +8,7 @@ set :repo_url, "git@github.com:rublen/qna.git"
 set :deploy_to, "/home/deployer/qna"
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/master.key"
+append :linked_files, "config/database.yml", "config/master.key", "tmp/pids/searchd.pid"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "public/uploads"
@@ -31,3 +31,7 @@ namespace :deploy do
   end
   after :publishing, :restart
 end
+
+# http://github.com/jamis/capistrano/blob/master/lib/capistrano/recipes/deploy.rb
+
+

@@ -7,6 +7,6 @@ test:
   mysql41: 9307
 
 production:
-  mysql41: 9308
+  pid_file: /home/deployer/qna/shared/tmp/pids/searchd.pid
   morphology: stem_en
   morphology: stem_ru
