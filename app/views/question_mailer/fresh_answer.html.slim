@@ -1,8 +1,10 @@
-h1 QNA#QuestionAuthor#fresh_answer
+h2 Fresh answer from Q&A
 p
-  = @greeting
+  = "Hi! The question "
   = link_to @question.title, question_url(@question)
+  =" has recently been answered. You are welcome to check it out."
 
 br
-p
+small style="color:grey"
+  = "If you don't want to receive these notifications, feel free to "
   = link_to 'Unsubscribe', unsubscribe_subscription_url(@subscription)

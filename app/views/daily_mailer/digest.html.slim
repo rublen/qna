@@ -1,8 +1,10 @@
-h1 QNA Daily digest
+h2 QnA Daily digest
 p = @greeting
 - @questions.each do |question|
   = link_to question.title, question_url(question)
 
 br
-p
+br
+small style="color:grey"
+  = "If you don't want to receive these notifications, feel free to "
   = link_to 'Unsubscribe', unsubscribe_subscription_url(@subscription)
