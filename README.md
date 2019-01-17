@@ -1,8 +1,5 @@
 # QnA (Questions and Answers)
 
-#### Ruby version 2.5.0
-#### Rails version 5.2.1
-#### DataBase PostgreSQL 10.6
 
 It's a training project which was done within the advanced programme of Ruby on Rails course of online coding school Thinknetica. The idea of the project is to allow people to help each other in solving problems via asking and answering questions.
 
@@ -61,8 +58,6 @@ It's a training project which was done within the advanced programme of Ruby on 
 - POST /api/v1/questions/:question_id/answers.json
 - Request body: body=BODY&access_token=XXXXXXX
 
-
-
 ##### Show answer
 - GET /api/v1/answers/:id.json?access_token=XXXXXXX
 
@@ -84,3 +79,7 @@ It's a training project which was done within the advanced programme of Ruby on 
 #### Testing technologies
 - RSpec
 - Capybara
+
+#### Ruby version 2.5.0
+#### Rails version 5.2.1
+#### DataBase PostgreSQL 10.6
