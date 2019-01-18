@@ -31,7 +31,7 @@ It's a training project which was done within the advanced programme of Ruby on 
 
 #### API
 ###### General information
-- http://104.248.89.162/oauth/applications - creating an app for using QnA as OAuth2 provider
+- http://104.248.89.162/oauth/applications - create an app for using QnA as OAuth2 provider (available only for admin users)
 - The base endpoint is: http://104.248.89.162
 - All endpoints return a JSON object
 ###### Endpoints
@@ -62,18 +62,26 @@ It's a training project which was done within the advanced programme of Ruby on 
 - GET /api/v1/answers/:id.json?access_token=XXXXXXX
 
 
+#### Streaming
+Real-time broadcasting of data organized with internal Rails library ActionCable which uses WebSocket protocol. Streaming works for:
+- creating a new answer
+- creating a new comment on the answer/question
+- voting for the answer/question
+
+
 #### Used technologies
 - AJAX and JavaScript
 - Slim and Bootstrap
 - Nested forms
 - OmniAuth
 - WebSockets (through ActionCable)
+- CanCanCan authorization
 
 
 #### Services
-- 'whenever' for job queues
-- 'Sidekiq' for performing jobs
 - 'Sphinx' as search engine
+- 'Sidekiq' for performing jobs
+- 'whenever' for job queueing
 - 'doorkeeper' as  an OAuth 2 provider for Ruby on Rails
 
 #### Testing technologies
