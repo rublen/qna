@@ -8,7 +8,7 @@ RSpec.describe FollowQuestionJob, type: :job do
   describe "#perform" do
 
     it "should send 2 letters" do
-      allow(nil).to receive(:deliver_later)
+      allow(nil).to receive(:deliver_now)
       create(:subscription, question_id: question.id)
       create(:subscription)
 

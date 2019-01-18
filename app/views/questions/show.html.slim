@@ -1,5 +1,5 @@
 hr
-.row.question.border-bottom
+.row.question.border-bottom id="question-#{@question.id}"
   .col-xs-3.col-md-1.col-lg-1
     div class="voting pr-3 text-secondary" align="center"
       - if current_user&.author_of?(@question)
@@ -8,7 +8,7 @@ hr
         = render 'votes/voting', votable: @question
 
   .col-xs-9.col-md-11.col-lg-11
-    div id="question-#{@question.id}"
+    div id="question"
       h1.question-title = @question.title
       h3.question-body = @question.body
       .attachments

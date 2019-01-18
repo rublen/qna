@@ -8,6 +8,9 @@ feature 'User signs in with facebook', %q{
 
   given(:user) { create(:user) }
 
+=begin
+Facebook doesn't trust QnA app, it require https:// So, authentication with fb is turned off, though you can change this in app/models/user.rb
+
   describe "Facebook oauth" do
     scenario "existing user always signs in with Facebook account (already has authorization)" do
       user.authorizations.create(provider: 'facebook', uid: '123456')
@@ -39,6 +42,7 @@ feature 'User signs in with facebook', %q{
       expect(page).to have_content "Log out"
     end
   end
+=end
 
   describe "GitHub oauth" do
     scenario "existing user always signs in with GitHub account (already has authorization)" do
