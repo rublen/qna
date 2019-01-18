@@ -91,3 +91,8 @@ Real-time broadcasting of data organized with internal Rails library ActionCable
 #### Ruby version 2.5.0
 #### Rails version 5.2.1
 #### DataBase PostgreSQL 10.6
+
+#####
+<sup> dev's email: rublen77@gmail.com <sup>
+
+<sup> Jan 2019 <sup>
