@@ -9,7 +9,7 @@ class QuestionsController < ApplicationController
   skip_authorization_check only: %i[index show]
 
   def index
-    @pagy, @questions = pagy_array(questions, items: 20)
+    @pagy, @questions = pagy_array(questions, items: 10)
     respond_with(@questions)
   end
 

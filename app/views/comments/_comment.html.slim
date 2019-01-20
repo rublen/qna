@@ -1,6 +1,6 @@
 - if comment.persisted?
 
-  li class="comment-#{comment.id} collection-group-item border-top"
+  li.collection-group-item.border-top id="comment-#{comment.id}"
     == "#{comment.body} <span class='text-secondary'>- #{comment.author.email}, #{comment.created_at.strftime('%F %T')}</span>"
     - if can?(:destroy, comment)
       = link_to 'Delete', comment, method: :delete, remote: true, class: :badge

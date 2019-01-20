@@ -1,11 +1,17 @@
 - if question.persisted?
-  li class="list-group-item"
+  li.list-group-item
     .row id="question-#{question.id}"
-      .col-xs-9.col-md-10.col-lg-10
+      .col-xs-6.col-md-8.col-lg-8
         p id="question-title-#{question.id}"
           = link_to question.title, question_path(question)
 
-      .col-xs-3.col-md-2.col-lg-2
-        .voute-sum.text-secondary
+      .col-xs-3.col-md-2.col-lg-2.text-center
+        .vote-sum.text-secondary
           = question.vote_sum
+        small.vote-sum-label.text-secondary votes
 
+
+      .col-xs-3.col-md-2.col-lg-2.text-center
+        .answers-number.text-secondary
+          = question.answers.count
+        small.answers-number-label.text-secondary answers

@@ -1,7 +1,7 @@
 - if answer.persisted?
   .row.border-bottom id="answer-#{answer.id}"
 
-    .col-xs-4.col-md-2.col-lg-1
+    .col-xs-4.col-md-2.col-lg-2
       div class="voting voting-#{answer.id} pr-3" align="center"
         - if can?(:vote, answer) || can?(:unvote, answer.vote_by(current_user))
           = render 'votes/voting', votable: answer
@@ -9,12 +9,12 @@
           = render 'votes/voting_disabled', votable: answer
 
       - if answer.best
-        .best-mark.text-success.center id="best-answer-#{answer.id}"
+        .best-mark.text-success.text-center id="best-answer-#{answer.id}"
           = "✓"
           small the best
 
 
-    .col-xs-8.col-md-10.col-lg-11
+    .col-xs-8.col-md-10.col-lg-10
       p id="answer-body-#{answer.id}"
         = "#{answer.body}"
 
@@ -42,6 +42,10 @@
               - if can?(:update, answer)
                 = ' | '
               = link_to "Mark as the best", best_answer_path(answer), method: :patch, remote: true, class: "text-secondary"
+
+      .answered-by.text-muted.text-right
+        small
+          em= "Answered by #{answer.author.email}, #{answer.created_at.strftime('%F %T')}"
 
       .comments
         small

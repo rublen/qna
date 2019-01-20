@@ -1,16 +1,16 @@
-hr
-.row.question.border-bottom id="question-#{@question.id}"
-  .col-xs-3.col-md-1.col-lg-1
-    div class="voting pr-3 text-secondary" align="center"
-      - if current_user&.author_of?(@question)
-        = render 'votes/voting_disabled', votable: @question
-      - else
-        = render 'votes/voting', votable: @question
+.question.pt-4 id="question-#{@question.id}"
+  h2.question-title = @question.title
+  .row.border-bottom
+    .col-xs-3.col-md-1.col-lg-1
+      .voting.pr-3.text-secondary.text-center
+        - if current_user&.author_of?(@question)
+          = render 'votes/voting_disabled', votable: @question
+        - else
+          = render 'votes/voting', votable: @question
 
-  .col-xs-9.col-md-11.col-lg-11
-    div id="question"
-      h1.question-title = @question.title
-      h3.question-body = @question.body
+    .col-xs-9.col-md-11.col-lg-11
+      .question-body = @question.body
+
       .attachments
         = render @question.attachments
 
@@ -24,6 +24,10 @@ hr
       - if can?(:destroy, @question)
         =< link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
 
+      .asked-by.text-muted.text-right
+        small
+          em= "Asked by #{@question.author.email}, #{@question.created_at.strftime('%F %T')}"
+
       .comments
         small
           ul.collection-group= render @question.comments
@@ -31,7 +35,8 @@ hr
           .new-comment-form.hide
             = render 'comments/form', commentable: @question, comment: @question.comments.new
 
-h2 Answers:
+h3
+  em Answers:
 .answers
   = render @answers
 

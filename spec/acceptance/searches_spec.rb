@@ -17,7 +17,7 @@ feature 'Search with ThinkingSphinx', %q{
 
   background { index }
 
-  scenario "Search form on the questions page leads to the search page and empty request givs 'Nothing to show'", js: true do
+  scenario "Search form the questions page leads to the search page and empty request givs 'Nothing to show'", js: true do
     ThinkingSphinx::Test.run do
       visit questions_path
       expect(page).to have_field(id:'search', type: 'text')
@@ -42,14 +42,17 @@ feature 'Search with ThinkingSphinx', %q{
       fill_in 'search', with: 'xxx'
       click_on 'Search'
 
-      full_search_results.each { |obj| expect(page).to have_content obj.inspect }
+      full_search_results.each do |obj|
+        expect(page).to have_content obj.class
+        expect(page).to have_content obj.body[0..100] unless obj.is_a? User
+        expect(page).to have_content obj.email if obj.is_a? User
+      end
 
       expect(page).to have_link question.title
       expect(page).to have_link answer.question.title
       expect(page).to have_link comment.commentable.title
       expect(page).to have_link answer_comment.commentable.question.title
 
-      expect(page).to_not have_content other_question.inspect
       expect(page).to_not have_link other_question.title
     end
   end
@@ -68,7 +71,7 @@ feature 'Search with ThinkingSphinx', %q{
       choose("search_options_" + model)
       fill_in 'search', with: 'xxx'
       click_on 'Search'
-      expect(page).to have_content instance_eval(model).inspect
+      expect(page).to have_content model.classify
     end
   end
 end

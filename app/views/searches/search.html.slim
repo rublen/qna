@@ -3,10 +3,17 @@ h1.pt-3 Search
 hr
 
 - if @items && !@items.empty?
-  - @items.each do |i|
+  - @items.each do |item|
     p.border-bottom
-      = i.inspect
-      =< link_to_question(i)
+      - if item.is_a? User
+        em User:
+        span.text-secondary= " #{item.email}, admin: #{item.admin?}"
+      -else
+        = link_to_question(item)
+        br
+        em= "#{item.class}: "
+        span.text-secondary= item.body.truncate(120)
+
 
   .d-flex.justify-content-center
     small== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1
