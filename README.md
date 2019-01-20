@@ -19,9 +19,10 @@ It's a training project which was done within the advanced programme of Ruby on 
 - OAuth with GitHub
 - Creating and managing questions
 - Creating and managing answers
+- A possibility to attach files for questions and answers
 - Commenting on questions or answers
-- Searching 1) a quick search in the questions list 2) search also in other entities separately or in altogether
-- Possibility to attach files for questions and answers
+- Question's author can choose the best answer
+- Searching 1) a quick search in the questions list 2) search as well in other entities separately or in altogether
 - Voting up or down for question/answer (excluding its author). Every user can change the score of the question/answer only by 1 (up) or -1 (down) point. Of course, he can change his mind and revote or unvote. Feel free doing that, no one knows who votes
 - Every new user subscribes automatically for daily newsletters with the list of new questions of the last day. Sure, he can unsubscribe, there is a link in the email and on the main page
 - The author of the question subscribes automatically for informational letters about every new answer for his question. He can unsubscribe, there is a link in the email and on the question page
@@ -93,6 +94,4 @@ Real-time broadcasting of data organized with internal Rails library ActionCable
 #### DataBase PostgreSQL 10.6
 
 #####
-<sup> dev's email: rublen77@gmail.com <sup>
-
-<sup> Jan 2019 <sup>
+<sup> Jan 2019, dev's email: rublen77@gmail.com <sup>
