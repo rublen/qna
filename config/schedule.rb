@@ -7,7 +7,7 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 60.minutes do
+every 20.minutes do
   rake "ts:index"
 end
 
