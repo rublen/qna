@@ -1,9 +1,10 @@
 - answer = this.answer
+- answered_by = this.answered_by
 - attachments = this.attachments
 
 .row.border-bottom id="answer-#{answer.id}"
 
-  .col-xs-4.col-md-2.col-lg-1
+  .col-xs-4.col-md-2.col-lg-2
     div class="voting voting-#{answer.id} pr-3" align="center"
       == JST["templates/voting"](answer)
 
@@ -13,7 +14,7 @@
         small the best
 
 
-  .col-xs-8.col-md-10.col-lg-11
+  .col-xs-8.col-md-10.col-lg-10
     p id="answer-body-#{answer.id}"
       p= "#{answer.body}"
 
@@ -28,10 +29,15 @@
         - if (!answer.best) && (gon.current_user_id == gon.question_author_id)
           a.text-secondary data-remote="true" rel="nofollow" data-method="patch" href="/answers/#{answer.id}/best" Mark as the best
 
+    .answered-by.text-muted.text-right
+        small
+          em= "Answered by #{answered_by}"
+
     .comments
       small
         ul.collection-group
         a.add-comment-link href="" Add comment
         .new-comment-form.hide
           == JST["templates/new_comment_form"](answer)
+
 

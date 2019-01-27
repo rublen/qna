@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: %i[update destroy best]
   before_action :set_question, only: %i[create]
   before_action :set_answers, only: %i[destroy best]
-  after_action :publish_to_stream, only: %[create]
+  # after_action :publish_to_stream, only: %[create]
 
   authorize_resource
 
@@ -13,6 +13,7 @@ class AnswersController < ApplicationController
 
     if @answer.save
       flash.now[:notice] = 'Answer was created successfully.'
+      publish_to_stream
     end
   end
 
@@ -51,6 +52,7 @@ class AnswersController < ApplicationController
   def publish_to_stream
     ActionCable.server.broadcast("question-#{@question.id}", {
       answer: @answer,
+      answered_by: "#{@answer.author.email}, #{@answer.created_at.strftime('%F %T')}",
       attachments: @answer.attachments
     }.to_json)
   end

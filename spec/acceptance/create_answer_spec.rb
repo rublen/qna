@@ -129,6 +129,7 @@ def user_creates_answer
     within('.answers') do
       expect(page).to have_content "answer_body"
       expect(page).to have_link 'spec_helper.rb', href: /\/uploads\/attachment\/file\/\d+\/spec_helper.rb/
+      expect(page).to have_content "Answered by #{instance_eval('user').email}"
     end
   end
 end
