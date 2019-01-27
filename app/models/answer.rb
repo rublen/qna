@@ -2,7 +2,7 @@ class Answer < ApplicationRecord
   include Attachable, Votable, Commentable
   after_create :follow_question_mails
 
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :author, class_name: 'User', foreign_key: 'user_id'
 
   validates :body, presence: true

@@ -1,7 +1,7 @@
 - if comment.persisted?
-
-  li.collection-group-item.border-top id="comment-#{comment.id}"
-    == "#{comment.body} <span class='text-secondary'>- #{comment.author.email}, #{comment.created_at.strftime('%F %T')}</span>"
-    - if can?(:destroy, comment)
-      = link_to 'Delete', comment, method: :delete, remote: true, class: :badge
+  - cache [can?(:destroy, comment).to_s, comment] do
+    li.collection-group-item.border-top id="comment-#{comment.id}"
+      == "#{comment.body} <span class='text-secondary'>- #{comment.author.email}, #{comment.created_at.strftime('%F %T')}</span>"
+      - if can?(:destroy, comment)
+        = link_to 'Delete', comment, method: :delete, remote: true, class: :badge
 
