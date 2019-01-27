@@ -32,7 +32,7 @@
         .comments
           small
             ul.collection-group= render @question.comments
-              = link_to 'Add comment', '', class: 'add-comment-link'
+            = link_to 'Add comment', '', class: 'add-comment-link'
             .new-comment-form.hide
               = render 'comments/form', commentable: @question, comment: @question.comments.new
 
