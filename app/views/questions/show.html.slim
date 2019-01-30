@@ -1,4 +1,4 @@
-- cache [current_user_role(@question), @question] do
+- cache ["#{can?(:destroy, @question)}-#{can?(:vote, @question)}-#{can?(:unvote, @question.vote_by(current_user))}", @question] do
   .question.pt-4 id="question-#{@question.id}"
     h2.question-title = @question.title
     .row.border-bottom
@@ -23,7 +23,8 @@
               = render 'form_content', question: @question, f: f
 
         - if can?(:destroy, @question)
-          =< link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
+          = "|"
+          = link_to 'Delete', @question, method: :delete, class: "badge text-secondary"
 
         .asked-by.text-muted.text-right
           small
