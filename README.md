@@ -1,7 +1,7 @@
 # QnA (Questions and Answers)
 
 
-It's a training project which was done within the advanced programme of Ruby on Rails course of online coding school Thinknetica. The idea of the project is to allow people to help each other in solving problems via asking and answering questions.
+It's a training project which was done within the advanced program of Ruby on Rails course of online coding school Thinknetica. The idea of the project is to allow people to help each other in solving problems by asking and answering questions.
 
 #### Entity list
 - user/admin
